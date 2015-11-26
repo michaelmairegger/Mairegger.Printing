@@ -5,16 +5,30 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mairegger.Printing", "Mairegger.Printing\Mairegger.Printing.csproj", "{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleProject", "SampleProject\SampleProject.csproj", "{D5374955-B77F-4C54-B3DA-616723DDC5D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Debug|x86.Build.0 = Debug|Any CPU
 		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}.Release|x86.Build.0 = Release|Any CPU
+		{D5374955-B77F-4C54-B3DA-616723DDC5D8}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D5374955-B77F-4C54-B3DA-616723DDC5D8}.Debug|x86.ActiveCfg = Debug|x86
+		{D5374955-B77F-4C54-B3DA-616723DDC5D8}.Debug|x86.Build.0 = Debug|x86
+		{D5374955-B77F-4C54-B3DA-616723DDC5D8}.Release|Any CPU.ActiveCfg = Release|x86
+		{D5374955-B77F-4C54-B3DA-616723DDC5D8}.Release|x86.ActiveCfg = Release|x86
+		{D5374955-B77F-4C54-B3DA-616723DDC5D8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
