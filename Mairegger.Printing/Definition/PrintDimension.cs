@@ -211,7 +211,7 @@ namespace Mairegger.Printing.Definition
         internal double GetMaxGridHeight(int pageNumber, bool isLastPage)
         {
             var reservedHeight = GetReservedHeight(pageNumber, isLastPage);
-            var maxGridHeight = PrintablePageSize.Height - Margin.Top - Margin.Bottom - reservedHeight;
+            var maxGridHeight = PrintablePageSize.Height - reservedHeight;
             return maxGridHeight;
         }
 

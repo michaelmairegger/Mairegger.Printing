@@ -111,22 +111,35 @@ namespace Mairegger.Printing.Sample
         protected override void PreparePrint()
         {
             base.PreparePrint();
+            PrintDimension.Margin = new Thickness(50);
 
             if (_printingAppendix.HasFlag(PrintAppendixes.Summary))
             {
                 PrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Summary));
-                PrintDimension.SummaryHeight = 50;
+                PrintDimension.SummaryHeight = GetSummary().ComputeDesiredSize().Height;
             }
             if (_printingAppendix.HasFlag(PrintAppendixes.Footer))
             {
                 PrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Footer));
-                PrintDimension.FooterHeight = 30;
+                PrintDimension.FooterHeight = GetFooter().ComputeDesiredSize().Height;
             }
             if (_printingAppendix.HasFlag(PrintAppendixes.Header))
             {
                 PrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header));
-                PrintDimension.HeaderHeight = 50;
+                PrintDimension.HeaderHeight = GetHeader().ComputeDesiredSize().Height;
             }
+        }
+    }
+
+    public static class UIElementExtensions
+    {
+
+        private static readonly Size MaxSize = new Size(double.MaxValue, double.MaxValue);
+
+        public static Size ComputeDesiredSize(this UIElement uiElement)
+        {
+            uiElement.Measure(MaxSize);
+            return uiElement.DesiredSize;
         }
     }
 }
