@@ -16,6 +16,7 @@ namespace Mairegger.Printing.Definition
 {
     using System;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using Mairegger.Printing.Internal;
 
     public class PrintDefinition
@@ -71,6 +72,7 @@ namespace Mairegger.Printing.Definition
             return PrintPartStatus.NotDefined;
         }
 
+        [SuppressMessage("ReSharper", "BitwiseOperatorOnEnumWithoutFlags", Justification = "This is OK, because PrintPartStatus should not have a flag-attribute and the line with & should be a bit-flag")]
         private PrintPartStatus GetPrintPrintDefinitionForPage(PrintAppendixes pa, int pageNumber, bool isLastPage)
         {
             PrintPartStatus result;

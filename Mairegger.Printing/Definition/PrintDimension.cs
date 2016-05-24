@@ -196,9 +196,9 @@ namespace Mairegger.Printing.Definition
             }
         }
 
-        protected bool UseRelativeColumnPosition { get; set; }
-
         internal PrintDefinition InternalPrintDefinition { get; set; }
+
+        protected bool UseRelativeColumnPosition { get; set; }
 
         internal Range<double> GetBodyGridRange(int pageNumber, bool isLastPage)
         {

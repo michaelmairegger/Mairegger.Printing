@@ -18,9 +18,9 @@ namespace Mairegger.Printing.Content
     using System.Windows;
     using System.Windows.Controls;
 
-    public sealed class PrintProcessorBackground
+    public sealed class PrintDocumentBackground
     {
-        public PrintProcessorBackground(Panel panel, Rect size = new Rect())
+        public PrintDocumentBackground(Panel panel, Rect size = new Rect())
         {
             if (panel == null)
             {

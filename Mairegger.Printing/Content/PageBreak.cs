@@ -1,4 +1,4 @@
-// Copyright 2015 Michael Mairegger
+// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,22 @@
 
 namespace Mairegger.Printing.Content
 {
+    using System;
     using System.Windows;
 
     public sealed class PageBreak : IPrintContent
     {
-        public UIElement Content => null;
+        private static readonly Lazy<PageBreak> LazyInstance = new Lazy<PageBreak>(() => new PageBreak());
+
+        private PageBreak()
+        {
+        }
+
+        public static IPrintContent Instance => LazyInstance.Value;
+
+        UIElement IPrintContent.Content
+        {
+            get { throw new InvalidOperationException("There is no available content."); }
+        }
     }
 }

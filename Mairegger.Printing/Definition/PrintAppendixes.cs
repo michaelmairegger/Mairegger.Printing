@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,42 +26,52 @@ namespace Mairegger.Printing.Definition
         ///     No additional field is printed
         /// </summary>
         None = 0x0,
+
         /// <summary>
         ///     The header field is printed
         /// </summary>
         Header = 0x1,
+
         /// <summary>
         ///     The footer field is printed
         /// </summary>
         Footer = 0x2,
+
         /// <summary>
         ///     The summary field is printed
         /// </summary>
         Summary = 0x4,
+
         /// <summary>
         ///     The background field is printed
         /// </summary>
         Background = 0x8,
+
         /// <summary>
         ///     The header description field is printed
         /// </summary>
         HeaderDescription = 0x10,
+
         /// <summary>
         ///     The page numbers are printed on every page
         /// </summary>
         PageNumbers = 0x20,
+
         /// <summary>
         ///     The footer and the summary field are printed
         /// </summary>
         FooterSummary = Footer | Summary,
+
         /// <summary>
         ///     The recipient summary and the header field are printed
         /// </summary>
         SummaryHeader = Summary | Header,
+
         /// <summary>
         ///     All additional fields are printed
         /// </summary>
         AllWithoutBackground = All & ~Background,
+
         /// <summary>
         ///     All additional fields are printed
         /// </summary>

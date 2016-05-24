@@ -83,7 +83,7 @@ namespace Mairegger.Printing.PrintProcessor
         ///     Gets the background for the print.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
-        PrintProcessorBackground GetBackgound();
+        PrintDocumentBackground GetBackgound();
 
         /// <summary>
         ///     Gets the footer.

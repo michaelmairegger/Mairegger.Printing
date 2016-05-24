@@ -1,4 +1,4 @@
-// Copyright 2015 Michael Mairegger
+// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,10 +25,12 @@ namespace Mairegger.Printing.Definition
         ///     Defines the first page.
         /// </summary>
         public const int FirstPage = 1;
+
         /// <summary>
         ///     Defines the last page.
         /// </summary>
         public const int LastPage = int.MaxValue;
+
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         private readonly List<Range<int>> _validPrintRanges = new List<Range<int>>();
 

@@ -75,7 +75,7 @@ namespace Mairegger.Printing.PrintProcessor
             return true;
         }
 
-        public virtual PrintProcessorBackground GetBackgound()
+        public virtual PrintDocumentBackground GetBackgound()
         {
             return null;
         }
@@ -147,15 +147,6 @@ namespace Mairegger.Printing.PrintProcessor
             XpsHelper.SaveFixedDocument(fixedDocument, file);
         }
 
-        protected virtual void PreparePrint()
-        {
-        }
-
-        protected virtual bool PrintDocument(PrintDialog printDialog)
-        {
-            return PrintDocument(printDialog, new PrintProcessorCollection(this));
-        }
-
         internal static void PreviewDocument(PrintProcessorCollection ppc)
         {
             var pd = ppc.First().PrintDialog;
@@ -163,6 +154,15 @@ namespace Mairegger.Printing.PrintProcessor
             var fixedDocument = CreateDocument(new Size(pd.PrintableAreaWidth, pd.PrintableAreaHeight), ppc);
 
             XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName);
+        }
+
+        protected virtual void PreparePrint()
+        {
+        }
+
+        protected virtual bool PrintDocument(PrintDialog printDialog)
+        {
+            return PrintDocument(printDialog, new PrintProcessorCollection(this));
         }
 
         private static FixedDocument CreateDocument(Size pageSize, PrintProcessorCollection p)
@@ -186,18 +186,20 @@ namespace Mairegger.Printing.PrintProcessor
                                                                             {
                                                                                 '.'
                                                                             }).ToList();
-            return path.Aggregate(new StringBuilder(), (sb, c) =>
-                                                       {
-                                                           if (invalidFileNameChars.Contains(c))
-                                                           {
-                                                               if (replaceInvalidCharsWith != null)
-                                                               {
-                                                                   return sb.Append(replaceInvalidCharsWith);
-                                                               }
-                                                               return sb;
-                                                           }
-                                                           return sb.Append(c);
-                                                       }).ToString();
+            return path.Aggregate(
+                new StringBuilder(),
+                (sb, c) =>
+                {
+                    if (invalidFileNameChars.Contains(c))
+                    {
+                        if (replaceInvalidCharsWith != null)
+                        {
+                            return sb.Append(replaceInvalidCharsWith);
+                        }
+                        return sb;
+                    }
+                    return sb.Append(c);
+                }).ToString();
         }
 
         private void Prepare(Size pageSize)
