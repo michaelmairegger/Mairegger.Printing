@@ -266,20 +266,24 @@ namespace Mairegger.Printing.Internal
         {
             AddBackground(content, pageCount, isLastPage);
 
-            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.Header, new Lazy<UIElement>(() => _printProcessor.GetHeader()));
-            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.HeaderDescription, new Lazy<UIElement>(() => _printProcessor.GetHeaderDescription()));
-            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.Summary, new Lazy<UIElement>(() => _printProcessor.GetSummary()));
-            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.Footer, new Lazy<UIElement>(() => _printProcessor.GetFooter()));
+            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.Header, () => _printProcessor.GetHeader());
+            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.HeaderDescription, () => _printProcessor.GetHeaderDescription());
+            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.Summary, () => _printProcessor.GetSummary());
+            AddSpecialElement(pageCount, isLastPage, content, PrintAppendixes.Footer, () => _printProcessor.GetFooter());
         }
 
-        private void AddSpecialElement(int pageNumber, bool isLastpage, PageContent pageContent, PrintAppendixes appendix, Lazy<UIElement> element)
+        private void AddSpecialElement(int pageNumber, bool isLastpage, PageContent pageContent, PrintAppendixes appendix, Func<UIElement> printElement)
         {
+            if (printElement == null)
+            {
+                throw new ArgumentNullException(nameof(printElement));
+            }
             if (!_printProcessor.PrintDefinition.IsToPrint(appendix, pageNumber, isLastpage))
             {
                 return;
             }
 
-            var elementToPrint = element.Value;
+            var elementToPrint = printElement();
             if (elementToPrint == null)
             {
                 throw new InvalidOperationException($"The {appendix} cannot be null if the corresponding flag in the PrintAppendix is set");
