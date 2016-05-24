@@ -1,4 +1,4 @@
-// Copyright 2015 Michael Mairegger
+// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -86,6 +86,12 @@ namespace Mairegger.Printing.Internal
                 }
             }
             return FixedDocument;
+        }
+
+        private static Brush ComputeBackGround(PrintAppendixes printAppendix)
+        {
+            var factor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enum.GetValues(typeof(PrintAppendixes)).Length) * (byte)printAppendix));
+            return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));
         }
 
         private static void PositionizeUiElement(PageContent pageContent, UIElement frameworkElement, Point positioningPoint)
@@ -247,12 +253,13 @@ namespace Mairegger.Printing.Internal
                 }
 
                 Trace.TraceInformation($"Print Page Numbers on page #{currentPageCount}");
-                var textBlock = new TextBlock { Text = $"{currentPageCount} | {FixedDocument.Pages.Count - from}", TextAlignment = TextAlignment.Center, Width = _printProcessor.PrintDimension.PrintablePageSize.Width };
-
-                if (_printProcessor.ColorPrintPartsForDebug)
-                {
-                    textBlock.Background = Brushes.Red;
-                }
+                var textBlock = new TextBlock
+                                {
+                                    Text = $"{currentPageCount} | {FixedDocument.Pages.Count - from}",
+                                    TextAlignment = TextAlignment.Center,
+                                    Width = _printProcessor.PrintDimension.PrintablePageSize.Width,
+                                    Height = _printProcessor.PrintDimension.GetPageNumberHeight(currentPageCount)
+                                };
 
                 AddSpecialElement(currentPageCount == to, pageContent, PrintAppendixes.PageNumbers, () => textBlock);
             }
@@ -303,7 +310,11 @@ namespace Mairegger.Printing.Internal
             var grid = new Grid();
             grid.Children.Add(pageHelper.BodyGrid);
 
-            var rectangle = new Rectangle { Stroke = pageHelper.BorderBrush, StrokeThickness = .5d };
+            var rectangle = new Rectangle
+                            {
+                                Stroke = pageHelper.BorderBrush,
+                                StrokeThickness = .5d
+                            };
 
             grid.Children.Add(rectangle);
             grid.Height = _printProcessor.PrintDimension.GetBodyGridRange(CurrentPageNumber, isLastPage).Length;
@@ -331,7 +342,7 @@ namespace Mairegger.Printing.Internal
 
             if (_printProcessor.ColorPrintPartsForDebug)
             {
-                itemsControl.Background = Brushes.White;
+                itemsControl.Background = ComputeBackGround(PrintAppendixes.All);
             }
 
             itemsControl.Height = _printProcessor.PrintDimension.GetMaxGridHeight(CurrentPageNumber, false);
@@ -352,11 +363,16 @@ namespace Mairegger.Printing.Internal
 
         private PageContent GetNewDocumentPage()
         {
-            var fixedPage = new FixedPage { Width = _printProcessor.PrintDimension.PageSize.Width, Height = _printProcessor.PrintDimension.PageSize.Height, Margin = _pageMargin };
+            var fixedPage = new FixedPage
+                            {
+                                Width = _printProcessor.PrintDimension.PageSize.Width,
+                                Height = _printProcessor.PrintDimension.PageSize.Height,
+                                Margin = _pageMargin
+                            };
 
             if (_printProcessor.ColorPrintPartsForDebug)
             {
-                fixedPage.Background = Brushes.Orange;
+                fixedPage.Background = ComputeBackGround(PrintAppendixes.None);
             }
 
             var pageContent = new PageContent();
@@ -372,29 +388,40 @@ namespace Mairegger.Printing.Internal
 
             var panelHeight = positioninRange.Length;
 
-            var contentControl = new ContentControl { Height = panelHeight, Width = _printProcessor.PrintDimension.PrintablePageSize.Width };
+            var contentControl = new ContentControl
+                                 {
+                                     Height = panelHeight,
+                                     Width = _printProcessor.PrintDimension.PrintablePageSize.Width
+                                 };
 
             if (_printProcessor.ColorPrintPartsForDebug)
             {
-                var grid = new Grid();
-                var rectangle = new Rectangle
-                                {
-                                    StrokeDashArray = new DoubleCollection(new double[]
-                                                                           {
-                                                                               20,
-                                                                               20
-                                                                           }),
-                                    Stroke = Brushes.Black,
-                                    StrokeThickness = 2d
-                                };
-
-                var textBlock = new TextBlock { Text = printAppendix.ToString(), FontSize = 48d, Opacity = 0.5d, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-
-                grid.Children.Add(panel);
-                grid.Children.Add(textBlock);
-                grid.Children.Add(rectangle);
-
-                contentControl.Content = grid;
+                contentControl.Content = new Grid
+                                         {
+                                             Background = ComputeBackGround(printAppendix),
+                                             Children =
+                                             {
+                                                 new Rectangle
+                                                 {
+                                                     StrokeDashArray = new DoubleCollection(new double[]
+                                                                                            {
+                                                                                                20,
+                                                                                                20
+                                                                                            }),
+                                                     Stroke = Brushes.Black,
+                                                     StrokeThickness = 2d
+                                                 },
+                                                 new TextBlock
+                                                 {
+                                                     Text = printAppendix.ToString(),
+                                                     FontSize = 48d,
+                                                     Opacity = 0.5d,
+                                                     HorizontalAlignment = HorizontalAlignment.Center,
+                                                     VerticalAlignment = VerticalAlignment.Center
+                                                 },
+                                                 panel
+                                             }
+                                         };
             }
             else
             {
