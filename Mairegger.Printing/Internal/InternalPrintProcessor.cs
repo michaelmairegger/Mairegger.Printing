@@ -258,7 +258,7 @@ namespace Mairegger.Printing.Internal
                                     Text = $"{currentPageCount} | {FixedDocument.Pages.Count - from}",
                                     TextAlignment = TextAlignment.Center,
                                     Width = _printProcessor.PrintDimension.PrintablePageSize.Width,
-                                    Height = _printProcessor.PrintDimension.GetPageNumberHeight(currentPageCount)
+                                    Height = _printProcessor.PrintDimension.GetHeightFor(PrintAppendixes.PageNumbers, currentPageCount, currentPageCount == to)
                                 };
 
                 AddSpecialElement(currentPageCount == to, pageContent, PrintAppendixes.PageNumbers, () => textBlock);
@@ -317,9 +317,9 @@ namespace Mairegger.Printing.Internal
                             };
 
             grid.Children.Add(rectangle);
-            grid.Height = _printProcessor.PrintDimension.GetBodyGridRange(CurrentPageNumber, isLastPage).Length;
+            grid.Height = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).Length;
 
-            var positioningPoint = new Point(_printProcessor.PrintDimension.Margin.Left, _printProcessor.PrintDimension.GetBodyGridRange(CurrentPageNumber, isLastPage).From);
+            var positioningPoint = new Point(_printProcessor.PrintDimension.Margin.Left, _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).From);
             PositionizeUiElement(content, grid, positioningPoint);
 
             AddPrintAppendixes(content, isLastPage);
@@ -345,7 +345,7 @@ namespace Mairegger.Printing.Internal
                 itemsControl.Background = ComputeBackGround(PrintAppendixes.All);
             }
 
-            itemsControl.Height = _printProcessor.PrintDimension.GetMaxGridHeight(CurrentPageNumber, false);
+            itemsControl.Height = _printProcessor.PrintDimension.GetHeightForBodyGrid(CurrentPageNumber, false);
             itemsControl.Width = _printProcessor.PrintDimension.PrintablePageSize.Width;
             itemsControl.VerticalAlignment = VerticalAlignment.Top;
             itemsControl.Items.Add(table);
@@ -383,7 +383,7 @@ namespace Mairegger.Printing.Internal
 
         private void PositionizeUiElement(PageContent pageContent, UIElement panel, PrintAppendixes printAppendix, bool isLastPage)
         {
-            var positioninRange = _printProcessor.PrintDimension.GetRange(printAppendix, CurrentPageNumber, isLastPage);
+            var positioninRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, CurrentPageNumber, isLastPage);
             var position = new Point(_printProcessor.PrintDimension.Margin.Left, positioninRange.From);
 
             var panelHeight = positioninRange.Length;

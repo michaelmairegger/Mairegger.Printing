@@ -32,7 +32,7 @@ namespace Mairegger.Printing.Internal
 
         public bool HasSpace(double space, int pageCount, bool supposeLastPage)
         {
-            var maxGridHeight = PrintingDimension.GetMaxGridHeight(pageCount, supposeLastPage);
+            var maxGridHeight = PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage);
             return maxGridHeight - UsedSpace - space >= 0;
         }
 

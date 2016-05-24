@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,16 +20,23 @@ namespace Mairegger.Printing.Definition
     using System.Linq;
     using System.Reflection;
     using System.Windows;
+    using Mairegger.Printing.PrintProcessor;
 
     /// <summary>
     ///     Provides a class that contains several Printing Dimensions
     /// </summary>
     public class PrintDimension
     {
-        private double? _footerHeight;
-        private double? _headerHeight;
-        private double? _recipientHeight;
-        private double? _summaryHeight;
+        private const double DefaultPageNumberHeight = 25;
+        private readonly Dictionary<PrintAppendixes, double?> _printPartDimensions = new Dictionary<PrintAppendixes, double?>();
+
+        private readonly Dictionary<PrintAppendixes, Func<IPrintProcessor, UIElement>> _printPartDimensionsRetrievalDictionary = new Dictionary<PrintAppendixes, Func<IPrintProcessor, UIElement>>
+                                                                                                                                 {
+                                                                                                                                     { PrintAppendixes.Header, p => p.GetHeader() },
+                                                                                                                                     { PrintAppendixes.HeaderDescription, p => p.GetHeaderDescription() },
+                                                                                                                                     { PrintAppendixes.Summary, p => p.GetSummary() },
+                                                                                                                                     { PrintAppendixes.Footer, p => p.GetFooter() }
+                                                                                                                                 };
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="PrintDimension" /> class and sets the margin to 0,0,0,0.
@@ -45,96 +52,14 @@ namespace Mairegger.Printing.Definition
         public PrintDimension(Thickness margin)
         {
             Margin = margin;
-        }
 
-        /// <summary>
-        ///     Gets or sets the height of the footer.
-        /// </summary>
-        /// <value> The height of the footer. </value>
-        public double FooterHeight
-        {
-            get
+            var values = Enum.GetValues(typeof(PrintAppendixes)).Cast<PrintAppendixes>();
+
+            foreach (var printAppendixese in values)
             {
-                if (GetPrintDefinitionForPage(PrintAppendixes.Footer))
-                {
-                    if (!_footerHeight.HasValue)
-                    {
-                        throw new InvalidOperationException("You have to set the height of the footer prior printing if the PrintAppendixes flag has set to \"Footer\".");
-                    }
-
-                    return _footerHeight.Value;
-                }
-
-                return 0;
+                _printPartDimensions.Add(printAppendixese, null);
             }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-                _footerHeight = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the height of the recipient.
-        /// </summary>
-        /// <value> The height of the recipient. </value>
-        public double HeaderDescriptionHeight
-        {
-            get
-            {
-                if (GetPrintDefinitionForPage(PrintAppendixes.HeaderDescription))
-                {
-                    if (!_recipientHeight.HasValue)
-                    {
-                        throw new InvalidOperationException("You have to set the descriptional header prior printing if the PrintAppendixes flag has set to \"HeaderDescription\".");
-                    }
-
-                    return _recipientHeight.Value;
-                }
-
-                return 0;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-                _recipientHeight = value;
-            }
-        }
-
-        /// <summary>
-        ///     Gets or sets the height of the header.
-        /// </summary>
-        /// <value> The height of the header. </value>
-        public double HeaderHeight
-        {
-            get
-            {
-                if (GetPrintDefinitionForPage(PrintAppendixes.Header))
-                {
-                    if (!_headerHeight.HasValue)
-                    {
-                        throw new InvalidOperationException("You have to set the height of the header prior printing if the PrintAppendixes flag has set to \"Header\".");
-                    }
-
-                    return _headerHeight.Value;
-                }
-
-                return 0;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-                _headerHeight = value;
-            }
+            _printPartDimensions[PrintAppendixes.PageNumbers] = DefaultPageNumberHeight;
         }
 
         /// <summary>
@@ -166,77 +91,127 @@ namespace Mairegger.Printing.Definition
             }
         }
 
-        /// <summary>
-        ///     Gets or sets the height of the summary.
-        /// </summary>
-        /// <value> The height of the summary. </value>
-        public double SummaryHeight
-        {
-            get
-            {
-                if (GetPrintDefinitionForPage(PrintAppendixes.Summary))
-                {
-                    if (!_summaryHeight.HasValue)
-                    {
-                        throw new InvalidOperationException("You have to set the height of the summary before printing if the PrintAppendixes flag has set to \"Summary\".");
-                    }
-
-                    return _summaryHeight.Value;
-                }
-
-                return 0;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-                _summaryHeight = value;
-            }
-        }
-
         internal PrintDefinition InternalPrintDefinition { get; set; }
+
+        internal IPrintProcessor PrintProcessor { get; set; }
 
         protected bool UseRelativeColumnPosition { get; set; }
 
-        internal Range<double> GetBodyGridRange(int pageNumber, bool isLastPage)
+        public void SetHeightValue(PrintAppendixes printAppendix, double value)
         {
-            var top = GetHeaderDescriptionRange(pageNumber, isLastPage).To;
-            var bottom = top + GetMaxGridHeight(pageNumber, isLastPage);
-
-            return new Range<double>(top, bottom);
+            if (_printPartDimensions.ContainsKey(printAppendix))
+            {
+                _printPartDimensions[printAppendix] = value;
+            }
         }
 
-        internal double GetMaxGridHeight(int pageNumber, bool isLastPage)
+        internal double GetHeightFor(PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
-            var reservedHeight = GetReservedHeight(pageNumber, isLastPage);
+            if (!InternalPrintDefinition.IsToPrint(printAppendix, pageNumber, isLastPage))
+            {
+                return 0;
+            }
+            if (!InternalPrintDefinition.IsDefined(printAppendix))
+            {
+                return 0;
+            }
+
+            double? value;
+            if (_printPartDimensions.TryGetValue(printAppendix, out value))
+            {
+                if (!value.HasValue)
+                {
+                    var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
+                    if (uiElement == null)
+                    {
+                        throw new ArgumentNullException($"${nameof(PrintProcessor)} must return a value for \"Get{printAppendix}\" if \"{printAppendix}\" is set.");
+                    }
+                    uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
+                    value = uiElement.DesiredSize.Height;
+                    _printPartDimensions[printAppendix] = value;
+                }
+                return value.Value;
+            }
+            throw new ArgumentOutOfRangeException(nameof(printAppendix), "Does not exists as height value");
+        }
+
+        internal double GetHeightForBodyGrid(int pageNumber, bool isLastPage)
+        {
+            var reservedHeight = GetHeightFor(PrintAppendixes.Summary, pageNumber, isLastPage) +
+                                 GetHeightFor(PrintAppendixes.HeaderDescription, pageNumber, isLastPage) +
+                                 GetHeightFor(PrintAppendixes.Header, pageNumber, isLastPage) +
+                                 GetHeightFor(PrintAppendixes.Footer, pageNumber, isLastPage) +
+                                 GetHeightFor(PrintAppendixes.PageNumbers, pageNumber, isLastPage);
+
             var maxGridHeight = PrintablePageSize.Height - reservedHeight;
             return maxGridHeight;
         }
 
-        internal double GetPageNumberHeight(int pageNumber)
+        /// <summary>
+        ///     Gets the range from which point the <paramref name="printAppendix" /> starts and where it ends.
+        ///     The layout of the page is constructed as follows:
+        ///     <list type="bullet">
+        ///         <item>
+        ///             <see cref="IPrintProcessor.GetHeader">Header</see>
+        ///         </item>
+        ///         <item>
+        ///             <see cref="IPrintProcessor.GetHeaderDescription">HeaderDescription</see>
+        ///         </item>
+        ///         <item>
+        ///             <see cref="IPrintProcessor.ItemCollection">Body Grid</see>
+        ///         </item>
+        ///         <item>
+        ///             <see cref="IPrintProcessor.GetSummary">Summary</see>
+        ///         </item>
+        ///         <item>
+        ///             <see cref="IPrintProcessor.GetFooter">Footer</see>
+        ///         </item>
+        ///         <item>Page numbers</item>
+        ///     </list>
+        /// </summary>
+        /// <param name="printAppendix"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="isLastPage"></param>
+        /// <returns></returns>
+        internal Range<double> GetRangeFor(PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
-            return InternalPrintDefinition.IsToPrint(PrintAppendixes.PageNumbers, pageNumber, false) ? 25 : 0;
-        }
+            double fromValue;
+            double height;
 
-        internal Range<double> GetRange(PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
-        {
             switch (printAppendix)
             {
                 case PrintAppendixes.Header:
-                    return GetHeaderRange(pageNumber, isLastPage);
-                case PrintAppendixes.Footer:
-                    return GetFooterRange(pageNumber, isLastPage);
-                case PrintAppendixes.Summary:
-                    return GetSummaryRange(pageNumber, isLastPage);
+                    fromValue = Margin.Top;
+                    height = GetHeightFor(printAppendix, pageNumber, isLastPage);
+                    break;
                 case PrintAppendixes.HeaderDescription:
-                    return GetHeaderDescriptionRange(pageNumber, isLastPage);
+                    fromValue = GetRangeFor(PrintAppendixes.Header, pageNumber, isLastPage).To;
+                    height = GetHeightFor(printAppendix, pageNumber, isLastPage);
+                    break;
+                case PrintAppendixes.Summary:
+                    fromValue = GetRangeFor(PrintAppendixes.HeaderDescription, pageNumber, isLastPage).To + GetHeightForBodyGrid(pageNumber, isLastPage);
+                    height = GetHeightFor(printAppendix, pageNumber, isLastPage);
+                    break;
+                case PrintAppendixes.Footer:
+                    fromValue = GetRangeFor(PrintAppendixes.Summary, pageNumber, isLastPage).To;
+                    height = GetHeightFor(printAppendix, pageNumber, isLastPage);
+                    break;
                 case PrintAppendixes.PageNumbers:
-                    return GetPageNumberRange(pageNumber, isLastPage);
+                    fromValue = GetRangeFor(PrintAppendixes.Footer, pageNumber, isLastPage).To;
+                    height = GetHeightFor(printAppendix, pageNumber, isLastPage);
+                    break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(printAppendix));
+                    throw new ArgumentException(nameof(printAppendix));
             }
+            return new Range<double>(fromValue, fromValue + height);
+        }
+
+        internal Range<double> GetRangeForBodyGrid(int pageNumber, bool isLastPage)
+        {
+            var top = GetRangeFor(PrintAppendixes.HeaderDescription, pageNumber, isLastPage).To;
+            var bottom = top + GetHeightForBodyGrid(pageNumber, isLastPage);
+
+            return new Range<double>(top, bottom);
         }
 
         internal void PositionizeRelative()
@@ -288,58 +263,6 @@ namespace Mairegger.Printing.Definition
             WritePropertyInformation(properties.Select(i => i.Key));
         }
 
-        private double GetFooterHeight(int pageNumber, bool isLastPage)
-        {
-            return InternalPrintDefinition.IsToPrint(PrintAppendixes.Footer, pageNumber, isLastPage) ? FooterHeight : 0;
-        }
-
-        private Range<double> GetFooterRange(int pageNumber, bool isLastPage)
-        {
-            var top = GetSummaryRange(pageNumber, isLastPage).To;
-            var bottom = top + GetFooterHeight(pageNumber, isLastPage);
-
-            return new Range<double>(top, bottom);
-        }
-
-        private double GetHeaderDescriptionHeight(int pageNumber, bool isLastPage)
-        {
-            return InternalPrintDefinition.IsToPrint(PrintAppendixes.HeaderDescription, pageNumber, isLastPage) ? HeaderDescriptionHeight : 0;
-        }
-
-        private Range<double> GetHeaderDescriptionRange(int pageNumber, bool isLastPage)
-        {
-            var top = GetHeaderRange(pageNumber, isLastPage).To;
-            var bottom = top + GetHeaderDescriptionHeight(pageNumber, isLastPage);
-
-            return new Range<double>(top, bottom);
-        }
-
-        private double GetHeaderHeight(int pageNumber, bool isLastPage)
-        {
-            return InternalPrintDefinition.IsToPrint(PrintAppendixes.Header, pageNumber, isLastPage) ? HeaderHeight : 0;
-        }
-
-        private Range<double> GetHeaderRange(int pageNumber, bool isLastPage)
-        {
-            var top = Margin.Top;
-            var bottom = top + GetHeaderHeight(pageNumber, isLastPage);
-
-            return new Range<double>(top, bottom);
-        }
-
-        private Range<double> GetPageNumberRange(int pageNumber, bool isLastPage)
-        {
-            var top = GetFooterRange(pageNumber, isLastPage).To;
-            var bottom = top + GetPageNumberHeight(pageNumber);
-
-            return new Range<double>(top, bottom);
-        }
-
-        private bool GetPrintDefinitionForPage(PrintAppendixes printAppendixes)
-        {
-            return InternalPrintDefinition.IsDefined(printAppendixes);
-        }
-
         private Dictionary<PropertyInfo, ColumnDimensionAttribute> GetPropertiesWithColumnDimensionAttribute()
         {
             var dict = new Dictionary<PropertyInfo, ColumnDimensionAttribute>();
@@ -358,36 +281,18 @@ namespace Mairegger.Printing.Definition
             return dict;
         }
 
-        private double GetReservedHeight(int pageNumber, bool isLastPage)
-        {
-            return GetSummaryHeight(pageNumber, isLastPage) + GetHeaderDescriptionHeight(pageNumber, isLastPage) + GetHeaderHeight(pageNumber, isLastPage) + GetFooterHeight(pageNumber, isLastPage) + GetPageNumberHeight(pageNumber);
-        }
-
-        private double GetSummaryHeight(int pageNumber, bool isLastPage)
-        {
-            return InternalPrintDefinition.IsToPrint(PrintAppendixes.Summary, pageNumber, isLastPage) ? SummaryHeight : 0;
-        }
-
-        private Range<double> GetSummaryRange(int pageNumber, bool isLastPage)
-        {
-            var top = GetBodyGridRange(pageNumber, isLastPage).To;
-            var bottom = top + GetSummaryHeight(pageNumber, isLastPage);
-
-            return new Range<double>(top, bottom);
-        }
-
         private void WritePropertyInformation(IEnumerable<PropertyInfo> propertyInfos)
         {
             Trace.WriteLine("Following print dimensions have been set:");
             Trace.Indent();
-            Trace.WriteLine("┌───────────────────────────┬─────────────┐");
-            Trace.WriteLine("│       PROPERTY NAME       │    VALUE    │");
-            Trace.WriteLine("├───────────────────────────┼─────────────┤");
+            Trace.WriteLine("┌──────────────────────────────────────────┬───────────────┐");
+            Trace.WriteLine("│              PROPERTY NAME               │     VALUE     │");
+            Trace.WriteLine("├──────────────────────────────────────────┼───────────────┤");
             foreach (var propertyInfo in propertyInfos)
             {
-                Trace.WriteLine($"│ {propertyInfo.Name,-25} │ {propertyInfo.GetValue(this),8:N3} px │");
+                Trace.WriteLine($"│ {propertyInfo.Name,-40} │ {propertyInfo.GetValue(this),10:N3} px │");
             }
-            Trace.WriteLine("└───────────────────────────┴─────────────┘");
+            Trace.WriteLine("└──────────────────────────────────────────┴───────────────┘");
             Trace.Unindent();
         }
     }

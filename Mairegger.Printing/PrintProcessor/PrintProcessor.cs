@@ -204,6 +204,7 @@ namespace Mairegger.Printing.PrintProcessor
 
         private void Prepare(Size pageSize)
         {
+            PrintDimension.PrintProcessor = this;
             PrintDimension.PageSize = pageSize;
             PreparePrint();
             PrintDimension.PositionizeRelative();
