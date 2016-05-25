@@ -33,14 +33,9 @@ namespace Mairegger.Printing.Definition
             return GetPrintPrintDefinitionForPage(pa, pageNumber, isLastPage) == PrintPartStatus.Include;
         }
 
-        public void SetPrintAttribute(IPrintPartDefinition definition)
+        public void SetPrintAttribute(IPrintPartDefinition printPartDefinition)
         {
-            if (definition == null)
-            {
-                throw new ArgumentNullException(nameof(definition));
-            }
-
-            _prinOnAttributeHelper.AddAttribute(definition);
+            _prinOnAttributeHelper.AddAttribute(printPartDefinition);
         }
 
         /// <summary>
@@ -59,7 +54,7 @@ namespace Mairegger.Printing.Definition
                 throw new ArgumentException(nameof(pa));
             }
 
-            if (IsDefined(pa))
+            //if (IsDefined(pa))
             {
                 return _prinOnAttributeHelper.IsPrintOnPage(pa, pageNumber);
             }

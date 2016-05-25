@@ -1,4 +1,4 @@
-// Copyright 2015 Michael Mairegger
+// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,19 +25,19 @@ namespace Mairegger.Printing.Internal
         private readonly List<PrintAppendixes> _printedWarnings = new List<PrintAppendixes>();
         private readonly List<IPrintPartDefinition> _printOnAttributes = new List<IPrintPartDefinition>();
 
-        public void AddAttribute(IPrintPartDefinition pageAttribute)
+        public void AddAttribute(IPrintPartDefinition printPartDefinition)
         {
-            if (pageAttribute == null)
+            if (printPartDefinition == null)
             {
-                throw new ArgumentNullException(nameof(pageAttribute));
+                throw new ArgumentNullException(nameof(printPartDefinition));
             }
-            Debug.WriteLine("PRINTING: Found {0} for {1}", pageAttribute.GetType().Name, pageAttribute.PrintAppendixes);
-            _printOnAttributes.Add(pageAttribute);
+            Debug.WriteLine("PRINTING: Found {0} for {1}", printPartDefinition.GetType().Name, printPartDefinition.PrintAppendixes);
+            _printOnAttributes.Add(printPartDefinition);
         }
 
         public bool IsDefined(PrintAppendixes printAppendixes)
         {
-            return _printOnAttributes.Any(pa => pa.PrintAppendixes.HasFlag(printAppendixes));
+            return GetPossiblePrintDefinitionAttributes(printAppendixes).Any();
         }
 
         public PrintPartStatus IsPrintOnPage(PrintAppendixes printA, int page)
@@ -47,8 +47,8 @@ namespace Mairegger.Printing.Internal
                 throw new ArgumentOutOfRangeException(nameof(page));
             }
 
-            var printOnPageAttributes = _printOnAttributes.Where(v => v.PrintAppendixes.HasFlag(printA)).ToArray();
-            if (printOnPageAttributes.Length == 0)
+            var printOnPageAttributes = GetPossiblePrintDefinitionAttributes(printA).ToList();
+            if (!printOnPageAttributes.Any())
             {
                 if (!_printedWarnings.Contains(printA))
                 {
@@ -75,6 +75,11 @@ namespace Mairegger.Printing.Internal
             }
 
             return PrintPartStatus.NotDefined;
+        }
+
+        private IEnumerable<IPrintPartDefinition> GetPossiblePrintDefinitionAttributes(PrintAppendixes printAppendixes)
+        {
+            return _printOnAttributes.Where(v => v.PrintAppendixes.HasFlag(printAppendixes));
         }
     }
 }

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Mairegger.Printing.Test
+namespace Mairegger.Printing.Test.Definition
 {
     #region Using Directives
 
@@ -181,7 +181,9 @@ namespace Mairegger.Printing.Test
         [Test]
         public void SetColumnDimensionToPropertyWithWrongType_ThrowsException()
         {
-            Assert.That(() => SetPageSizeToPrintDimension(new InvalidPrintDimension(), new Size(500, 1000)), Throws.InnerException.InstanceOf<InvalidOperationException>());
+            var invalidPrintDimension = new InvalidPrintDimension();
+            invalidPrintDimension.Column1 = invalidPrintDimension.Column1;
+            Assert.That(() => SetPageSizeToPrintDimension(invalidPrintDimension, new Size(500, 1000)), Throws.InnerException.InstanceOf<InvalidOperationException>());
         }
 
         [Test]
@@ -230,7 +232,7 @@ namespace Mairegger.Printing.Test
             }
 
             [ColumnDimension("1*")]
-            public int Column1 { get; private set; }
+            public int Column1 { get; set; }
         }
 
         private class CannotWritePrintDimension : PrintDimension

@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Mairegger.Printing.Test
+namespace Mairegger.Printing.Test.Definition
 {
+    using System;
     using Mairegger.Printing.Definition;
     using NUnit.Framework;
 
@@ -95,6 +96,14 @@ namespace Mairegger.Printing.Test
         {
             var pd = new PrintDefinition();
             Assert.That(() => pd.IsToPrint((PrintAppendixes)(-1), 1, false), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void IsToPrint_NegativePage_ThrowsException()
+        {
+            var pd = new PrintDefinition();
+            pd.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Footer));
+            Assert.That(() => pd.IsToPrint(PrintAppendixes.Footer, -1, false), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
         [Test]

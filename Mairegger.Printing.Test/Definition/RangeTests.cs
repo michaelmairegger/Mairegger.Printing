@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Mairegger.Printing.Test
+namespace Mairegger.Printing.Test.Definition
 {
     #region Using Directives
 
@@ -156,10 +156,7 @@ namespace Mairegger.Printing.Test
         {
             var r = Range.FromPoint(new ClassWithoutMinusOperatorOverloading());
 
-            Assert.Throws<RuntimeBinderException>(() =>
-                                                  {
-                                                      var i = r.Length;
-                                                  });
+            Assert.That(() => r.Length, Throws.TypeOf<RuntimeBinderException>());
         }
 
         [Test]
