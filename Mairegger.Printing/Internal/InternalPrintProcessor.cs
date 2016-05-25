@@ -261,7 +261,7 @@ namespace Mairegger.Printing.Internal
                                     Height = _printProcessor.PrintDimension.GetHeightFor(PrintAppendixes.PageNumbers, currentPageCount, currentPageCount == to)
                                 };
 
-                AddSpecialElement(currentPageCount == to, pageContent, PrintAppendixes.PageNumbers, () => textBlock);
+                AddSpecialElement(currentPageCount == to, currentPageCount, pageContent, PrintAppendixes.PageNumbers, () => textBlock);
             }
         }
 
@@ -269,19 +269,19 @@ namespace Mairegger.Printing.Internal
         {
             AddBackground(content, isLastPage);
 
-            AddSpecialElement(isLastPage, content, PrintAppendixes.Header, () => _printProcessor.GetHeader());
-            AddSpecialElement(isLastPage, content, PrintAppendixes.HeaderDescription, () => _printProcessor.GetHeaderDescription());
-            AddSpecialElement(isLastPage, content, PrintAppendixes.Summary, () => _printProcessor.GetSummary());
-            AddSpecialElement(isLastPage, content, PrintAppendixes.Footer, () => _printProcessor.GetFooter());
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Header, () => _printProcessor.GetHeader());
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.HeaderDescription, () => _printProcessor.GetHeaderDescription());
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Summary, () => _printProcessor.GetSummary());
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Footer, () => _printProcessor.GetFooter());
         }
 
-        private void AddSpecialElement(bool isLastpage, PageContent pageContent, PrintAppendixes appendix, Func<UIElement> printElement)
+        private void AddSpecialElement(bool isLastpage, int pageNumber, PageContent pageContent, PrintAppendixes appendix, Func<UIElement> printElement)
         {
             if (printElement == null)
             {
                 throw new ArgumentNullException(nameof(printElement));
             }
-            if (!_printProcessor.PrintDefinition.IsToPrint(appendix, CurrentPageNumber, isLastpage))
+            if (!_printProcessor.PrintDefinition.IsToPrint(appendix, pageNumber, isLastpage))
             {
                 return;
             }
@@ -292,8 +292,8 @@ namespace Mairegger.Printing.Internal
                 throw new InvalidOperationException($"The {appendix} cannot be null if the corresponding flag in the PrintAppendix is set");
             }
 
-            Trace.TraceInformation($"Print {appendix} desciption on page #{CurrentPageNumber} ");
-            PositionizeUiElement(pageContent, elementToPrint, appendix, isLastpage);
+            Debug.WriteLine($"PRINTING: Print {appendix} desciption on page #{pageNumber} ");
+            PositionizeUiElement(pageContent, elementToPrint, appendix, pageNumber, isLastpage);
         }
 
         private void ConcludeDocument()
@@ -381,9 +381,9 @@ namespace Mairegger.Printing.Internal
             return pageContent;
         }
 
-        private void PositionizeUiElement(PageContent pageContent, UIElement panel, PrintAppendixes printAppendix, bool isLastPage)
+        private void PositionizeUiElement(PageContent pageContent, UIElement panel, PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
-            var positioninRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, CurrentPageNumber, isLastPage);
+            var positioninRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, pageNumber, isLastPage);
             var position = new Point(_printProcessor.PrintDimension.Margin.Left, positioninRange.From);
 
             var panelHeight = positioninRange.Length;
