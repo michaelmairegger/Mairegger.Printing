@@ -90,9 +90,7 @@ namespace Mairegger.Printing.Definition
                 result = GetPrintPrintDefinitionForPage(pa, pageNumber);
             }
 
-            Debug.WriteLineIf(result == PrintPartStatus.NotDefined, pa + " not defined on page " + pageNumber + " (lastpage=" + isLastPage + ")");
-            Debug.WriteLineIf(result == PrintPartStatus.Include, pa + " included on page " + pageNumber + " (lastpage=" + isLastPage + ")");
-            Debug.WriteLineIf(result == PrintPartStatus.Exclude, pa + " excluded on page " + pageNumber + " (lastpage=" + isLastPage + ")");
+            Debug.WriteLine($"{pa,-20}| {result,-12}| {(isLastPage? "last page" : $"page {pageNumber}")}");
 
             return result;
         }

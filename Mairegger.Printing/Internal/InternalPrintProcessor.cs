@@ -117,7 +117,7 @@ namespace Mairegger.Printing.Internal
 
             var positioningPoint = new Point(backgound.Size.Left, backgound.Size.Top);
 
-            Trace.TraceInformation($"Print background on page #{CurrentPageNumber} ");
+            Debug.WriteLine($"PRINTING: Print background on page #{CurrentPageNumber} ");
             PositionizeUiElement(pageContent, backgound.Element, positioningPoint);
         }
 
@@ -135,7 +135,7 @@ namespace Mairegger.Printing.Internal
             }
             else
             {
-                Trace.TraceInformation("There are no ILineItems available to print");
+                Debug.WriteLine("PRINTING: There are no ILineItems available to print");
                 ConcludeDocument();
             }
         }
@@ -154,7 +154,7 @@ namespace Mairegger.Printing.Internal
                 if ((lineElement.GetValue(Panel.BackgroundProperty) != null) && !_alternatingWarningShown)
                 {
                     _alternatingWarningShown = true;
-                    Trace.TraceInformation("Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");
+                    Debug.WriteLine("PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");
                 }
 
                 lineElement.SetValue(Panel.BackgroundProperty, alternatingRowBackground);
@@ -189,7 +189,7 @@ namespace Mairegger.Printing.Internal
                 Action addLastLineData = () =>
                                          {
                                              AddLineData(content);
-                                             Trace.TraceInformation("Last item print");
+                                             Debug.WriteLine("PRINTING: Last item print");
                                          };
 
                 Action<Action, Action> doAction = (first, second) =>
@@ -225,7 +225,7 @@ namespace Mairegger.Printing.Internal
             }
             else if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, false))
             {
-                Trace.TraceInformation("Second chance because item has no space");
+                Debug.WriteLine("PRINTING: Second chance because item has no space");
                 AddLineData(content);
                 _pageHelper.RemoveRemainingSpace(lineHeiht);
             }
@@ -252,7 +252,7 @@ namespace Mairegger.Printing.Internal
                     continue;
                 }
 
-                Trace.TraceInformation($"Print Page Numbers on page #{currentPageCount}");
+                Debug.WriteLine($"PRINTING: Print Page Numbers on page #{currentPageCount}");
                 var textBlock = new TextBlock
                                 {
                                     Text = $"{currentPageCount} | {FixedDocument.Pages.Count - from}",
@@ -303,7 +303,7 @@ namespace Mairegger.Printing.Internal
 
         private void ConcludeDocumentPage(PageHelper pageHelper, bool isLastPage)
         {
-            Trace.TraceInformation("Conclude Document Page");
+            Debug.WriteLine("PRINTING: Conclude Document Page");
 
             var content = GetNewDocumentPage();
 

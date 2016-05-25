@@ -37,8 +37,6 @@ namespace Mairegger.Printing.Definition
         protected PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, Range<int> pages)
             : this(printAppendixes)
         {
-            Debug.WriteLine($"PrintRange: {printAppendixes} {pages}", "PrintOnPageAttribute");
-
             AddRange(pages);
         }
 

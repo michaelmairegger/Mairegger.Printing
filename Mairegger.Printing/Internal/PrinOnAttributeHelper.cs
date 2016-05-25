@@ -31,7 +31,7 @@ namespace Mairegger.Printing.Internal
             {
                 throw new ArgumentNullException(nameof(pageAttribute));
             }
-            Trace.TraceInformation("Found {0} for {1}", pageAttribute.GetType().Name, pageAttribute.PrintAppendixes);
+            Debug.WriteLine("PRINTING: Found {0} for {1}", pageAttribute.GetType().Name, pageAttribute.PrintAppendixes);
             _printOnAttributes.Add(pageAttribute);
         }
 
@@ -53,7 +53,7 @@ namespace Mairegger.Printing.Internal
                 if (!_printedWarnings.Contains(printA))
                 {
                     _printedWarnings.Add(printA);
-                    Trace.TraceWarning("The {0}-Attribute is not defined as PrintOnPageAttribute on Your PrintProcessor. Remove {0} as PrintAppendix or add it as PrintOnPageAttribute", printA);
+                    Debug.WriteLine("PRINTING: The {0}-Attribute is not defined as PrintOnPageAttribute on Your PrintProcessor. Remove {0} as PrintAppendix or add it as PrintOnPageAttribute", printA);
                 }
 
                 return PrintPartStatus.NotDefined;

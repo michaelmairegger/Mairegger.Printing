@@ -111,10 +111,6 @@ namespace Mairegger.Printing.Definition
             {
                 return 0;
             }
-            if (!InternalPrintDefinition.IsDefined(printAppendix))
-            {
-                return 0;
-            }
 
             double? value;
             if (_printPartDimensions.TryGetValue(printAppendix, out value))
@@ -283,17 +279,17 @@ namespace Mairegger.Printing.Definition
 
         private void WritePropertyInformation(IEnumerable<PropertyInfo> propertyInfos)
         {
-            Trace.WriteLine("Following print dimensions have been set:");
-            Trace.Indent();
-            Trace.WriteLine("┌──────────────────────────────────────────┬───────────────┐");
-            Trace.WriteLine("│              PROPERTY NAME               │     VALUE     │");
-            Trace.WriteLine("├──────────────────────────────────────────┼───────────────┤");
+            Debug.WriteLine("PRINTING: Following print dimensions have been set:");
+            Debug.Indent();
+            Debug.WriteLine("PRINTING: ┌──────────────────────────────────────────┬───────────────┐");
+            Debug.WriteLine("PRINTING: │              PROPERTY NAME               │     VALUE     │");
+            Debug.WriteLine("PRINTING: ├──────────────────────────────────────────┼───────────────┤");
             foreach (var propertyInfo in propertyInfos)
             {
-                Trace.WriteLine($"│ {propertyInfo.Name,-40} │ {propertyInfo.GetValue(this),10:N3} px │");
+                Debug.WriteLine($"PRINTING: │ {propertyInfo.Name,-40} │ {propertyInfo.GetValue(this),10:N3} px │");
             }
-            Trace.WriteLine("└──────────────────────────────────────────┴───────────────┘");
-            Trace.Unindent();
+            Debug.WriteLine("PRINTING: └──────────────────────────────────────────┴───────────────┘");
+            Debug.Unindent();
         }
     }
 }
