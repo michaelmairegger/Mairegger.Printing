@@ -35,17 +35,12 @@ namespace Mairegger.Printing.Definition
 
         public void SetPrintAttribute(IPrintPartDefinition definition)
         {
-            _prinOnAttributeHelper.AddAttribute(definition);
-        }
-
-        public void SetPrintOnAttribute(IPrintPartDefinition printOnPageAttribute)
-        {
-            if (printOnPageAttribute == null)
+            if (definition == null)
             {
-                throw new ArgumentNullException(nameof(printOnPageAttribute));
+                throw new ArgumentNullException(nameof(definition));
             }
 
-            _prinOnAttributeHelper.AddAttribute(printOnPageAttribute);
+            _prinOnAttributeHelper.AddAttribute(definition);
         }
 
         /// <summary>

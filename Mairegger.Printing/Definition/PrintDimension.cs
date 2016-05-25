@@ -107,14 +107,9 @@ namespace Mairegger.Printing.Definition
 
         internal double GetHeightFor(PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
-            if (!InternalPrintDefinition.IsToPrint(printAppendix, pageNumber, isLastPage))
+            if (InternalPrintDefinition.IsToPrint(printAppendix, pageNumber, isLastPage))
             {
-                return 0;
-            }
-
-            double? value;
-            if (_printPartDimensions.TryGetValue(printAppendix, out value))
-            {
+                double? value = _printPartDimensions[printAppendix];
                 if (!value.HasValue)
                 {
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
@@ -128,7 +123,7 @@ namespace Mairegger.Printing.Definition
                 }
                 return value.Value;
             }
-            throw new ArgumentOutOfRangeException(nameof(printAppendix), "Does not exists as height value");
+            return 0;
         }
 
         internal double GetHeightForBodyGrid(int pageNumber, bool isLastPage)

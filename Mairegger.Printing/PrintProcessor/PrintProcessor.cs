@@ -216,7 +216,7 @@ namespace Mairegger.Printing.PrintProcessor
 
             foreach (var printOnAttribute in customPageAttributes)
             {
-                PrintDefinition.SetPrintOnAttribute(printOnAttribute);
+                PrintDefinition.SetPrintAttribute(printOnAttribute);
             }
             PrintDimension.InternalPrintDefinition = PrintDefinition;
         }
