@@ -14,34 +14,24 @@
 
 namespace Mairegger.Printing.Content
 {
-    using System;
-    using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
 
-    internal sealed class CombinedPrintContentCollection : List<IPrintContent>, IPrintContent
+    internal class HorizontalLine : IPrintContent
     {
-        public CombinedPrintContentCollection(params IPrintContent[] content)
+        private readonly Thickness _margin;
+        internal HorizontalLine(Thickness margin = new Thickness())
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-            AddRange(content);
+            _margin = margin;
         }
 
         public UIElement Content
         {
             get
             {
-                var contentPanel = new StackPanel();
-
-                foreach (var lineItem in this)
-                {
-                    contentPanel.Children.Add(lineItem.Content);
-                }
-
-                return contentPanel;
+                Grid g = new Grid { Margin = _margin };
+                g.Children.Add(new Separator());
+                return g;
             }
         }
     }

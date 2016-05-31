@@ -1,4 +1,4 @@
-// Copyright 2015 Michael Mairegger
+// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <summary>
         ///     Creates the document in order to provide a preview of the document
         /// </summary>
-        void PreviewDocument();
+        void PreviewDocument(IWindowProvider windowsProvider = null);
 
         /// <summary>
         ///     Prints the document.

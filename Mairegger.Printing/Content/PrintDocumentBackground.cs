@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@ namespace Mairegger.Printing.Content
     using System;
     using System.Windows;
     using System.Windows.Controls;
+    using JetBrains.Annotations;
 
     public sealed class PrintDocumentBackground
     {
-        public PrintDocumentBackground(Panel panel, Rect size = new Rect())
+        public PrintDocumentBackground([NotNull] Panel panel, Rect size = new Rect())
         {
             if (panel == null)
             {
@@ -31,8 +32,8 @@ namespace Mairegger.Printing.Content
             Element = panel;
         }
 
-        public Panel Element { get; private set; }
+        public Panel Element { get; }
 
-        public Rect Size { get; private set; }
+        public Rect Size { get; }
     }
 }

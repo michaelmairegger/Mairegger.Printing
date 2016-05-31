@@ -14,31 +14,26 @@
 
 namespace Mairegger.Printing.Internal
 {
+    using System;
+    using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Definition;
+    using Mairegger.Printing.PrintProcessor;
 
-    internal class PageHelper
+    internal class WindowsProvider : IWindowProvider
     {
-        private const double Threshold = 0;
+        private readonly Window _window = new Window { WindowStartupLocation = WindowStartupLocation.CenterOwner };
 
-        public ItemsControl BodyGrid { get; set; }
-
-        public Brush BorderBrush { get; set; }
-
-        public PrintDimension PrintingDimension { private get; set; }
-
-        private double UsedSpace { get; set; }
-
-        public bool HasSpace(double space, int pageCount, bool supposeLastPage)
+        public event EventHandler Closed
         {
-            var maxGridHeight = PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage);
-            return maxGridHeight - UsedSpace - space >= 0;
+            add { _window.Closed += value; }
+            remove { _window.Closed -= value; }
         }
 
-        public void RemoveRemainingSpace(double space)
+        public void Show(string windowTitle, DocumentViewer documentViewer)
         {
-            UsedSpace += space + Threshold;
+            _window.Content = documentViewer;
+            _window.Title = $"Preview: {windowTitle}";
+            _window.Show();
         }
     }
 }

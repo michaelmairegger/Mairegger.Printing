@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -53,13 +53,7 @@ namespace Mairegger.Printing.Definition
             {
                 throw new ArgumentException(nameof(pa));
             }
-
-            //if (IsDefined(pa))
-            {
-                return _prinOnAttributeHelper.IsPrintOnPage(pa, pageNumber);
-            }
-
-            return PrintPartStatus.NotDefined;
+            return _prinOnAttributeHelper.IsPrintOnPage(pa, pageNumber);
         }
 
         [SuppressMessage("ReSharper", "BitwiseOperatorOnEnumWithoutFlags", Justification = "This is OK, because PrintPartStatus should not have a flag-attribute and the line with & should be a bit-flag")]
@@ -80,7 +74,7 @@ namespace Mairegger.Printing.Definition
                 result = GetPrintPrintDefinitionForPage(pa, pageNumber);
             }
 
-            Debug.WriteLine($"{pa,-20}| {result,-12}| {(isLastPage? "last page" : $"page {pageNumber}")}");
+            Debug.WriteLine($"{pa,-20}| {result,-12}| {(isLastPage ? "last page" : $"page {pageNumber}")}");
 
             return result;
         }

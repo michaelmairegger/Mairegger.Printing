@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,16 @@
 
 namespace Mairegger.Printing.PrintProcessor
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Printing;
     using System.Text;
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Media;
+    using JetBrains.Annotations;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
     using Mairegger.Printing.Internal;
@@ -32,16 +33,15 @@ namespace Mairegger.Printing.PrintProcessor
     /// </summary>
     public abstract class PrintProcessor : IPrintProcessor
     {
-        private PrintDialog _printDialog;
+        private string _fileName = string.Empty;
+        private IPrintDialog _printDialog;
+        private PrintDimension _printDimension = new PrintDimension();
 
         protected PrintProcessor()
         {
+            _printDialog = new PrintDialogWrapper();
             PageOrientation = PageOrientation.Portrait;
         }
-
-        public abstract string FileName { get; }
-
-        public abstract PrintDimension PrintDimension { get; }
 
         public virtual IList<SolidColorBrush> AlternatingRowColors { get; set; } = new[]
                                                                                    {
@@ -53,24 +53,55 @@ namespace Mairegger.Printing.PrintProcessor
 
         public int CurrentPage { get; set; }
 
+        public string FileName
+        {
+            get { return _fileName; }
+            set { _fileName = ReplaceInvalidCharsFromFilename(value); }
+        }
+
         public bool IsAlternatingRowColor { get; set; }
 
-        public PageOrientation PageOrientation { get; set; }
+        public PageOrientation PageOrientation
+        {
+            get { return PrintDialog.PrintTicket.PageOrientation.GetValueOrDefault(); }
+            set { PrintDialog.PrintTicket.PageOrientation = value; }
+        }
 
         public PrintDefinition PrintDefinition { get; } = new PrintDefinition();
 
-        internal PrintDialog PrintDialog => _printDialog ?? (_printDialog = new PrintDialog
-                                                                            {
-                                                                                PrintTicket = { PageOrientation = PageOrientation }
-                                                                            });
+        public IPrintDialog PrintDialog
+        {
+            get { return _printDialog; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+                _printDialog = value;
+            }
+        }
 
-        public static bool PrintDocument(PrintDialog printDialog, PrintProcessorCollection pp)
+        public PrintDimension PrintDimension
+        {
+            get { return _printDimension; }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+                _printDimension = value;
+            }
+        }
+
+        public static bool PrintDocument(IPrintDialog printDialog, PrintProcessorCollection pp)
         {
             var pageSize = new Size(printDialog.PrintableAreaWidth, printDialog.PrintableAreaHeight);
 
             var fixedDocument = CreateDocument(pageSize, pp);
 
-            printDialog.PrintDocument(fixedDocument.DocumentPaginator, ReplaceInvalidCharsFromFilename(pp.FileName));
+            printDialog.PrintDocument(fixedDocument.DocumentPaginator, pp.FileName);
 
             return true;
         }
@@ -108,9 +139,9 @@ namespace Mairegger.Printing.PrintProcessor
         {
         }
 
-        public void PreviewDocument()
+        public void PreviewDocument(IWindowProvider windowsProvider = null)
         {
-            PreviewDocument(new PrintProcessorCollection(this));
+            PreviewDocument(new PrintProcessorCollection(this), windowsProvider);
         }
 
         public bool PrintDocument(string printQueueName, PrintServer printServer)
@@ -147,20 +178,48 @@ namespace Mairegger.Printing.PrintProcessor
             XpsHelper.SaveFixedDocument(fixedDocument, file);
         }
 
-        internal static void PreviewDocument(PrintProcessorCollection ppc)
+        internal static void PreviewDocument(PrintProcessorCollection ppc, IWindowProvider windowsProvider = null)
         {
+            if (!ppc.Any())
+            {
+                return;
+            }
             var pd = ppc.First().PrintDialog;
 
             var fixedDocument = CreateDocument(new Size(pd.PrintableAreaWidth, pd.PrintableAreaHeight), ppc);
 
-            XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName);
+            XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName, windowsProvider);
+        }
+
+        [NotNull]
+        internal static string ReplaceInvalidCharsFromFilename(string path)
+        {
+            if (path == null)
+            {
+                return string.Empty;
+            }
+
+            var invalidFileNameChars = Path.GetInvalidFileNameChars().Union(new[]
+                                                                            {
+                                                                                '.'
+                                                                            }).ToList();
+            return path.Aggregate(
+                new StringBuilder(),
+                (sb, c) =>
+                {
+                    if (invalidFileNameChars.Contains(c))
+                    {
+                        return sb;
+                    }
+                    return sb.Append(c);
+                }).ToString();
         }
 
         protected virtual void PreparePrint()
         {
         }
 
-        protected virtual bool PrintDocument(PrintDialog printDialog)
+        protected virtual bool PrintDocument(IPrintDialog printDialog)
         {
             return PrintDocument(printDialog, new PrintProcessorCollection(this));
         }
@@ -178,28 +237,6 @@ namespace Mairegger.Printing.PrintProcessor
 
             var internalPrintProcessor = new InternalPrintProcessor();
             return internalPrintProcessor.CreateFixedDocument(p);
-        }
-
-        private static string ReplaceInvalidCharsFromFilename(string path, char? replaceInvalidCharsWith = null)
-        {
-            var invalidFileNameChars = Path.GetInvalidFileNameChars().Union(new[]
-                                                                            {
-                                                                                '.'
-                                                                            }).ToList();
-            return path.Aggregate(
-                new StringBuilder(),
-                (sb, c) =>
-                {
-                    if (invalidFileNameChars.Contains(c))
-                    {
-                        if (replaceInvalidCharsWith != null)
-                        {
-                            return sb.Append(replaceInvalidCharsWith);
-                        }
-                        return sb;
-                    }
-                    return sb.Append(c);
-                }).ToString();
         }
 
         private void Prepare(Size pageSize)

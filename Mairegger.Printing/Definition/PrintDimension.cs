@@ -115,7 +115,7 @@ namespace Mairegger.Printing.Definition
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
                     if (uiElement == null)
                     {
-                        throw new ArgumentNullException($"${nameof(PrintProcessor)} must return a value for \"Get{printAppendix}\" if \"{printAppendix}\" is set.");
+                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", $"{typeof(PrintProcessor)} must return a value for \"Get{printAppendix}()\" if \"{printAppendix}\" is set.");
                     }
                     uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
                     value = uiElement.DesiredSize.Height;

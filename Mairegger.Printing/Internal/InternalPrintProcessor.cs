@@ -158,6 +158,7 @@ namespace Mairegger.Printing.Internal
                 }
 
                 lineElement.SetValue(Panel.BackgroundProperty, alternatingRowBackground);
+                contentControl.Background = alternatingRowBackground;
             }
 
             bodyGrid.Items.Add(contentControl);

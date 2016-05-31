@@ -1,4 +1,4 @@
-// Copyright 2016 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Mairegger.Printing.Definition
+namespace Mairegger.Printing.Content
 {
-    /// <summary>
-    ///     Defined to include or exclude parts from printing.
-    /// </summary>
-    public enum PrintPartStatus
+    using System.Windows;
+
+    internal class DirectContentLineItem : IPrintContent
     {
-        Exclude = 0,
-        Include = 1,
-        NotDefined = 3
+        public DirectContentLineItem(UIElement content)
+        {
+            Content = content;
+        }
+
+        public UIElement Content { get; }
     }
 }

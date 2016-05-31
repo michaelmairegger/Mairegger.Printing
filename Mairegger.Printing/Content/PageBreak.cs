@@ -17,7 +17,7 @@ namespace Mairegger.Printing.Content
     using System;
     using System.Windows;
 
-    public sealed class PageBreak : IPrintContent
+    internal sealed class PageBreak : IPrintContent
     {
         private static readonly Lazy<PageBreak> LazyInstance = new Lazy<PageBreak>(() => new PageBreak());
 

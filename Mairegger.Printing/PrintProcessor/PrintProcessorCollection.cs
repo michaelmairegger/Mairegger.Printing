@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,25 +19,29 @@ namespace Mairegger.Printing.PrintProcessor
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Printing;
-    using System.Windows.Controls;
+    using JetBrains.Annotations;
 
     public class PrintProcessorCollection : Collection<PrintProcessor>, IPrintProcessorPrinter
     {
-        public PrintProcessorCollection(PrintProcessor printProcessor)
-            : this(new List<PrintProcessor> { printProcessor }, printProcessor.FileName)
+        private string _fileName = string.Empty;
+
+        public PrintProcessorCollection([NotNull] PrintProcessor printProcessor)
+            : this(new List<PrintProcessor> { printProcessor })
         {
             if (printProcessor == null)
             {
                 throw new ArgumentNullException(nameof(printProcessor));
             }
+
+            _fileName = printProcessor.FileName;
         }
 
-        public PrintProcessorCollection(IEnumerable<PrintProcessor> coll, string fileName = "")
+        public PrintProcessorCollection([NotNull] IEnumerable<PrintProcessor> coll, string fileName = "")
             : this(new List<PrintProcessor>(coll), fileName)
         {
         }
 
-        public PrintProcessorCollection(IList<PrintProcessor> coll, string fileName = "")
+        public PrintProcessorCollection([NotNull] IList<PrintProcessor> coll, string fileName = "")
         {
             if (coll == null)
             {
@@ -54,7 +58,11 @@ namespace Mairegger.Printing.PrintProcessor
             }
         }
 
-        public string FileName { get; private set; }
+        public string FileName
+        {
+            get { return _fileName; }
+            set { _fileName = PrintProcessor.ReplaceInvalidCharsFromFilename(value); }
+        }
 
         /// <summary>
         ///     Sets whether for each <see cref="System.Printing.PrintProcessor" /> in <see cref="Collection{T}.Items" /> the page
@@ -69,9 +77,9 @@ namespace Mairegger.Printing.PrintProcessor
         /// <summary>
         ///     Creates the document in order to provide a preview of the document
         /// </summary>
-        public void PreviewDocument()
+        public void PreviewDocument(IWindowProvider windowsProvider = null)
         {
-            PrintProcessor.PreviewDocument(this);
+            PrintProcessor.PreviewDocument(this, windowsProvider);
         }
 
         /// <summary>
@@ -86,7 +94,7 @@ namespace Mairegger.Printing.PrintProcessor
             }
 
             var p = this.First();
-            PrintDialog pd = p.PrintDialog;
+            IPrintDialog pd = p.PrintDialog;
 
             if (pd.ShowDialog().Equals(false))
             {
@@ -111,7 +119,7 @@ namespace Mairegger.Printing.PrintProcessor
             }
 
             var p = this.First();
-            PrintDialog pd = p.PrintDialog;
+            IPrintDialog pd = p.PrintDialog;
             pd.PrintQueue = new PrintQueue(printServer, printQueueName);
 
             return PrintProcessor.PrintDocument(pd, this);

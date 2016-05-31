@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Michael Mairegger
+﻿// Copyright 2016 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@
 
 namespace Mairegger.Printing.PrintProcessor
 {
+    using System;
     using System.IO;
-    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Markup;
     using System.Windows.Xps.Packaging;
+    using Mairegger.Printing.Internal;
 
     /// <summary>
     ///     Represents a helper class for displaying a <see cref="FixedDocument" /> in a <see cref="DocumentViewer" />.
@@ -64,50 +65,32 @@ namespace Mairegger.Printing.PrintProcessor
         }
 
         /// <summary>
-        ///     Saves the <see cref="FixedDocument" /> to a temporary file.
-        /// </summary>
-        /// <param name="fixedDocument">The document to save.</param>
-        /// <returns>The <see cref="FileInfo" /> for the document that has been created.</returns>
-        public static FileInfo SaveFixedDocument(FixedDocument fixedDocument)
-        {
-            var tempFileName = Path.GetTempFileName();
-            SaveFixedDocument(fixedDocument, tempFileName);
-
-            return new FileInfo(tempFileName);
-        }
-
-        /// <summary>
         ///     Displays the <see cref="FixedDocument" /> in a <see cref="DocumentViewer" />
         /// </summary>
         /// <param name="fixedDocument">The fixed document to display.</param>
         /// <param name="title">Title of the preview window</param>
-        public static void ShowFixedDocument(FixedDocument fixedDocument, string title)
+        public static void ShowFixedDocument(FixedDocument fixedDocument, string title, IWindowProvider windowProvider = null)
         {
             var tempFileName = Path.GetTempFileName();
 
             WriteXps(fixedDocument, tempFileName);
-            ShowXps(tempFileName, title);
+            ShowXps(tempFileName, title, windowProvider);
         }
 
-        public static void ShowXps(string fileName, string title)
+        public static void ShowXps(string fileName, string title, IWindowProvider windowProvider = null)
         {
             var xpsDocument = new XpsDocument(fileName, FileAccess.Read);
 
             var documentViewer = new DocumentViewer { Document = xpsDocument.GetFixedDocumentSequence() };
-            var previewWindow = new Window
-                                {
-                                    Content = documentViewer,
-                                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                                    Title = $"Preview: {title}"
-                                };
 
-            previewWindow.Show();
-            previewWindow.Closed += (sender, args) =>
-                                    {
-                                        xpsDocument.Close();
+            if (windowProvider == null)
+            {
+                windowProvider = new WindowsProvider();
+            }
 
-                                        File.Delete(fileName);
-                                    };
+            windowProvider.Closed += PreviewWindowOnClosed(fileName, xpsDocument);
+            windowProvider.Show(title, documentViewer);
+            windowProvider.Closed -= PreviewWindowOnClosed(fileName, xpsDocument);
         }
 
         private static void Add(string path, FixedDocumentSequence fixedDocumentSequence)
@@ -131,6 +114,16 @@ namespace Mairegger.Printing.PrintProcessor
                     }
                 }
             }
+        }
+
+        private static EventHandler PreviewWindowOnClosed(string fileName, XpsDocument xpsDocument)
+        {
+            return (sender, args) =>
+                   {
+                       xpsDocument.Close();
+
+                       File.Delete(fileName);
+                   };
         }
 
         private static void WriteXps(IDocumentPaginatorSource fixedDocument, string tempFileName)

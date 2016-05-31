@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Mairegger.Printing.Definition
+namespace Mairegger.Printing.PrintProcessor
 {
-    /// <summary>
-    ///     Defined to include or exclude parts from printing.
-    /// </summary>
-    public enum PrintPartStatus
+    using System;
+    using System.Windows.Controls;
+
+    public interface IWindowProvider
     {
-        Exclude = 0,
-        Include = 1,
-        NotDefined = 3
+        event EventHandler Closed;
+
+        void Show(string windowTitle, DocumentViewer documentViewer);
     }
 }

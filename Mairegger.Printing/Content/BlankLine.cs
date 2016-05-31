@@ -15,34 +15,24 @@
 namespace Mairegger.Printing.Content
 {
     using System;
-    using System.Collections.Generic;
     using System.Windows;
-    using System.Windows.Controls;
 
-    internal sealed class CombinedPrintContentCollection : List<IPrintContent>, IPrintContent
+    internal class BlankLine : IPrintContent
     {
-        public CombinedPrintContentCollection(params IPrintContent[] content)
+        private readonly double _height;
+
+        internal BlankLine(double height)
         {
-            if (content == null)
+            if (height < 0)
             {
-                throw new ArgumentNullException(nameof(content));
+                throw new ArgumentOutOfRangeException(nameof(height));
             }
-            AddRange(content);
+            _height = height;
         }
 
         public UIElement Content
         {
-            get
-            {
-                var contentPanel = new StackPanel();
-
-                foreach (var lineItem in this)
-                {
-                    contentPanel.Children.Add(lineItem.Content);
-                }
-
-                return contentPanel;
-            }
+            get { return new FrameworkElement { Height = _height }; }
         }
     }
 }
