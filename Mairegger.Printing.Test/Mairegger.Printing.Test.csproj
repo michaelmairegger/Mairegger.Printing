@@ -46,7 +46,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -59,6 +62,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Content\CombinedPrintContentCollectionTests.cs" />
+    <Compile Include="Content\PageBreakTests.cs" />
+    <Compile Include="Content\PrintDocumentBackgroundTest.cs" />
+    <Compile Include="Content\PrintProcessorCollectionTests.cs" />
+    <Compile Include="Content\PrintProcessorTests.cs" />
+    <Compile Include="Content\PrintProcessorWithPrintOnAttribute.cs" />
+    <Compile Include="Content\TestPrintProcessor.cs" />
     <Compile Include="Definition\ColumnDimensionAttributeTests.cs" />
     <Compile Include="Definition\ExcludeFromPagesTests.cs" />
     <Compile Include="Definition\PrintDefinitionTest.cs" />

@@ -52,7 +52,7 @@ namespace Mairegger.Printing.Test.Definition
         [Test]
         public void InvalidPrintDimension()
         {
-            Assert.Throws<ArgumentException>(() => new ColumnDimensionAttribute(""));
+            Assert.Throws<ArgumentException>(() => new ColumnDimensionAttribute(string.Empty));
         }
 
         [Test]
