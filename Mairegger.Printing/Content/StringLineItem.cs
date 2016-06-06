@@ -16,7 +16,6 @@ namespace Mairegger.Printing.Content
 {
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Documents;
     using System.Windows.Media;
 
     public class StringLineItem : IPrintContent
@@ -55,7 +54,14 @@ namespace Mairegger.Printing.Content
                 }
                 g.Margin = Margin;
 
-                var textBlock = new TextBlock(new Run(Text)) { HorizontalAlignment = HorizontalAlignment, Padding = Padding, TextWrapping = TextWrapping.Wrap };
+                var textBlock = new TextBlock
+                                {
+                                    Text = Text,
+                                    HorizontalAlignment = HorizontalAlignment,
+                                    Padding = Padding,
+                                    TextWrapping = TextWrapping.Wrap
+                                };
+
                 if (FontSize.HasValue)
                 {
                     textBlock.FontSize = FontSize.Value;

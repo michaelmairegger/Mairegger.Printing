@@ -106,7 +106,10 @@ namespace Mairegger.Printing.Test.Content
         [Apartment(ApartmentState.STA)]
         public void PreviewDocument1()
         {
-            var printProcessor = new PrintProcessorCollection(new TestPrintProcessor());
+            var printDialog = new Mock<IPrintDialog>();
+            var testPrintProcessor = new TestPrintProcessor();
+            testPrintProcessor.PrintDialog = printDialog.Object;
+            var printProcessor = new PrintProcessorCollection(testPrintProcessor);
             var windowProvider = new Mock<IWindowProvider>();
             printProcessor.PreviewDocument(windowProvider.Object);
 

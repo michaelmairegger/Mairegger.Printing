@@ -16,6 +16,7 @@ namespace Mairegger.Printing.Content
 {
     using System;
     using System.Windows;
+    using System.Windows.Media;
 
     public static class PrintContent
     {
@@ -23,9 +24,9 @@ namespace Mairegger.Printing.Content
         /// Returns a new <see cref="IPrintContent"/> defining a horizontal line.
         /// </summary>
         /// <returns></returns>
-        public static IPrintContent HorizontalLine(Thickness margin = new Thickness())
+        public static IPrintContent HorizontalLine(double? lineHeight = 1, Thickness margin = new Thickness(), Brush lineColor = null)
         {
-            return new HorizontalLine(margin);
+            return new HorizontalLine(lineHeight, margin, lineColor);
         }
 
         /// <summary>

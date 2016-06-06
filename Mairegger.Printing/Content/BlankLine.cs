@@ -23,7 +23,7 @@ namespace Mairegger.Printing.Content
 
         internal BlankLine(double height)
         {
-            if (height < 0)
+            if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(height));
             }

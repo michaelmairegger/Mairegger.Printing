@@ -50,7 +50,7 @@ namespace Mairegger.Printing.Definition
             PrintAppendixes = printAppendixes;
             if (definedPages != null)
             {
-                var ranges = definedPages.Select<int, Range<int>>(Range.FromPoint).ToArray();
+                var ranges = definedPages.Select(Range.FromPoint).ToArray();
                 AddRange(ranges);
             }
         }

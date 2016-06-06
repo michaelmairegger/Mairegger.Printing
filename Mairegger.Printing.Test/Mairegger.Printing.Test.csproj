@@ -63,7 +63,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Content\CombinedPrintContentCollectionTests.cs" />
-    <Compile Include="Content\PageBreakTests.cs" />
+    <Compile Include="Content\PrintContentTests.cs" />
     <Compile Include="Content\PrintDocumentBackgroundTest.cs" />
     <Compile Include="Content\PrintProcessorCollectionTests.cs" />
     <Compile Include="Content\PrintProcessorTests.cs" />

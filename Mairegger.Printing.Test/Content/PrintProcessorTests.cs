@@ -190,7 +190,9 @@ namespace Mairegger.Printing.Test.Content
         [Test]
         public void PreviewDocument()
         {
+            var printDialog = new Mock<IPrintDialog>();
             var printProcessor = new TestPrintProcessor();
+            printProcessor.PrintDialog = printDialog.Object;
             var windowProvider = new Mock<IWindowProvider>();
             windowProvider.Setup(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()));
 
@@ -248,8 +250,6 @@ namespace Mairegger.Printing.Test.Content
             printProcessor.PrintDialog = printDialog.Object;
 
             Assert.That(printProcessor.PrintDocument(), Is.True);
-            //Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new System.Printing.LocalPrintServer()), Is.False);
-            //Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.False);
         }
 
         [Test]

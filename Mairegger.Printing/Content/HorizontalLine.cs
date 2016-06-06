@@ -16,13 +16,20 @@ namespace Mairegger.Printing.Content
 {
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Shapes;
 
-    internal class HorizontalLine : IPrintContent
+    public sealed class HorizontalLine : IPrintContent
     {
+        private readonly double? _lineHeight;
         private readonly Thickness _margin;
-        internal HorizontalLine(Thickness margin = new Thickness())
+        private readonly Brush _lineColor;
+
+        internal HorizontalLine(double? lineHeight = 1, Thickness margin = new Thickness(), Brush lineColor = null)
         {
+            _lineHeight = lineHeight;
             _margin = margin;
+            _lineColor = lineColor;
         }
 
         public UIElement Content
@@ -30,7 +37,13 @@ namespace Mairegger.Printing.Content
             get
             {
                 Grid g = new Grid { Margin = _margin };
-                g.Children.Add(new Separator());
+
+                g.Children.Add(new Rectangle
+                               {
+                                   Fill = _lineColor ?? Brushes.Black,
+                                   Height = _lineHeight.GetValueOrDefault(1),
+                                   HorizontalAlignment = HorizontalAlignment.Stretch,
+                               });
                 return g;
             }
         }
