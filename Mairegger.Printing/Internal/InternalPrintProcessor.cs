@@ -387,11 +387,8 @@ namespace Mairegger.Printing.Internal
             var positioninRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, pageNumber, isLastPage);
             var position = new Point(_printProcessor.PrintDimension.Margin.Left, positioninRange.From);
 
-            var panelHeight = positioninRange.Length;
-
             var contentControl = new ContentControl
                                  {
-                                     Height = panelHeight,
                                      Width = _printProcessor.PrintDimension.PrintablePageSize.Width
                                  };
 

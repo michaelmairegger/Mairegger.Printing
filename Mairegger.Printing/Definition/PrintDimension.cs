@@ -97,11 +97,39 @@ namespace Mairegger.Printing.Definition
 
         protected bool UseRelativeColumnPosition { get; set; }
 
-        public void SetHeightValue(PrintAppendixes printAppendix, double value)
+        /// <summary>
+        /// Sets the height for <paramref name="printAppendix"/> to a specific value
+        /// </summary>
+        /// <param name="printAppendix">The <see cref="PrintAppendixes"/> whichs the heigth is set.</param>
+        /// <param name="value">The height for the item.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is negative.</exception>
+        public void SetHeightValue(PrintAppendixes printAppendix, double? value)
         {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), value, "Must be a positive number or null");
+            }
             if (_printPartDimensions.ContainsKey(printAppendix))
             {
                 _printPartDimensions[printAppendix] = value;
+            }
+        }
+
+        /// <summary>
+        /// Recalculates the height for <paramref name="printAppendix"/> when the specific <paramref name="condition"/> is met.
+        /// </summary>
+        /// <param name="condition">The condition when to reset the height for <paramref name="printAppendix"/></param>
+        /// <param name="printAppendix">The <see cref="PrintAppendixes"/> whichs value is reset.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="condition"/> is null.</exception>
+        public void RecalculateHeightValueWhen(Func<bool> condition, PrintAppendixes printAppendix)
+        {
+            if (condition == null)
+            {
+                throw new ArgumentNullException(nameof(condition));
+            }
+            if (condition())
+            {
+                SetHeightValue(printAppendix, null);
             }
         }
 
