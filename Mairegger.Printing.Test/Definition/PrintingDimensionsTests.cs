@@ -214,12 +214,12 @@ namespace Mairegger.Printing.Test.Definition
 
         [Test]
         [Apartment(ApartmentState.STA)]
-        public void RecalculateHeightValueWhen([Random(10,100,1)] int initialHeight)
+        public void RecalculateHeightValueWhen([Random(10, 100, 1)] int initialHeight)
         {
             PrintDimension pd = new PrintDimension();
             pd.InternalPrintDefinition = new PrintDefinition();
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
-            
+
             Mock<IPrintProcessor> printProcessor = new Mock<IPrintProcessor>();
             printProcessor.Setup(i => i.GetSummary()).Returns(() => new Grid() { Height = initialHeight });
             pd.PrintProcessor = printProcessor.Object;
@@ -231,7 +231,7 @@ namespace Mairegger.Printing.Test.Definition
 
             Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(5));
 
-            pd.RecalculateHeightValueWhen(()=> true, PrintAppendixes.Summary);
+            pd.RecalculateHeightValueWhen(() => true, PrintAppendixes.Summary);
 
             Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(initialHeight));
         }
