@@ -228,8 +228,20 @@ namespace Mairegger.Printing.PrintProcessor
         {
             if (p != null)
             {
-                foreach (var printProcessor in p)
+                for (int index = 0; index < p.Count; index++)
                 {
+                    var printProcessor = p[index];
+
+                    if (index > 0 && p.IndividualPageOrientation)
+                    {
+                        if ((pageSize.Width > pageSize.Height && printProcessor.PageOrientation == PageOrientation.Portrait) ||
+                            (pageSize.Height > pageSize.Width && printProcessor.PageOrientation == PageOrientation.Landscape))
+                        {
+                            pageSize = new Size(pageSize.Height, pageSize.Width);
+                        }
+                    }
+
+
                     printProcessor.SetPrintOnAttributes();
                     printProcessor.Prepare(pageSize);
                 }

@@ -65,10 +65,17 @@ namespace Mairegger.Printing.PrintProcessor
         }
 
         /// <summary>
-        ///     Sets whether for each <see cref="System.Printing.PrintProcessor" /> in <see cref="Collection{T}.Items" /> the page
-        ///     numbers begins with 0.
+        ///     Sets whether for each <see cref="PrintProcessor" /> in <see cref="Collection{T}.Items" /> the page
+        ///     numbers begins with 0. The default value is true.
         /// </summary>
-        public bool IndividualPageNumbers { get; set; }
+        public bool IndividualPageNumbers { get; set; } = true;
+
+        /// <summary>
+        ///     Gets or sets whether each <see cref="PrintProcessor" /> uses its own <see cref="PrintProcessor.PageOrientation" />.
+        ///     If false the first <see cref="PrintProcessor.PageOrientation" /> of the first <see cref="PrintProcessor" /> is
+        ///     used. The default value is true.
+        /// </summary>
+        public bool IndividualPageOrientation { get; set; } = true;
 
         public virtual void OnPageBreak()
         {
