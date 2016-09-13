@@ -20,10 +20,11 @@ namespace Mairegger.Printing.Content
 
     public class StringLineItem : IPrintContent
     {
-        internal StringLineItem(string text, double? fontSize = null)
+        internal StringLineItem(string text, double? fontSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left)
         {
             Text = text;
             FontSize = fontSize;
+            HorizontalAlignment = horizontalAlignment;
 
             Margin = new Thickness(0, 10, 0, 0);
             Padding = new Thickness(5, 0, 5, 0);

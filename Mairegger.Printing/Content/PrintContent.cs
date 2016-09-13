@@ -42,10 +42,11 @@ namespace Mairegger.Printing.Content
         /// </summary>
         /// <param name="text">The text to print.</param>
         /// <param name="fonzSize">The size of the text.</param>
+        /// <param name="horizontalAlignment">The alignment of the text.</param>
         /// <returns></returns>
-        public static StringLineItem TextLine(string text, double? fonzSize = null)
+        public static StringLineItem TextLine(string text, double? fonzSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left)
         {
-            return new StringLineItem(text, fonzSize);
+            return new StringLineItem(text, fonzSize, horizontalAlignment);
         }
 
         /// <summary>
