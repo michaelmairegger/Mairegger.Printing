@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Mairegger.Printing.Test.Definition
+namespace Mairegger.Printing.Tests.Definition
 {
     using Mairegger.Printing.Definition;
     using NUnit.Framework;
