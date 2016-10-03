@@ -282,15 +282,7 @@ namespace Mairegger.Printing.Internal
 
             foreach (var item in pageContents)
             {
-                if (!Equals(item, last))
-                {
-                    AddLineItem(item.ToPrintContent(), false);
-                    AddLineItem(PrintContent.PageBreak(), false);
-                }
-                else
-                {
-                    AddLineItem(item.ToPrintContent(), isLast);
-                }
+                AddLineItem(item.ToPrintContent(), Equals(item, last));
             }
         }
 

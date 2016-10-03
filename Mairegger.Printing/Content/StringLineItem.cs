@@ -21,11 +21,6 @@ namespace Mairegger.Printing.Content
     using System.Windows.Controls;
     using System.Windows.Media;
 
-    public interface IPageBreakAware
-    {
-        IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize);
-    }
-
     public class StringLineItem : IPrintContent, IPageBreakAware
     {
         internal StringLineItem(string text, double? fontSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left)
