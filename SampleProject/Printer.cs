@@ -35,16 +35,9 @@ namespace Mairegger.Printing.Sample
         {
             _printingAppendix = printingAppendix;
             _collToPrint = collToPrint;
-        }
 
-        public override string FileName
-        {
-            get { return "This is my Print"; }
-        }
-
-        public override PrintDimension PrintDimension
-        {
-            get { return _printDimensions; }
+            FileName = "FileName";
+            PrintDimension = _printDimensions;
         }
 
         public override UIElement GetFooter()
@@ -116,17 +109,14 @@ namespace Mairegger.Printing.Sample
             if (_printingAppendix.HasFlag(PrintAppendixes.Summary))
             {
                 PrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Summary));
-                PrintDimension.SummaryHeight = GetSummary().ComputeDesiredSize().Height;
             }
             if (_printingAppendix.HasFlag(PrintAppendixes.Footer))
             {
                 PrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Footer));
-                PrintDimension.FooterHeight = GetFooter().ComputeDesiredSize().Height;
             }
             if (_printingAppendix.HasFlag(PrintAppendixes.Header))
             {
                 PrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header));
-                PrintDimension.HeaderHeight = GetHeader().ComputeDesiredSize().Height;
             }
         }
     }
