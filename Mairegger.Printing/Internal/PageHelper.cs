@@ -26,7 +26,7 @@ namespace Mairegger.Printing.Internal
 
         public Brush BorderBrush { get; set; }
 
-        public PrintDimension PrintingDimension { private get; set; }
+        public PrintDimension PrintingDimension { get; set; }
 
         private double UsedSpace { get; set; }
 
@@ -34,6 +34,11 @@ namespace Mairegger.Printing.Internal
         {
             var maxGridHeight = PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage);
             return maxGridHeight - UsedSpace - space >= 0;
+        }
+
+        public double GetRemainingSpace(int pageCount, bool supposeLastPage)
+        {
+            return PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage) - UsedSpace - Threshold;
         }
 
         public void RemoveRemainingSpace(double space)

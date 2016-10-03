@@ -170,74 +170,127 @@ namespace Mairegger.Printing.Internal
             {
                 ConcludeDocumentPage(_pageHelper, false);
                 _pageHelper = CreateNewPageHelper();
-                return;
             }
-
-            var content = item.Content;
-
-            content.Measure(new Size(_pageHelper.BodyGrid.DesiredSize.Width, double.MaxValue));
-            var lineHeiht = content.DesiredSize.Height;
-
-            if (isLast)
+            else if (item is IPageBreakAware)
             {
-                // otherwise the last item is put on a new pageContent if desired, or it is left on the current pageContent and the PrintAppendixes that have no space would be print on the next pageContent
-                // should occur only if there are PrintAppendixes that have to be print on the last pageContent
-                Action concludePage = () =>
-                                      {
-                                          ConcludeDocumentPage(_pageHelper, false);
-                                          _pageHelper = CreateNewPageHelper();
-                                      };
-                Action addLastLineData = () =>
-                                         {
-                                             AddLineData(content);
-                                             Debug.WriteLine("PRINTING: Last item print");
-                                         };
-
-                Action<Action, Action> doAction = (first, second) =>
-                                                  {
-                                                      first();
-                                                      second();
-                                                      ConcludeDocument();
-                                                  };
-
-                if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
-                {
-                    // if (_printProcessor.BreakLastItemIfLastPageWouldBeEmpty)
-                    // { 
-                    //     doAction(concludePage, addLastLineData);
-                    // }
-                    // else
-                    {
-                        AddLineData(content);
-                        ConcludeDocumentPage(_pageHelper, true);
-                    }
-                }
-                else
-                {
-                    doAction(concludePage, addLastLineData);
-                }
-                return;
-            }
-
-            if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
-            {
-                AddLineData(content);
-                _pageHelper.RemoveRemainingSpace(lineHeiht);
-            }
-            else if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, false))
-            {
-                Debug.WriteLine("PRINTING: Second chance because item has no space");
-                AddLineData(content);
-                _pageHelper.RemoveRemainingSpace(lineHeiht);
+                AddLineItem((IPageBreakAware)item, isLast);
             }
             else
             {
-                ConcludeDocumentPage(_pageHelper, false);
+                var content = item.Content;
 
-                _pageHelper = CreateNewPageHelper();
+                content.Measure(new Size(_pageHelper.BodyGrid.DesiredSize.Width, double.MaxValue));
+                var lineHeiht = content.DesiredSize.Height;
 
-                AddLineData(content);
-                _pageHelper.RemoveRemainingSpace(lineHeiht);
+                if (lineHeiht < _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
+                {
+                    //OK
+                }
+                else
+                {
+                    const string description = "Current line is higher than the";
+                    var formattableString = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
+
+                    if (lineHeiht > _pageHelper.PrintingDimension.PageSize.Height)
+                    {
+                        Trace.TraceWarning($"{description} page-size. {formattableString}");
+                    }
+                    else if (lineHeiht > _pageHelper.PrintingDimension.PrintablePageSize.Height)
+                    {
+                        Trace.TraceWarning($"{description} printable-page-size. {formattableString}");
+                    }
+                    else if (lineHeiht > _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
+                    {
+                        Trace.TraceWarning($"{description} body grid. {formattableString}");
+                    }
+                }
+
+                if (isLast)
+                {
+                    // otherwise the last item is put on a new pageContent if desired, or it is left on the current pageContent and the PrintAppendixes that have no space would be print on the next pageContent
+                    // should occur only if there are PrintAppendixes that have to be print on the last pageContent
+                    Action concludePage = () =>
+                    {
+                        ConcludeDocumentPage(_pageHelper, false);
+                        _pageHelper = CreateNewPageHelper();
+                    };
+                    Action addLastLineData = () =>
+                    {
+                        AddLineData(content);
+                        Debug.WriteLine("PRINTING: Last item print");
+                    };
+
+                    Action<Action, Action> doAction = (first, second) =>
+                    {
+                        first();
+                        second();
+                        ConcludeDocument();
+                    };
+
+                    if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
+                    {
+                        // if (_printProcessor.BreakLastItemIfLastPageWouldBeEmpty)
+                        // { 
+                        //     doAction(concludePage, addLastLineData);
+                        // }
+                        // else
+                        {
+                            AddLineData(content);
+                            ConcludeDocumentPage(_pageHelper, true);
+                        }
+                    }
+                    else
+                    {
+                        doAction(concludePage, addLastLineData);
+                    }
+                    return;
+                }
+
+                if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
+                {
+                    AddLineData(content);
+                    _pageHelper.RemoveRemainingSpace(lineHeiht);
+                }
+                else if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, false))
+                {
+                    Debug.WriteLine("PRINTING: Second chance because item has no space");
+                    AddLineData(content);
+                    _pageHelper.RemoveRemainingSpace(lineHeiht);
+                }
+                else
+                {
+                    ConcludeDocumentPage(_pageHelper, false);
+
+                    _pageHelper = CreateNewPageHelper();
+
+                    AddLineData(content);
+                    _pageHelper.RemoveRemainingSpace(lineHeiht);
+                }
+            }
+
+            
+        }
+
+        private void AddLineItem(IPageBreakAware aware, bool isLast)
+        {
+            var currentPageHeight = _pageHelper.GetRemainingSpace(CurrentPageNumber, isLast);
+            var rangeForBodyGrid = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLast);
+            var printablePageSize = new Size(_printProcessor.PrintDimension.PrintablePageSize.Width, rangeForBodyGrid.Length);
+
+            var pageContents = aware.PageContents(currentPageHeight, printablePageSize).ToList();
+            var last = pageContents.Last();
+
+            foreach (var item in pageContents)
+            {
+                if (!Equals(item, last))
+                {
+                    AddLineItem(item.ToPrintContent(), false);
+                    AddLineItem(PrintContent.PageBreak(), false);
+                }
+                else
+                {
+                    AddLineItem(item.ToPrintContent(), isLast);
+                }
             }
         }
 
