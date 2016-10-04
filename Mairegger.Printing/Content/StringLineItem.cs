@@ -35,8 +35,6 @@ namespace Mairegger.Printing.Content
 
         public Brush Background { get; set; }
 
-        public string Text { get; set; }
-
         public double? FontSize { get; set; }
 
         public FontWeight FontWeight { get; set; }
@@ -47,14 +45,68 @@ namespace Mairegger.Printing.Content
 
         public Thickness Padding { get; set; }
 
+        public string Text { get; set; }
+
         UIElement IPrintContent.Content
         {
             get { return ConstructContent(Text); }
         }
 
+        public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
+        {
+            var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic);
+            var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic);
+            PropertyInfo reflectionLineLength = null;
+
+            var lineHeight = GetLineHeight();
+            var printablePageHeight = currentPageHeight;
+
+            var textBlock = ConstructTextBlock(Text);
+            textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
+
+            var totalLines = (int)reflectionLineCount.GetValue(textBlock);
+
+            var currentLine = 0;
+            var currentLineOnPage = 0;
+            var currentPosition = 0;
+
+            var stringBuilder = new StringBuilder();
+
+            while (currentLine < totalLines)
+            {
+                int linesThatHaveSpace = (int)((printablePageHeight / lineHeight) * .95); // remove 5% of the page height
+
+                var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine });
+
+                if (reflectionLineLength == null)
+                {
+                    reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
+                }
+
+                var lenght = (int)reflectionLineLength.GetValue(line);
+
+                var substring = Text.Substring(currentPosition, lenght);
+                stringBuilder.Append(substring);
+
+                currentPosition += lenght;
+                currentLineOnPage++;
+                currentLine++;
+
+                if ((currentLineOnPage == linesThatHaveSpace) || (currentLine == totalLines))
+                {
+                    yield return ConstructContent(stringBuilder.ToString());
+                    stringBuilder.Clear();
+
+                    currentLineOnPage = 0;
+
+                    printablePageHeight = printablePageSize.Height;
+                }
+            }
+        }
+
         private UIElement ConstructContent(string text)
         {
-           Grid g = new Grid();
+            Grid g = new Grid();
             if (Background != null)
             {
                 g.Background = Background;
@@ -70,11 +122,11 @@ namespace Mairegger.Printing.Content
         private TextBlock ConstructTextBlock(string text)
         {
             var textBlock = new TextBlock
-            {
-                Text = text,
-                HorizontalAlignment = HorizontalAlignment,
-                TextWrapping = TextWrapping.Wrap
-            };
+                            {
+                                Text = text,
+                                HorizontalAlignment = HorizontalAlignment,
+                                TextWrapping = TextWrapping.Wrap
+                            };
 
             if (FontSize.HasValue)
             {
@@ -87,61 +139,6 @@ namespace Mairegger.Printing.Content
             textBlock.FontWeight = FontWeight;
 
             return textBlock;
-        }
-
-        public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
-        {
-            var rLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic);
-            var rGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic);
-            PropertyInfo rLineLength = null;
-
-
-            var lineHeight = GetLineHeight();
-            var printablePageHeight = currentPageHeight;
-
-            var textBlock = ConstructTextBlock(Text);
-            textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
-
-
-            var totalLines = (int)rLineCount.GetValue(textBlock);
-
-            var currentLine = 0;
-            var currentLineOnPage = 0;
-            var currentPosition = 0;
-
-            var stringBuilder = new StringBuilder();
-
-            while (currentLine < totalLines)
-            {
-                int linesThatHaveSpace = (int)(printablePageHeight / lineHeight * .95); //remove 5% of the page height
-
-                var line = rGetLine.Invoke(textBlock, new object[] { currentLine });
-
-                if (rLineLength == null)
-                {
-                    rLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
-                }
-
-                var lenght = (int)rLineLength.GetValue(line);
-
-                var substring = Text.Substring(currentPosition, lenght);
-                stringBuilder.Append(substring);
-
-
-                currentPosition += lenght;
-                currentLineOnPage++;
-                currentLine++;
-
-                if (currentLineOnPage == linesThatHaveSpace || currentLine == totalLines)
-                {
-                    yield return ConstructContent(stringBuilder.ToString());
-                    stringBuilder.Clear();
-
-                    currentLineOnPage = 0;
-
-                    printablePageHeight = printablePageSize.Height;
-                }
-            }
         }
 
         private double GetLineHeight()

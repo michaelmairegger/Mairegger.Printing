@@ -241,7 +241,6 @@ namespace Mairegger.Printing.PrintProcessor
                         }
                     }
 
-
                     printProcessor.SetPrintOnAttributes();
                     printProcessor.Prepare(pageSize);
                 }

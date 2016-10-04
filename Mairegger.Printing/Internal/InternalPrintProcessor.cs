@@ -33,6 +33,7 @@ namespace Mairegger.Printing.Internal
     /// </summary>
     internal class InternalPrintProcessor
     {
+        private const string Description = "Current line is higher than the";
         private readonly Thickness _pageMargin = new Thickness(0);
         private bool _alternatingWarningShown;
         private int _itemCount;
@@ -184,24 +185,23 @@ namespace Mairegger.Printing.Internal
 
                 if (lineHeiht < _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
                 {
-                    //OK
+                    // OK
                 }
                 else
                 {
-                    const string description = "Current line is higher than the";
                     var formattableString = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
 
                     if (lineHeiht > _pageHelper.PrintingDimension.PageSize.Height)
                     {
-                        Trace.TraceWarning($"{description} page-size. {formattableString}");
+                        Trace.TraceWarning($"{Description} page-size. {formattableString}");
                     }
                     else if (lineHeiht > _pageHelper.PrintingDimension.PrintablePageSize.Height)
                     {
-                        Trace.TraceWarning($"{description} printable-page-size. {formattableString}");
+                        Trace.TraceWarning($"{Description} printable-page-size. {formattableString}");
                     }
                     else if (lineHeiht > _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
                     {
-                        Trace.TraceWarning($"{description} body grid. {formattableString}");
+                        Trace.TraceWarning($"{Description} body grid. {formattableString}");
                     }
                 }
 
@@ -267,8 +267,6 @@ namespace Mairegger.Printing.Internal
                     _pageHelper.RemoveRemainingSpace(lineHeiht);
                 }
             }
-
-            
         }
 
         private void AddLineItem(IPageBreakAware aware, bool isLast)
