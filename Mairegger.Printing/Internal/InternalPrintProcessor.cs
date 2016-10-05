@@ -280,7 +280,7 @@ namespace Mairegger.Printing.Internal
 
             foreach (var item in pageContents)
             {
-                AddLineItem(item.ToPrintContent(), Equals(item, last));
+                AddLineItem(item.ToPrintContent(), isLast && Equals(item, last));
             }
         }
 
