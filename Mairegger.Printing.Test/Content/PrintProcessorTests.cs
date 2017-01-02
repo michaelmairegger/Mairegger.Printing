@@ -68,9 +68,11 @@ namespace Mairegger.Printing.Tests.Content
         public void CustomAlternatingRowColors([Random(10, 20, 1)] int itemCount, [Random(3, 7, 1)] int differentColors)
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent);
-            pp.ItemCount = itemCount;
-            pp.IsAlternatingRowColor = true;
+            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+                     {
+                         ItemCount = itemCount,
+                         IsAlternatingRowColor = true
+                     };
 
             var colorList = new List<SolidColorBrush>();
             var r = new Random();
@@ -153,9 +155,11 @@ namespace Mairegger.Printing.Tests.Content
         public void IsAlternatingRowColor_False_NotColoring()
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent);
-            pp.ItemCount = 3;
-            pp.IsAlternatingRowColor = false;
+            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+                     {
+                         ItemCount = 3,
+                         IsAlternatingRowColor = false
+                     };
 
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(true);
@@ -172,9 +176,11 @@ namespace Mairegger.Printing.Tests.Content
         public void IsAlternatingRowColor_True_Coloring()
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent);
-            pp.ItemCount = 3;
-            pp.IsAlternatingRowColor = true;
+            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+                     {
+                         ItemCount = 3,
+                         IsAlternatingRowColor = true
+                     };
 
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(true);
@@ -191,8 +197,11 @@ namespace Mairegger.Printing.Tests.Content
         public void PreviewDocument()
         {
             var printDialog = new Mock<IPrintDialog>();
-            var printProcessor = new TestPrintProcessor();
-            printProcessor.PrintDialog = printDialog.Object;
+            var printProcessor = new TestPrintProcessor
+                                 {
+                                     PrintDialog = printDialog.Object
+                                 };
+
             var windowProvider = new Mock<IWindowProvider>();
             windowProvider.Setup(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()));
 

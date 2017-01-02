@@ -14,6 +14,7 @@
 
 namespace Mairegger.Printing.Tests.Content
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing.Printing;
     using System.IO;
     using System.Linq;
@@ -44,6 +45,7 @@ namespace Mairegger.Printing.Tests.Content
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_Null_ThrowsArgumentNullException()
         {
             Assert.That(() => new PrintProcessorCollection(null, "FileName"), Throws.ArgumentNullException);
@@ -85,9 +87,8 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void FileName_Null_IsStringEmpty()
         {
-            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
+            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>()) { FileName = null };
 
-            ppcoll.FileName = null;
             Assert.That(ppcoll.FileName, Is.Empty);
         }
 
@@ -107,8 +108,7 @@ namespace Mairegger.Printing.Tests.Content
         public void PreviewDocument1()
         {
             var printDialog = new Mock<IPrintDialog>();
-            var testPrintProcessor = new TestPrintProcessor();
-            testPrintProcessor.PrintDialog = printDialog.Object;
+            var testPrintProcessor = new TestPrintProcessor { PrintDialog = printDialog.Object };
             var printProcessor = new PrintProcessorCollection(testPrintProcessor);
             var windowProvider = new Mock<IWindowProvider>();
             printProcessor.PreviewDocument(windowProvider.Object);
@@ -130,8 +130,11 @@ namespace Mairegger.Printing.Tests.Content
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(false);
 
-            var testPrintProcessor = new TestPrintProcessor();
-            testPrintProcessor.PrintDialog = printDialog.Object;
+            var testPrintProcessor = new TestPrintProcessor
+                                     {
+                                         PrintDialog = printDialog.Object
+                                     };
+
             var printProcessor = new PrintProcessorCollection(testPrintProcessor);
 
             Assert.That(printProcessor.PrintDocument(), Is.False);

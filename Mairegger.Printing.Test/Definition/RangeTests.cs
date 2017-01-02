@@ -17,6 +17,7 @@ namespace Mairegger.Printing.Tests.Definition
     #region Using Directives
 
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Mairegger.Printing.Definition;
     using Microsoft.CSharp.RuntimeBinder;
     using NUnit.Framework;
@@ -119,12 +120,14 @@ namespace Mairegger.Printing.Tests.Definition
         [TestCase(3, 3)]
         [TestCase(4, 4)]
         [TestCase(5, 5)]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Range_MinEqualsMax_Valie(double min, double max)
         {
             Assert.DoesNotThrow(() => new Range<double>(min, max));
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Range_MinGreatherMax_Valie(
             [Values(6, 7, 8, 9, 10)] double min,
             [Values(1, 2, 3, 4, 5)] double max)
@@ -133,6 +136,7 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
         public void Range_MinLessMax_Valie(
             [Values(1, 2, 3, 4, 5)] double min,
             [Values(6, 7, 8, 9, 10)] double max)

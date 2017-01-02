@@ -26,7 +26,7 @@ namespace Mairegger.Printing.Definition
     /// </remarks>
     [SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Inheriting should be allowed")]
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    [DebuggerDisplay("Print on all pages: {PrintAppendixes}")]
+    [DebuggerDisplay("Print on all pages: {" + nameof(PrintAppendixes) + "}")]
     public sealed class PrintOnAllPagesAttribute : PrintOnPageAttribute
     {
         /// <summary>

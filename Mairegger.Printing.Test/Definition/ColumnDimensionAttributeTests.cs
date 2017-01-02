@@ -17,12 +17,14 @@ namespace Mairegger.Printing.Tests.Definition
     #region Using Directives
 
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Mairegger.Printing.Definition;
     using NUnit.Framework;
 
     #endregion
 
     [TestFixture]
+    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class ColumnDimensionAttributeTests
     {
         private static readonly double[] Values =
@@ -64,7 +66,7 @@ namespace Mairegger.Printing.Tests.Definition
 
         [Test]
         [TestCaseSource(nameof(Values))]
-        public void RelativeWidth__OutOfRange_Fail(double param)
+        public void RelativeWidth_OutOfRange_Fail(double param)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new ColumnDimensionAttribute(param));
         }

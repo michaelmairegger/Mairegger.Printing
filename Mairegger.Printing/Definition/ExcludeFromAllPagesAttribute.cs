@@ -24,7 +24,7 @@ namespace Mairegger.Printing.Definition
     ///     <see cref="ExcludeFromPageAttribute" /> is prioritized against <see cref="PrintOnPageAttribute" />
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    [DebuggerDisplay("Exclude from all pages: {PrintAppendixes}")]
+    [DebuggerDisplay("Exclude from all pages: {" + nameof(PrintAppendixes) + "}")]
     public sealed class ExcludeFromAllPagesAttribute : ExcludeFromPageAttribute
     {
         /// <summary>

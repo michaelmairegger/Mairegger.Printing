@@ -40,9 +40,11 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetFooter()).Returns(new Grid { Height = 2 });
             mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 3 });
 
-            PrintDimension pd = new PrintDimension();
-            pd.PrintProcessor = mock.Object;
-            pd.InternalPrintDefinition = new PrintDefinition();
+            PrintDimension pd = new PrintDimension
+                                {
+                                    PrintProcessor = mock.Object,
+                                    InternalPrintDefinition = new PrintDefinition()
+                                };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header | PrintAppendixes.Footer | PrintAppendixes.Summary));
 
             Assert.That(pd.GetHeightFor(PrintAppendixes.Header, 1, false), Is.EqualTo(1));
@@ -59,8 +61,7 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void GetHeightForBody_IsTotalPageHeight_IfNoAdditionalPrintParts()
         {
-            PrintDimension pd = new PrintDimension();
-            pd.InternalPrintDefinition = new PrintDefinition();
+            PrintDimension pd = new PrintDimension { InternalPrintDefinition = new PrintDefinition() };
 
             Assert.That(pd.GetHeightForBodyGrid(1, false), Is.EqualTo(0));
 
@@ -83,9 +84,11 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 30 });
             mock.Setup(i => i.GetSummary()).Returns(new Grid { Height = 40 });
 
-            PrintDimension pd = new PrintDimension();
-            pd.PrintProcessor = mock.Object;
-            pd.InternalPrintDefinition = new PrintDefinition();
+            PrintDimension pd = new PrintDimension
+                                {
+                                    PrintProcessor = mock.Object,
+                                    InternalPrintDefinition = new PrintDefinition()
+                                };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             pd.PageSize = new Size(100, 300);
@@ -104,11 +107,13 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 30 });
             mock.Setup(i => i.GetSummary()).Returns(new Grid { Height = 40 });
 
-            PrintDimension pd = new PrintDimension();
-            pd.PrintProcessor = mock.Object;
-            pd.Margin = new Thickness(10);
-            pd.PageSize = new Size(100, 1000);
-            pd.InternalPrintDefinition = new PrintDefinition();
+            PrintDimension pd = new PrintDimension
+                                {
+                                    PrintProcessor = mock.Object,
+                                    Margin = new Thickness(10),
+                                    PageSize = new Size(100, 1000),
+                                    InternalPrintDefinition = new PrintDefinition()
+                                };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             Assert.That(pd.GetRangeFor(PrintAppendixes.Header, 1, false), Is.EqualTo(new Range<double>(10, 20)));
@@ -201,9 +206,11 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void SetHeightValue()
         {
-            PrintDimension pd = new PrintDimension();
+            PrintDimension pd = new PrintDimension
+                                {
+                                    InternalPrintDefinition = new PrintDefinition()
+                                };
 
-            pd.InternalPrintDefinition = new PrintDefinition();
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             pd.SetHeightValue(PrintAppendixes.Summary, 5);
@@ -216,8 +223,11 @@ namespace Mairegger.Printing.Tests.Definition
         [Apartment(ApartmentState.STA)]
         public void RecalculateHeightValueWhen([Random(10, 100, 1)] int initialHeight)
         {
-            PrintDimension pd = new PrintDimension();
-            pd.InternalPrintDefinition = new PrintDefinition();
+            PrintDimension pd = new PrintDimension
+                                {
+                                    InternalPrintDefinition = new PrintDefinition()
+                                };
+
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             Mock<IPrintProcessor> printProcessor = new Mock<IPrintProcessor>();

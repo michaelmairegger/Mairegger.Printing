@@ -14,6 +14,7 @@
 
 namespace Mairegger.Printing.Tests.Content
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
@@ -33,6 +34,7 @@ namespace Mairegger.Printing.Tests.Content
         }
 
         [Test]
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public void Ctor_Null_ThrowsArgumentNullException()
         {
             Assert.That(() => new PrintDocumentBackground(null, Rect.Empty), Throws.ArgumentNullException);
