@@ -24,7 +24,7 @@ namespace Mairegger.Printing.Tests.Definition
     #endregion
 
     [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+    [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK")]
     public class ColumnDimensionAttributeTests
     {
         private static readonly double[] Values =

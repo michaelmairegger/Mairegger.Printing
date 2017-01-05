@@ -120,14 +120,14 @@ namespace Mairegger.Printing.Tests.Definition
         [TestCase(3, 3)]
         [TestCase(4, 4)]
         [TestCase(5, 5)]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
         public void Range_MinEqualsMax_Valie(double min, double max)
         {
             Assert.DoesNotThrow(() => new Range<double>(min, max));
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
         public void Range_MinGreatherMax_Valie(
             [Values(6, 7, 8, 9, 10)] double min,
             [Values(1, 2, 3, 4, 5)] double max)
@@ -136,7 +136,7 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Test]
-        [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
+        [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
         public void Range_MinLessMax_Valie(
             [Values(1, 2, 3, 4, 5)] double min,
             [Values(6, 7, 8, 9, 10)] double max)
