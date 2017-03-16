@@ -29,13 +29,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>$(SolutionDir)\bin\$(Configuration)\$(Platform)\$(AssemblyName)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TFSO|AnyCPU'">
-    <OutputPath>bin\TFSO\</OutputPath>
+    <OutputPath>$(SolutionDir)\bin\$(Configuration)\$(Platform)\$(AssemblyName)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
