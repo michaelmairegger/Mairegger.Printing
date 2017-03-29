@@ -1,4 +1,4 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,6 +23,12 @@ namespace Mairegger.Printing.Content
 
     public class StringLineItem : IPrintContent, IPageBreakAware
     {
+        internal StringLineItem(string text, StringLineItemConfiguration configuration)
+            : this(text, configuration.FontSize, configuration.HorizontalAlignment)
+        {
+            FontFamily = configuration.FontFamily;
+        }
+
         internal StringLineItem(string text, double? fontSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left)
         {
             Text = text;
@@ -39,6 +45,8 @@ namespace Mairegger.Printing.Content
 
         public FontWeight FontWeight { get; set; }
 
+        public FontFamily FontFamily { get; set; }
+
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
         public Thickness Margin { get; set; }
@@ -46,11 +54,6 @@ namespace Mairegger.Printing.Content
         public Thickness Padding { get; set; }
 
         public string Text { get; set; }
-
-        UIElement IPrintContent.Content
-        {
-            get { return ConstructContent(Text); }
-        }
 
         public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
         {
@@ -64,7 +67,7 @@ namespace Mairegger.Printing.Content
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
 
-            var totalLines = (int)reflectionLineCount.GetValue(textBlock);
+            var totalLines = (int) reflectionLineCount.GetValue(textBlock);
 
             var currentLine = 0;
             var currentLineOnPage = 0;
@@ -74,16 +77,16 @@ namespace Mairegger.Printing.Content
 
             while (currentLine < totalLines)
             {
-                int linesThatHaveSpace = (int)((printablePageHeight / lineHeight) * .95); // remove 5% of the page height
+                var linesThatHaveSpace = (int) (printablePageHeight / lineHeight * .95); // remove 5% of the page height
 
-                var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine });
+                var line = reflectionGetLine.Invoke(textBlock, new object[] {currentLine});
 
                 if (reflectionLineLength == null)
                 {
                     reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
                 }
 
-                var lenght = (int)reflectionLineLength.GetValue(line);
+                var lenght = (int) reflectionLineLength.GetValue(line);
 
                 var substring = Text.Substring(currentPosition, lenght);
                 stringBuilder.Append(substring);
@@ -92,7 +95,7 @@ namespace Mairegger.Printing.Content
                 currentLineOnPage++;
                 currentLine++;
 
-                if ((currentLineOnPage == linesThatHaveSpace) || (currentLine == totalLines))
+                if (currentLineOnPage == linesThatHaveSpace || currentLine == totalLines)
                 {
                     yield return ConstructContent(stringBuilder.ToString());
                     stringBuilder.Clear();
@@ -104,9 +107,11 @@ namespace Mairegger.Printing.Content
             }
         }
 
+        UIElement IPrintContent.Content => ConstructContent(Text);
+
         private UIElement ConstructContent(string text)
         {
-            Grid g = new Grid();
+            var g = new Grid();
             if (Background != null)
             {
                 g.Background = Background;
@@ -122,11 +127,11 @@ namespace Mairegger.Printing.Content
         private TextBlock ConstructTextBlock(string text)
         {
             var textBlock = new TextBlock
-                            {
-                                Text = text,
-                                HorizontalAlignment = HorizontalAlignment,
-                                TextWrapping = TextWrapping.Wrap
-                            };
+            {
+                Text = text,
+                HorizontalAlignment = HorizontalAlignment,
+                TextWrapping = TextWrapping.Wrap
+            };
 
             if (FontSize.HasValue)
             {
@@ -137,6 +142,10 @@ namespace Mairegger.Printing.Content
                 textBlock.Background = Background;
             }
             textBlock.FontWeight = FontWeight;
+            if (FontFamily != null)
+            {
+                textBlock.FontFamily = FontFamily;
+            }
 
             return textBlock;
         }

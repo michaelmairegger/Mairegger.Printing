@@ -17,6 +17,7 @@ namespace Mairegger.Printing.Content
     using System;
     using System.Windows;
     using System.Windows.Media;
+    using JetBrains.Annotations;
 
     public static class PrintContent
     {
@@ -43,10 +44,19 @@ namespace Mairegger.Printing.Content
         /// <param name="text">The text to print.</param>
         /// <param name="fonzSize">The size of the text.</param>
         /// <param name="horizontalAlignment">The alignment of the text.</param>
+        /// <param name="fontFamily">The font type.</param>
         /// <returns></returns>
-        public static StringLineItem TextLine(string text, double? fonzSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left)
+        public static StringLineItem TextLine(string text, double? fonzSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left, FontFamily fontFamily = null)
         {
-            return new StringLineItem(text, fonzSize, horizontalAlignment);
+            return new StringLineItem(text, fonzSize, horizontalAlignment)
+            {
+                FontFamily = fontFamily
+            };
+        }
+
+        public static StringLineItem TextLine(string text, [NotNull] StringLineItemConfiguration configuration)
+        {
+            return new StringLineItem(text, configuration ?? throw new ArgumentNullException(nameof(configuration)));
         }
 
         /// <summary>
