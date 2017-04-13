@@ -55,6 +55,8 @@ namespace Mairegger.Printing.Content
 
         public string Text { get; set; }
 
+        UIElement IPrintContent.Content => ConstructContent(Text);
+
         public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
         {
             var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -67,7 +69,7 @@ namespace Mairegger.Printing.Content
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
 
-            var totalLines = (int) reflectionLineCount.GetValue(textBlock);
+            var totalLines = (int)reflectionLineCount.GetValue(textBlock);
 
             var currentLine = 0;
             var currentLineOnPage = 0;
@@ -77,16 +79,16 @@ namespace Mairegger.Printing.Content
 
             while (currentLine < totalLines)
             {
-                var linesThatHaveSpace = (int) (printablePageHeight / lineHeight * .95); // remove 5% of the page height
+                var linesThatHaveSpace = (int)(printablePageHeight / lineHeight * .95); // remove 5% of the page height
 
-                var line = reflectionGetLine.Invoke(textBlock, new object[] {currentLine});
+                var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine });
 
                 if (reflectionLineLength == null)
                 {
                     reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
                 }
 
-                var lenght = (int) reflectionLineLength.GetValue(line);
+                var lenght = (int)reflectionLineLength.GetValue(line);
 
                 var substring = Text.Substring(currentPosition, lenght);
                 stringBuilder.Append(substring);
@@ -106,8 +108,6 @@ namespace Mairegger.Printing.Content
                 }
             }
         }
-
-        UIElement IPrintContent.Content => ConstructContent(Text);
 
         private UIElement ConstructContent(string text)
         {
