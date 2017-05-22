@@ -17,7 +17,6 @@ namespace Mairegger.Printing.Tests.Definition
     #region Using Directives
 
     using System;
-    using System.Reflection;
     using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
@@ -188,7 +187,7 @@ namespace Mairegger.Printing.Tests.Definition
         {
             var invalidPrintDimension = new InvalidPrintDimension();
             invalidPrintDimension.Column1 = invalidPrintDimension.Column1;
-            Assert.That(() => SetPageSizeToPrintDimension(invalidPrintDimension, new Size(500, 1000)), Throws.InnerException.InstanceOf<InvalidOperationException>());
+            Assert.That(() => SetPageSizeToPrintDimension(invalidPrintDimension, new Size(500, 1000)), Throws.InstanceOf<InvalidOperationException>());
         }
 
         [Test]
@@ -248,14 +247,8 @@ namespace Mairegger.Printing.Tests.Definition
 
         private static void SetPageSizeToPrintDimension(PrintDimension printingDimension, Size pageSize)
         {
-            Type t = printingDimension.GetType();
-            var v = t.GetProperty("PageSize");
-
-            v.SetValue(printingDimension, pageSize, null);
-
-            var m = t.GetMethod("PositionizeRelative", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.That(m, Is.Not.Null);
-            m.Invoke(printingDimension, null);
+            printingDimension.PageSize = pageSize;
+            printingDimension.PositionizeRelative();
         }
 
         private class InvalidPrintDimension : PrintDimension

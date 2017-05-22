@@ -14,6 +14,7 @@
 
 namespace Mairegger.Printing.Content
 {
+    using System;
     using System.Collections.Generic;
     using System.Reflection;
     using System.Text;
@@ -61,6 +62,12 @@ namespace Mairegger.Printing.Content
         {
             var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic);
             var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            if (reflectionGetLine == null || reflectionLineCount == null)
+            {
+                throw new InvalidOperationException("Exception in reflecting LineCount or GetLine on object of type TextBlock");
+            }
+
             PropertyInfo reflectionLineLength = null;
 
             var lineHeight = GetLineHeight();
@@ -86,6 +93,11 @@ namespace Mairegger.Printing.Content
                 if (reflectionLineLength == null)
                 {
                     reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                    if (reflectionLineLength == null)
+                    {
+                        throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
+                    }
                 }
 
                 var lenght = (int)reflectionLineLength.GetValue(line);
