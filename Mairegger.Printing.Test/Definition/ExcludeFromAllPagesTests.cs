@@ -14,12 +14,8 @@
 
 namespace Mairegger.Printing.Tests.Definition
 {
-    #region Using Directives
-
     using Mairegger.Printing.Definition;
     using NUnit.Framework;
-
-    #endregion
 
     [TestFixture]
     public class ExcludeFromAllPagesTests

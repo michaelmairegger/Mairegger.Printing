@@ -14,14 +14,10 @@
 
 namespace Mairegger.Printing.Tests.Definition
 {
-    #region Using Directives
-
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Mairegger.Printing.Definition;
     using NUnit.Framework;
-
-    #endregion
 
     [TestFixture]
     [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK")]

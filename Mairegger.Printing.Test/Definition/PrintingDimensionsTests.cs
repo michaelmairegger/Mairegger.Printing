@@ -14,8 +14,6 @@
 
 namespace Mairegger.Printing.Tests.Definition
 {
-    #region Using Directives
-
     using System;
     using System.Threading;
     using System.Windows;
@@ -24,8 +22,6 @@ namespace Mairegger.Printing.Tests.Definition
     using Mairegger.Printing.PrintProcessor;
     using Moq;
     using NUnit.Framework;
-
-    #endregion
 
     [TestFixture]
     public class PrintingDimensionsTests
