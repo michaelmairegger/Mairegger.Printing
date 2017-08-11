@@ -1,4 +1,4 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 namespace Mairegger.Printing.Internal
 {
     using System.Windows.Controls;
+    using System.Windows.Documents;
     using System.Windows.Media;
     using Mairegger.Printing.Definition;
 
@@ -26,19 +27,21 @@ namespace Mairegger.Printing.Internal
 
         public Brush BorderBrush { get; set; }
 
+        public PageContent PageContent { get; set; }
+
         public PrintDimension PrintingDimension { get; set; }
 
         private double UsedSpace { get; set; }
+
+        public double GetRemainingSpace(int pageCount, bool supposeLastPage)
+        {
+            return PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage) - UsedSpace - Threshold;
+        }
 
         public bool HasSpace(double space, int pageCount, bool supposeLastPage)
         {
             var maxGridHeight = PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage);
             return maxGridHeight - UsedSpace - space >= 0;
-        }
-
-        public double GetRemainingSpace(int pageCount, bool supposeLastPage)
-        {
-            return PrintingDimension.GetHeightForBodyGrid(pageCount, supposeLastPage) - UsedSpace - Threshold;
         }
 
         public void RemoveRemainingSpace(double space)

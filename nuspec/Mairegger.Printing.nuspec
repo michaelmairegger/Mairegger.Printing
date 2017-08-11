@@ -2,15 +2,14 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>Mairegger.Printing</id>
-        <version>1.1.6</version>
+        <version>1.2</version>
         <authors>Michael Mairegger</authors>
         <owners>Michael Mairegger</owners>
         <licenseUrl>https://github.com/xxMUROxx/Mairegger.Printing/blob/master/LICENSE</licenseUrl>
         <projectUrl>https://github.com/xxMUROxx/Mairegger.Printing</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>A WPF Printing Library</description>
-        <releaseNotes>StringLineItem does now have a property FontFamily.
-StringLineItem does now allow to pass a StringLineItemConfiguration object</releaseNotes>
+        <releaseNotes>Allow content that is put on a specific position on a page.</releaseNotes>
         <copyright>Copyright 2016-2017</copyright>
         <tags>WPF Printing</tags>
     </metadata>

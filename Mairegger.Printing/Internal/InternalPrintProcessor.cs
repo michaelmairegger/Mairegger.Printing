@@ -176,6 +176,11 @@ namespace Mairegger.Printing.Internal
             {
                 AddLineItem((IPageBreakAware)item, isLast);
             }
+            else if (item is DirectPrintContent directPrintContent)
+            {
+                var position = new Point(directPrintContent.Position.X + _pageHelper.PrintingDimension.Margin.Left, directPrintContent.Position.Y + _pageHelper.PrintingDimension.Margin.Top);
+                PositionizeUiElement(_pageHelper.PageContent, item.Content, position);
+            }
             else
             {
                 var content = item.Content;
@@ -349,7 +354,6 @@ namespace Mairegger.Printing.Internal
         {
             Debug.WriteLine("PRINTING: Conclude Document Page");
 
-            var content = GetNewDocumentPage();
 
             var grid = new Grid();
             grid.Children.Add(pageHelper.BodyGrid);
@@ -364,11 +368,11 @@ namespace Mairegger.Printing.Internal
             grid.Height = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).Length;
 
             var positioningPoint = new Point(_printProcessor.PrintDimension.Margin.Left, _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).From);
-            PositionizeUiElement(content, grid, positioningPoint);
+            PositionizeUiElement(pageHelper.PageContent, grid, positioningPoint);
 
-            AddPrintAppendixes(content, isLastPage);
+            AddPrintAppendixes(pageHelper.PageContent, isLastPage);
 
-            FixedDocument.Pages.Add(content);
+            FixedDocument.Pages.Add(pageHelper.PageContent);
             CurrentPageNumber++;
             _pageHelper = null;
         }
@@ -394,7 +398,8 @@ namespace Mairegger.Printing.Internal
             itemsControl.VerticalAlignment = VerticalAlignment.Top;
             itemsControl.Items.Add(table);
 
-            var pageHelper = new PageHelper();
+            var pageHelper = new PageHelper { PageContent = GetNewDocumentPage() };
+
 
             pageHelper.RemoveRemainingSpace(gridTableHeight);
 
