@@ -15,6 +15,7 @@
 namespace Mairegger.Printing.Definition
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Microsoft.CSharp.RuntimeBinder;
 
@@ -128,7 +129,7 @@ namespace Mairegger.Printing.Definition
         /// <exception cref="ArgumentException">If the passed agrument is in a invalid format</exception>
         /// <exception cref="FormatException">If the passed argument does not contains the correct number</exception>
         /// <example>
-        ///     <code>Range r = Range.Parse("4,6");</code>
+        ///     <code>Range r = Range.Parse("4-6");</code>
         /// </example>
         public static Range<double> Parse(string input)
         {
@@ -136,27 +137,39 @@ namespace Mairegger.Printing.Definition
             {
                 throw new ArgumentNullException(nameof(input));
             }
+            if (input.Contains(',')) //TODO Remove this check in a future releases
+            {
+                throw new ArgumentException("',' is not supported anymore change range to '-'");
+            }
 
-            var v = input.Split(',');
-            if ((v.Length != 2) || v.Any(c => c.Length == 0))
+            var range = input.Split('-');
+
+            if ((range.Length != 2 && range.Length != 1) || range.Any(c => c.Length == 0))
             {
                 throw new ArgumentException("invalid format", nameof(input));
             }
 
-            double min;
+            var fromString = range.First();
+            var toString = range.Last();
 
-            if (!double.TryParse(v[0], out min))
+            if (!double.TryParse(fromString, out double min))
             {
-                throw new FormatException($"Cannot convert {input}");
+                throw new FormatException($"Cannot convert '{fromString}' from '{input}'");
             }
 
-            double max;
-            if (!double.TryParse(v[1], out max))
+            if (!double.TryParse(toString, out double max))
             {
-                throw new FormatException($"Cannot convert {input}");
+                throw new FormatException($"Cannot convert '{toString}' from '{input}'");
             }
 
             return new Range<double>(min, max);
+        }
+
+        public static IList<Range<double>> ParseRanges(string input)
+        {
+            var ranges = input.Split(',');
+
+            return ranges.Select(Parse).ToList();
         }
     }
 }
