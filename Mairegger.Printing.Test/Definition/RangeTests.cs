@@ -76,18 +76,17 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.Throws<ArgumentNullException>(() => Range.Parse(null));
             var input = string.Empty;
             Assert.Throws<ArgumentException>(() => Range.Parse(input));
-            Assert.Throws<ArgumentException>(() => Range.Parse("4"));
-            Assert.Throws<ArgumentException>(() => Range.Parse(","));
-            Assert.Throws<FormatException>(() => Range.Parse("InvalidNumber,6"));
-            Assert.Throws<FormatException>(() => Range.Parse("6,InvalidNumber"));
+            Assert.Throws<ArgumentException>(() => Range.Parse("-"));
+            Assert.Throws<FormatException>(() => Range.Parse("InvalidNumber-6"));
+            Assert.Throws<FormatException>(() => Range.Parse("6-InvalidNumber"));
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => Range.Parse("6,4"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Range.Parse("6-4"));
         }
 
         [Test]
         public void Parse_ValidRange()
         {
-            var r = Range.Parse("4,6");
+            var r = Range.Parse("4-6");
             Assert.That(r.From, Is.EqualTo(4));
             Assert.That(r.To, Is.EqualTo(6));
         }
