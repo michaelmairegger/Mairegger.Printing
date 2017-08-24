@@ -1,4 +1,4 @@
-﻿// Copyright 2016 Michael Mairegger
+﻿// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,13 +33,16 @@ namespace Mairegger.Printing.PrintProcessor
     /// </summary>
     public abstract class PrintProcessor : IPrintProcessor
     {
+        private static Action<IPrintDialog> _configurePrintDialog;
         private string _fileName = string.Empty;
         private IPrintDialog _printDialog;
         private PrintDimension _printDimension = new PrintDimension();
 
         protected PrintProcessor()
         {
-            _printDialog = new PrintDialogWrapper();
+            PrintDialog = new PrintDialogWrapper();
+            _configurePrintDialog?.Invoke(PrintDialog);
+
             PageOrientation = PageOrientation.Portrait;
         }
 
@@ -55,44 +58,30 @@ namespace Mairegger.Printing.PrintProcessor
 
         public string FileName
         {
-            get { return _fileName; }
-            set { _fileName = ReplaceInvalidCharsFromFilename(value); }
+            get => _fileName;
+            set => _fileName = ReplaceInvalidCharsFromFilename(value);
         }
 
         public bool IsAlternatingRowColor { get; set; }
 
         public PageOrientation PageOrientation
         {
-            get { return PrintDialog.PrintTicket.PageOrientation.GetValueOrDefault(); }
-            set { PrintDialog.PrintTicket.PageOrientation = value; }
+            get => PrintDialog.PrintTicket.PageOrientation.GetValueOrDefault();
+            set => PrintDialog.PrintTicket.PageOrientation = value;
         }
 
         public PrintDefinition PrintDefinition { get; } = new PrintDefinition();
 
         public IPrintDialog PrintDialog
         {
-            get { return _printDialog; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                _printDialog = value;
-            }
+            get => _printDialog;
+            set => _printDialog = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public PrintDimension PrintDimension
         {
-            get { return _printDimension; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                _printDimension = value;
-            }
+            get => _printDimension;
+            set => _printDimension = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         public static bool PrintDocument(IPrintDialog printDialog, PrintProcessorCollection pp)
@@ -104,6 +93,15 @@ namespace Mairegger.Printing.PrintProcessor
             printDialog.PrintDocument(fixedDocument.DocumentPaginator, pp.FileName);
 
             return true;
+        }
+
+        /// <summary>
+        /// Sets the global configuration of the <see cref="IPrintDialog"/>. This action is applied before each print.
+        /// </summary>
+        /// <param name="configuration"></param>
+        public static void ConfigurePrintDialog(Action<IPrintDialog> configuration)
+        {
+            _configurePrintDialog = configuration;
         }
 
         public virtual PrintDocumentBackground GetBackgound()
@@ -228,14 +226,14 @@ namespace Mairegger.Printing.PrintProcessor
         {
             if (p != null)
             {
-                for (int index = 0; index < p.Count; index++)
+                for (var index = 0; index < p.Count; index++)
                 {
                     var printProcessor = p[index];
 
-                    if (index > 0 && p.IndividualPageOrientation)
+                    if ((index > 0) && p.IndividualPageOrientation)
                     {
-                        if ((pageSize.Width > pageSize.Height && printProcessor.PageOrientation == PageOrientation.Portrait) ||
-                            (pageSize.Height > pageSize.Width && printProcessor.PageOrientation == PageOrientation.Landscape))
+                        if (((pageSize.Width > pageSize.Height) && (printProcessor.PageOrientation == PageOrientation.Portrait)) ||
+                            ((pageSize.Height > pageSize.Width) && (printProcessor.PageOrientation == PageOrientation.Landscape)))
                         {
                             pageSize = new Size(pageSize.Height, pageSize.Width);
                         }
