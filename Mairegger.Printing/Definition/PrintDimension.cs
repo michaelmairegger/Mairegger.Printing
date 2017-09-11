@@ -27,7 +27,6 @@ namespace Mairegger.Printing.Definition
     /// </summary>
     public class PrintDimension
     {
-        private const double DefaultPageNumberHeight = 25;
         private readonly Dictionary<PrintAppendixes, double?> _printPartDimensions = new Dictionary<PrintAppendixes, double?>();
 
         private readonly Dictionary<PrintAppendixes, Func<IPrintProcessor, UIElement>> _printPartDimensionsRetrievalDictionary = new Dictionary<PrintAppendixes, Func<IPrintProcessor, UIElement>>
@@ -35,7 +34,8 @@ namespace Mairegger.Printing.Definition
                                                                                                                                      { PrintAppendixes.Header, p => p.GetHeader() },
                                                                                                                                      { PrintAppendixes.HeaderDescription, p => p.GetHeaderDescription() },
                                                                                                                                      { PrintAppendixes.Summary, p => p.GetSummary() },
-                                                                                                                                     { PrintAppendixes.Footer, p => p.GetFooter() }
+                                                                                                                                     { PrintAppendixes.Footer, p => p.GetFooter() },
+                                                                                                                                     { PrintAppendixes.PageNumbers, p => p.GetPageNumbers(1,1) }
                                                                                                                                  };
 
         /// <summary>
@@ -59,7 +59,6 @@ namespace Mairegger.Printing.Definition
             {
                 _printPartDimensions.Add(printAppendixese, null);
             }
-            _printPartDimensions[PrintAppendixes.PageNumbers] = DefaultPageNumberHeight;
         }
 
         /// <summary>

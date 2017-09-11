@@ -1,4 +1,4 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -86,6 +86,13 @@ namespace Mairegger.Printing.PrintProcessor
         PrintDocumentBackground GetBackgound();
 
         /// <summary>
+        ///     Returns a list of <see cref="IDirectPrintContent" /> to allow custom positionizing element on the page.
+        /// </summary>
+        /// <param name="pageNumber">The current page number. The numbering starts with 1.</param>
+        /// <returns></returns>
+        IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber);
+
+        /// <summary>
         ///     Gets the footer.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
@@ -102,6 +109,14 @@ namespace Mairegger.Printing.PrintProcessor
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
         UIElement GetHeaderDescription();
+
+        /// <summary>
+        ///     Gets the <see cref="UIElement" /> that represents the the page number section.
+        /// </summary>
+        /// <param name="currentPage">The current page number</param>
+        /// <param name="totalPages">The total page numbers.</param>
+        /// <returns></returns>
+        UIElement GetPageNumbers(int currentPage, int totalPages);
 
         /// <summary>
         ///     Gets the summary.
@@ -128,13 +143,5 @@ namespace Mairegger.Printing.PrintProcessor
         /// </summary>
         /// <returns> A collection containing the print contents </returns>
         IEnumerable<IPrintContent> ItemCollection();
-
-
-        /// <summary>
-        /// Returns a list of <see cref="IDirectPrintContent"/> to allow custom positionizing element on the page.
-        /// </summary>
-        /// <param name="pageNumber">The current page number. The numbering starts with 1.</param>
-        /// <returns></returns>
-        IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber);
     }
 }

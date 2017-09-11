@@ -308,26 +308,22 @@ namespace Mairegger.Printing.Internal
 
         private void AddPageNumbers(int from = 0, int to = int.MaxValue)
         {
-            var currentPageCount = 0;
+            var currentPageCount = 1;
+            int maxPages = FixedDocument.Pages.Count - from;
 
             foreach (var pageContent in FixedDocument.Pages.Skip(from).Take(to))
             {
-                currentPageCount++;
                 if (!_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.PageNumbers, currentPageCount, false))
                 {
                     continue;
                 }
 
                 Debug.WriteLine($"PRINTING: Print Page Numbers on page #{currentPageCount}");
-                var textBlock = new TextBlock
-                                {
-                                    Text = $"{currentPageCount} | {FixedDocument.Pages.Count - from}",
-                                    TextAlignment = TextAlignment.Center,
-                                    Width = _printProcessor.PrintDimension.PrintablePageSize.Width,
-                                    Height = _printProcessor.PrintDimension.GetHeightFor(PrintAppendixes.PageNumbers, currentPageCount, currentPageCount == to)
-                                };
 
-                AddSpecialElement(currentPageCount == to, currentPageCount, pageContent, PrintAppendixes.PageNumbers, () => textBlock);
+                var count = currentPageCount;
+                AddSpecialElement(currentPageCount == to, currentPageCount, pageContent, PrintAppendixes.PageNumbers, () => _printProcessor.GetPageNumbers(count, maxPages));
+
+                currentPageCount++;
             }
         }
 

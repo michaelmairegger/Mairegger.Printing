@@ -21,6 +21,7 @@ namespace Mairegger.Printing.PrintProcessor
     using System.Printing;
     using System.Text;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Media;
     using JetBrains.Annotations;
@@ -98,6 +99,15 @@ namespace Mairegger.Printing.PrintProcessor
         public virtual IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
         {
             yield break;
+        }
+
+        public virtual UIElement GetPageNumbers(int currentPage, int totalPages)
+        {
+            return new TextBlock
+                   {
+                       Text = $"{currentPage} | {totalPages}",
+                       TextAlignment = TextAlignment.Center,
+                   };
         }
 
         /// <summary>
