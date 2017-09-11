@@ -16,9 +16,37 @@ namespace Mairegger.Printing.Content
 {
     using System.Windows;
 
-    public abstract class DirectPrintContent : IPrintContent
+    /// <inheritdoc />
+    /// <summary>
+    ///     A print content that can be positionized freely on the page.
+    /// </summary>
+    /// <remarks>
+    ///     By returning an instance of this class from a
+    ///     <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.ItemCollection" />
+    ///     or <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.GetCustomPageContent(System.Int32)" /> following
+    ///     behaviors apply:
+    ///     <list type="bullets">
+    ///         <listheader>
+    ///             <term>Method</term>
+    ///             <description>Behavior</description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term>
+    ///                 <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.ItemCollection" />
+    ///             </term>
+    ///             <description>The object is printed on the current page.</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>
+    ///                 <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.GetCustomPageContent(System.Int32)" />
+    ///             </term>
+    ///             <description>The item can be printed on any page that is desired.</description>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    public class DirectPrintContent : IDirectPrintContent
     {
-        public abstract UIElement Content { get; }
+        public virtual UIElement Content { get; set; }
 
         public Point Position { get; set; }
     }

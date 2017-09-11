@@ -95,6 +95,11 @@ namespace Mairegger.Printing.PrintProcessor
             return true;
         }
 
+        public virtual IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
+        {
+            yield break;
+        }
+
         /// <summary>
         /// Sets the global configuration of the <see cref="IPrintDialog"/>. This action is applied before each print.
         /// </summary>

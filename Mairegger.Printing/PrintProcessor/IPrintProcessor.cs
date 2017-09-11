@@ -128,5 +128,13 @@ namespace Mairegger.Printing.PrintProcessor
         /// </summary>
         /// <returns> A collection containing the print contents </returns>
         IEnumerable<IPrintContent> ItemCollection();
+
+
+        /// <summary>
+        /// Returns a list of <see cref="IDirectPrintContent"/> to allow custom positionizing element on the page.
+        /// </summary>
+        /// <param name="pageNumber">The current page number. The numbering starts with 1.</param>
+        /// <returns></returns>
+        IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber);
     }
 }

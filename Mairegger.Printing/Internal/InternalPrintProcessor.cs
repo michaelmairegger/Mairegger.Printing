@@ -79,6 +79,14 @@ namespace Mairegger.Printing.Internal
                     {
                         AddPageNumbers(currentPage);
                     }
+
+                    for (int i = currentPage,
+                             j = 1;
+                        i < FixedDocument.Pages.Count;
+                        i++, j++)
+                    {
+                        AddCustomPositionizedContent(FixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
+                    }
                 }
 
                 if (!collection.IndividualPageNumbers)
@@ -102,6 +110,15 @@ namespace Mairegger.Printing.Internal
 
             pageContent.Child.Children.Add(frameworkElement);
         }
+
+        private static void AddCustomPositionizedContent(PageContent page, IEnumerable<IDirectPrintContent> customContent)
+        {
+            foreach (var content in customContent)
+            {
+                PositionizeUiElement(page, content.Content, content.Position);
+            }
+        }
+
 
         private void AddBackground(PageContent pageContent, bool isLastpage)
         {
@@ -176,7 +193,7 @@ namespace Mairegger.Printing.Internal
             {
                 AddLineItem((IPageBreakAware)item, isLast);
             }
-            else if (item is DirectPrintContent directPrintContent)
+            else if (item is IDirectPrintContent directPrintContent)
             {
                 var position = new Point(directPrintContent.Position.X + _pageHelper.PrintingDimension.Margin.Left, directPrintContent.Position.Y + _pageHelper.PrintingDimension.Margin.Top);
                 PositionizeUiElement(_pageHelper.PageContent, item.Content, position);

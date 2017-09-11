@@ -74,6 +74,7 @@
     <Compile Include="Content\DirectContentLineItem.cs" />
     <Compile Include="Content\DirectPrintContent.cs" />
     <Compile Include="Content\HorizontalLine.cs" />
+    <Compile Include="Content\IDirectPrintContent.cs" />
     <Compile Include="Content\IPageBreakAware.cs" />
     <Compile Include="Content\PrintContent.cs" />
     <Compile Include="Content\StringLineItem.cs" />

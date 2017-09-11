@@ -1,4 +1,4 @@
-﻿// Copyright 2016 Michael Mairegger
+// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,15 +16,11 @@ namespace Mairegger.Printing.Content
 {
     using System.Windows;
 
-    /// <summary>
-    ///     Interface that provides the line-data for the <see cref="PrintProcessor" />
-    /// </summary>
-    public interface IPrintContent
+    public interface IDirectPrintContent : IPrintContent
     {
         /// <summary>
-        ///     Gets the <see cref="UIElement" /> of the current line.
+        ///     Gets the position where the <see cref="IPrintContent.Content" /> should be printed.
         /// </summary>
-        /// <value> </value>
-        UIElement Content { get; }
+        Point Position { get; }
     }
 }
