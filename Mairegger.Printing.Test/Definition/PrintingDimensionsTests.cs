@@ -78,6 +78,7 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetFooter()).Returns(new Grid { Height = 20 });
             mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 30 });
             mock.Setup(i => i.GetSummary()).Returns(new Grid { Height = 40 });
+            mock.Setup(i => i.GetPageNumbers(It.IsAny<int>(), It.IsAny<int>())).Returns(new Grid { Height = 25 });
 
             PrintDimension pd = new PrintDimension
                                 {
@@ -101,6 +102,7 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetFooter()).Returns(new Grid { Height = 20 });
             mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 30 });
             mock.Setup(i => i.GetSummary()).Returns(new Grid { Height = 40 });
+            mock.Setup(i => i.GetPageNumbers(It.IsAny<int>(), It.IsAny<int>())).Returns(new Grid { Height = 25 });
 
             PrintDimension pd = new PrintDimension
                                 {
