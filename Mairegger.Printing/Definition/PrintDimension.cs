@@ -35,7 +35,7 @@ namespace Mairegger.Printing.Definition
                                                                                                                                      { PrintAppendixes.HeaderDescription, p => p.GetHeaderDescription() },
                                                                                                                                      { PrintAppendixes.Summary, p => p.GetSummary() },
                                                                                                                                      { PrintAppendixes.Footer, p => p.GetFooter() },
-                                                                                                                                     { PrintAppendixes.PageNumbers, p => p.GetPageNumbers(1,1) }
+                                                                                                                                     { PrintAppendixes.PageNumbers, p => p.GetPageNumbers(1, 1) }
                                                                                                                                  };
 
         /// <summary>

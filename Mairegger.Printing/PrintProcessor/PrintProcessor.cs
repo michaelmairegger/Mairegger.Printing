@@ -85,6 +85,15 @@ namespace Mairegger.Printing.PrintProcessor
             set => _printDimension = value ?? throw new ArgumentNullException(nameof(value));
         }
 
+        /// <summary>
+        ///     Sets the global configuration of the <see cref="IPrintDialog" />. This action is applied before each print.
+        /// </summary>
+        /// <param name="configuration"></param>
+        public static void ConfigurePrintDialog(Action<IPrintDialog> configuration)
+        {
+            _configurePrintDialog = configuration;
+        }
+
         public static bool PrintDocument(IPrintDialog printDialog, PrintProcessorCollection pp)
         {
             var pageSize = new Size(printDialog.PrintableAreaWidth, printDialog.PrintableAreaHeight);
@@ -96,32 +105,14 @@ namespace Mairegger.Printing.PrintProcessor
             return true;
         }
 
-        public virtual IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
-        {
-            yield break;
-        }
-
-        public virtual UIElement GetPageNumbers(int currentPage, int totalPages)
-        {
-            return new TextBlock
-                   {
-                       Text = $"{currentPage} | {totalPages}",
-                       TextAlignment = TextAlignment.Center,
-                   };
-        }
-
-        /// <summary>
-        /// Sets the global configuration of the <see cref="IPrintDialog"/>. This action is applied before each print.
-        /// </summary>
-        /// <param name="configuration"></param>
-        public static void ConfigurePrintDialog(Action<IPrintDialog> configuration)
-        {
-            _configurePrintDialog = configuration;
-        }
-
         public virtual PrintDocumentBackground GetBackgound()
         {
             return null;
+        }
+
+        public virtual IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
+        {
+            yield break;
         }
 
         public virtual UIElement GetFooter()
@@ -137,6 +128,15 @@ namespace Mairegger.Printing.PrintProcessor
         public virtual UIElement GetHeaderDescription()
         {
             return null;
+        }
+
+        public virtual UIElement GetPageNumbers(int currentPage, int totalPages)
+        {
+            return new TextBlock
+                   {
+                       Text = $"{currentPage} | {totalPages}",
+                       TextAlignment = TextAlignment.Center
+                   };
         }
 
         public virtual UIElement GetSummary()

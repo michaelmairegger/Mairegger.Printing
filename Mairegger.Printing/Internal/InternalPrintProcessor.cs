@@ -119,7 +119,6 @@ namespace Mairegger.Printing.Internal
             }
         }
 
-
         private void AddBackground(PageContent pageContent, bool isLastpage)
         {
             if (!_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.Background, CurrentPageNumber, isLastpage))
@@ -367,7 +366,6 @@ namespace Mairegger.Printing.Internal
         {
             Debug.WriteLine("PRINTING: Conclude Document Page");
 
-
             var grid = new Grid();
             grid.Children.Add(pageHelper.BodyGrid);
 
@@ -412,7 +410,6 @@ namespace Mairegger.Printing.Internal
             itemsControl.Items.Add(table);
 
             var pageHelper = new PageHelper { PageContent = GetNewDocumentPage() };
-
 
             pageHelper.RemoveRemainingSpace(gridTableHeight);
 

@@ -137,7 +137,7 @@ namespace Mairegger.Printing.Definition
             {
                 throw new ArgumentNullException(nameof(input));
             }
-            if (input.Contains(',')) //TODO Remove this check in a future releases
+            if (input.Contains(',')) // TODO Remove this check in a future releases
             {
                 throw new ArgumentException("',' is not supported anymore change range to '-'");
             }
