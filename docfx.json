@@ -1,0 +1,67 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "src/Mairegger.Printing/**.csproj"
+          ],
+          "exclude": [
+            "**/obj/**",
+            "**/bin/**",
+            "_site/**"
+          ]
+        }
+      ],
+      "dest": "docs/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ],
+        "src":"docs"
+      },
+      {
+        "files": [
+          "articles/**.md",
+          "articles/**/toc.yml",
+          "toc.yml",
+          "*.md"
+        ],
+        "src":"docs"
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ],
+        "src":"docs"
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidoc/**.md"
+        ],
+        "src":"docs"
+      }
+    ],
+    "dest": "docs",
+    "globalMetadataFiles": [
+      "globalMetadata.json"
+    ],
+    "fileMetadataFiles": [],
+    "template": [
+      "default"
+    ],
+    "postProcessors": [],
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": false
+  }
+}
