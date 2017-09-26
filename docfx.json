@@ -52,9 +52,8 @@
       }
     ],
     "dest": "docs",
-    "globalMetadataFiles": [
-      "globalMetadata.json"
-    ],
+    "globalMetadataFiles": ["global_metadata.json"],
+  
     "fileMetadataFiles": [],
     "template": [
       "default"
