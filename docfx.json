@@ -51,10 +51,8 @@
         "src":"docs"
       }
     ],
-    "dest": "docs",
+    "dest": "docs.generated",
     "globalMetadataFiles": ["global_metadata.json"],
-  
-    "fileMetadataFiles": [],
     "template": [
       "default"
     ],
