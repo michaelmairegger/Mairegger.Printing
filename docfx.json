@@ -51,10 +51,20 @@
         "src":"docs"
       }
     ],
-    "dest": "docs.generated",
-    "globalMetadataFiles": ["global_metadata.json"],
+    "dest": "_site",
+    "globalMetadata":
+	  {
+      "_appTitle":"Mairegger.Printing",
+	    "_gitContribute":
+			{
+			  "repo": "https://github.com/xxMUROxx/Mairegger.Printing",
+			  "branch": "master",
+			  "apiSpecFolder": "docs"
+			}
+	  },
     "template": [
-      "default"
+      "default",
+	    "statictoc"
     ],
     "postProcessors": [],
     "noLangKeyword": false,
