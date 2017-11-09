@@ -26,66 +26,60 @@ namespace Mairegger.Printing.Internal
 
         public bool CurrentPageEnabled
         {
-            get { return _printDialog.CurrentPageEnabled; }
-            set { _printDialog.CurrentPageEnabled = value; }
+            get => _printDialog.CurrentPageEnabled;
+            set => _printDialog.CurrentPageEnabled = value;
         }
 
         public int MaxPage
         {
-            get { return (int)_printDialog.MaxPage; }
-            set { _printDialog.MaxPage = (uint)value; }
+            get => (int)_printDialog.MaxPage;
+            set => _printDialog.MaxPage = (uint)value;
         }
 
         public int MinPage
         {
-            get { return (int)_printDialog.MinPage; }
-            set { _printDialog.MinPage = (uint)value; }
+            get => (int)_printDialog.MinPage;
+            set => _printDialog.MinPage = (uint)value;
         }
 
         public PageRange PageRange
         {
-            get { return _printDialog.PageRange; }
-            set { _printDialog.PageRange = value; }
+            get => _printDialog.PageRange;
+            set => _printDialog.PageRange = value;
         }
 
         public PageRangeSelection PageRangeSelection
         {
-            get { return _printDialog.PageRangeSelection; }
-            set { _printDialog.PageRangeSelection = value; }
+            get => _printDialog.PageRangeSelection;
+            set => _printDialog.PageRangeSelection = value;
         }
 
-        public double PrintableAreaHeight
-        {
-            get { return _printDialog.PrintableAreaHeight; }
-        }
+        public double PrintableAreaHeight => _printDialog.PrintableAreaHeight;
 
-        public double PrintableAreaWidth
-        {
-            get { return _printDialog.PrintableAreaWidth; }
-        }
+        public double PrintableAreaWidth => _printDialog.PrintableAreaWidth;
 
         public PrintQueue PrintQueue
         {
-            get { return _printDialog.PrintQueue; }
-            set { _printDialog.PrintQueue = value; }
+            get => _printDialog.PrintQueue;
+            set => _printDialog.PrintQueue = value;
         }
 
         public PrintTicket PrintTicket
         {
-            get { return _printDialog.PrintTicket; }
-            set { _printDialog.PrintTicket = value; }
+            get => _printDialog.PrintTicket;
+            set => _printDialog.PrintTicket = value;
         }
 
         public bool SelectedPagesEnabled
         {
-            get { return _printDialog.SelectedPagesEnabled; }
-            set { _printDialog.SelectedPagesEnabled = value; }
+            get => _printDialog.SelectedPagesEnabled;
+            set => _printDialog.SelectedPagesEnabled = value;
         }
 
         public bool UserPageRangeEnabled
         {
-            get { return _printDialog.UserPageRangeEnabled; }
-            set { _printDialog.UserPageRangeEnabled = value; }
+            get => _printDialog.UserPageRangeEnabled;
+            set => _printDialog.UserPageRangeEnabled = value;
         }
 
         public void PrintDocument(DocumentPaginator documentPaginator, string description)

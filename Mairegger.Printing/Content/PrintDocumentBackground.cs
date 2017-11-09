@@ -23,13 +23,8 @@ namespace Mairegger.Printing.Content
     {
         public PrintDocumentBackground([NotNull] Panel panel, Rect size = new Rect())
         {
-            if (panel == null)
-            {
-                throw new ArgumentNullException(nameof(panel));
-            }
-
+            Element = panel ?? throw new ArgumentNullException(nameof(panel));
             Size = size;
-            Element = panel;
         }
 
         public Panel Element { get; }

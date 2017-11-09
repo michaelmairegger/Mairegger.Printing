@@ -27,9 +27,6 @@ namespace Mairegger.Printing.Content
 
         public static IPrintContent Instance => LazyInstance.Value;
 
-        UIElement IPrintContent.Content
-        {
-            get { throw new InvalidOperationException("There is no available content."); }
-        }
+        UIElement IPrintContent.Content => throw new InvalidOperationException("There is no available content.");
     }
 }

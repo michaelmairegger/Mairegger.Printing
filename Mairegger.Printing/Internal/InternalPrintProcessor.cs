@@ -393,9 +393,7 @@ namespace Mairegger.Printing.Internal
             _printProcessor.CurrentPage++;
             _printProcessor.OnPageBreak();
 
-            Brush borderBrush;
-            double gridTableHeight;
-            var table = _printProcessor.GetTable(out gridTableHeight, out borderBrush);
+            var table = _printProcessor.GetTable(out var gridTableHeight, out var borderBrush);
 
             var itemsControl = new ItemsControl();
 

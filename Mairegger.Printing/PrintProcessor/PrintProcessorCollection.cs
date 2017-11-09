@@ -60,8 +60,8 @@ namespace Mairegger.Printing.PrintProcessor
 
         public string FileName
         {
-            get { return _fileName; }
-            set { _fileName = PrintProcessor.ReplaceInvalidCharsFromFilename(value); }
+            get => _fileName;
+            set => _fileName = PrintProcessor.ReplaceInvalidCharsFromFilename(value);
         }
 
         /// <summary>

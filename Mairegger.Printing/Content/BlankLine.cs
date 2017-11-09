@@ -30,9 +30,6 @@ namespace Mairegger.Printing.Content
             _height = height;
         }
 
-        public UIElement Content
-        {
-            get { return new FrameworkElement { Height = _height }; }
-        }
+        public UIElement Content => new FrameworkElement { Height = _height };
     }
 }

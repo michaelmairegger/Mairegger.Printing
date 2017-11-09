@@ -25,8 +25,8 @@ namespace Mairegger.Printing.Internal
 
         public event EventHandler Closed
         {
-            add { _window.Closed += value; }
-            remove { _window.Closed -= value; }
+            add => _window.Closed += value;
+            remove => _window.Closed -= value;
         }
 
         public void Show(string windowTitle, DocumentViewer documentViewer)
