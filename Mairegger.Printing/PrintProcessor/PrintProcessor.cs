@@ -107,27 +107,27 @@ namespace Mairegger.Printing.PrintProcessor
 
         public virtual PrintDocumentBackground GetBackgound()
         {
-            return null;
+            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetBackgound)}\" if \"{nameof(PrintAppendixes.Background)}\" is set.");
         }
 
         public virtual IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
         {
-            yield break;
+            return Enumerable.Empty<IDirectPrintContent>();
         }
 
         public virtual UIElement GetFooter()
         {
-            return null;
+            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetFooter)}\" if \"{nameof(PrintAppendixes.Footer)}\" is set.");
         }
 
         public virtual UIElement GetHeader()
         {
-            return null;
+            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetHeader)}\" if \"{nameof(PrintAppendixes.Header)}\" is set.");
         }
 
         public virtual UIElement GetHeaderDescription()
         {
-            return null;
+            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetHeaderDescription)}\" if \"{nameof(PrintAppendixes.HeaderDescription)}\" is set.");
         }
 
         public virtual UIElement GetPageNumbers(int currentPage, int totalPages)
@@ -141,7 +141,7 @@ namespace Mairegger.Printing.PrintProcessor
 
         public virtual UIElement GetSummary()
         {
-            return null;
+            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetSummary)}\" if \"{nameof(PrintAppendixes.Summary)}\" is set.");
         }
 
         public abstract UIElement GetTable(out double reserveHeightOf, out Brush borderBrush);

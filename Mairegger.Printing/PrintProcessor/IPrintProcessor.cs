@@ -19,6 +19,7 @@ namespace Mairegger.Printing.PrintProcessor
     using System.Printing;
     using System.Windows;
     using System.Windows.Media;
+    using JetBrains.Annotations;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
 
@@ -83,6 +84,7 @@ namespace Mairegger.Printing.PrintProcessor
         ///     Gets the background for the print.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
+        [NotNull]
         PrintDocumentBackground GetBackgound();
 
         /// <summary>
@@ -96,18 +98,21 @@ namespace Mairegger.Printing.PrintProcessor
         ///     Gets the footer.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
+        [NotNull]
         UIElement GetFooter();
 
         /// <summary>
         ///     Gets the header.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
+        [NotNull]
         UIElement GetHeader();
 
         /// <summary>
         ///     Gets the header description.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
+        [NotNull]
         UIElement GetHeaderDescription();
 
         /// <summary>
@@ -116,12 +121,14 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="currentPage">The current page number</param>
         /// <param name="totalPages">The total page numbers.</param>
         /// <returns></returns>
+        [NotNull]
         UIElement GetPageNumbers(int currentPage, int totalPages);
 
         /// <summary>
         ///     Gets the summary.
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
+        [NotNull]
         UIElement GetSummary();
 
         /// <summary>
