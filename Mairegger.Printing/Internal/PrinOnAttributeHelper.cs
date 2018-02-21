@@ -22,7 +22,6 @@ namespace Mairegger.Printing.Internal
 
     internal class PrinOnAttributeHelper
     {
-        private readonly List<PrintAppendixes> _printedWarnings = new List<PrintAppendixes>();
         private readonly List<IPrintPartDefinition> _printOnAttributes = new List<IPrintPartDefinition>();
 
         public void AddAttribute(IPrintPartDefinition printPartDefinition)
@@ -50,12 +49,6 @@ namespace Mairegger.Printing.Internal
             var printOnPageAttributes = GetPossiblePrintDefinitionAttributes(printA).ToList();
             if (!printOnPageAttributes.Any())
             {
-                if (!_printedWarnings.Contains(printA))
-                {
-                    _printedWarnings.Add(printA);
-                    Debug.WriteLine("PRINTING: The {0}-Attribute is not defined as PrintOnPageAttribute on Your PrintProcessor. Remove {0} as PrintAppendix or add it as PrintOnPageAttribute", printA);
-                }
-
                 return PrintPartStatus.NotDefined;
             }
 

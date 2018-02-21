@@ -18,12 +18,14 @@ namespace Mairegger.Printing.Internal
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Markup;
     using System.Windows.Media;
     using System.Windows.Shapes;
+    using JetBrains.Annotations;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
     using Mairegger.Printing.PrintProcessor;
@@ -129,7 +131,7 @@ namespace Mairegger.Printing.Internal
             var backgound = _printProcessor.GetBackgound();
             if (backgound == null)
             {
-                throw new InvalidOperationException("The Background cannot be null if the corresponding flag in the PrintAppendix is set");
+                throw new InvalidOperationException($"The instance of type \"{_printProcessor.GetType()}\" must return a value for \"{nameof(PrintProcessor.GetBackgound)}()\" if \"{PrintAppendixes.Background}\" is set.");
             }
 
             var positioningPoint = new Point(backgound.Size.Left, backgound.Size.Top);
@@ -152,7 +154,7 @@ namespace Mairegger.Printing.Internal
             }
             else
             {
-                Debug.WriteLine("PRINTING: There are no ILineItems available to print");
+                Trace.TraceWarning("PRINTING: There are no ILineItems available to print");
                 ConcludeDocument();
             }
         }
@@ -168,10 +170,12 @@ namespace Mairegger.Printing.Internal
                 var i = _itemCount++ % _printProcessor.AlternatingRowColors.Count;
                 var alternatingRowBackground = _printProcessor.AlternatingRowColors[i];
 
-                if ((lineElement.GetValue(Panel.BackgroundProperty) != null) && !_alternatingWarningShown)
+                if (lineElement.GetType().GetProperty("Background") is PropertyInfo property 
+                    && property.GetValue(lineElement) != null 
+                    && !_alternatingWarningShown)
                 {
                     _alternatingWarningShown = true;
-                    Debug.WriteLine("PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");
+                    Trace.TraceWarning("PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");
                 }
 
                 lineElement.SetValue(Panel.BackgroundProperty, alternatingRowBackground);
@@ -188,9 +192,9 @@ namespace Mairegger.Printing.Internal
                 ConcludeDocumentPage(_pageHelper, false);
                 _pageHelper = CreateNewPageHelper();
             }
-            else if (item is IPageBreakAware)
+            else if (item is IPageBreakAware pageBreakAware)
             {
-                AddLineItem((IPageBreakAware)item, isLast);
+                AddLineItem(pageBreakAware, isLast);
             }
             else if (item is IDirectPrintContent directPrintContent)
             {
@@ -312,15 +316,13 @@ namespace Mairegger.Printing.Internal
 
             foreach (var pageContent in FixedDocument.Pages.Skip(from).Take(to))
             {
-                if (!_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.PageNumbers, currentPageCount, false))
+                if (_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.PageNumbers, currentPageCount, false))
                 {
-                    continue;
+                    Debug.WriteLine($"PRINTING: Print Page Numbers on page #{currentPageCount}");
+
+                    var count = currentPageCount;
+                    AddSpecialElement(currentPageCount == to, currentPageCount, pageContent, PrintAppendixes.PageNumbers, () => _printProcessor.GetPageNumbers(count, maxPages));
                 }
-
-                Debug.WriteLine($"PRINTING: Print Page Numbers on page #{currentPageCount}");
-
-                var count = currentPageCount;
-                AddSpecialElement(currentPageCount == to, currentPageCount, pageContent, PrintAppendixes.PageNumbers, () => _printProcessor.GetPageNumbers(count, maxPages));
 
                 currentPageCount++;
             }
@@ -336,7 +338,7 @@ namespace Mairegger.Printing.Internal
             AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Footer, () => _printProcessor.GetFooter());
         }
 
-        private void AddSpecialElement(bool isLastpage, int pageNumber, PageContent pageContent, PrintAppendixes appendix, Func<UIElement> printElement)
+        private void AddSpecialElement(bool isLastpage, int pageNumber, PageContent pageContent, PrintAppendixes appendix, [NotNull]Func<UIElement> printElement)
         {
             if (printElement == null)
             {
