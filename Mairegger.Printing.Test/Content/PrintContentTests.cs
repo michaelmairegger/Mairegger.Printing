@@ -101,6 +101,37 @@ namespace Mairegger.Printing.Tests.Content
 
         [Test]
         [Apartment(ApartmentState.STA)]
+        public void TextLine_Configuration()
+        {
+            StringLineItemConfiguration configuration = new StringLineItemConfiguration()
+                                                        {
+                                                            FontFamily = new FontFamily("Verdana"),
+                                                            FontSize = 10,
+                                                            HorizontalAlignment = HorizontalAlignment.Right
+                                                        };
+
+            var content = PrintContent.TextLine("Test", configuration);
+
+            var icontent = (IPrintContent)content;
+
+            var grid = (Grid)icontent.Content;
+            var uiElement = (TextBlock)grid.Children[0];
+
+            Assert.That(uiElement.FontSize, Is.EqualTo(10));
+            Assert.That(uiElement.FontFamily, Is.EqualTo(new FontFamily("Verdana")));
+            Assert.That(uiElement.HorizontalAlignment, Is.EqualTo(HorizontalAlignment.Right));
+
+        }
+
+        [Test]
+        public void TextLine_Configuration_Null_Throws()
+        {
+
+            Assert.That(() => PrintContent.TextLine("Test", null), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        [Apartment(ApartmentState.STA)]
         public void ToPrintContent()
         {
             var content = new TextBlock { Text = "Test" };

@@ -16,6 +16,7 @@ namespace Mairegger.Printing.Tests.Definition
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using Mairegger.Printing.Definition;
     using Microsoft.CSharp.RuntimeBinder;
     using NUnit.Framework;
@@ -81,6 +82,8 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.Throws<FormatException>(() => Range.Parse("6-InvalidNumber"));
 
             Assert.Throws<ArgumentOutOfRangeException>(() => Range.Parse("6-4"));
+
+            Assert.Throws<ArgumentException>(() => Range.Parse("4,6"));
         }
 
         [Test]
@@ -89,6 +92,16 @@ namespace Mairegger.Printing.Tests.Definition
             var r = Range.Parse("4-6");
             Assert.That(r.From, Is.EqualTo(4));
             Assert.That(r.To, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void ParseRanges()
+        {
+            var ranges = Range.ParseRanges("1-2,5,10-11").ToList();
+
+            CollectionAssert.Contains(ranges, Range.Parse("1-2"));
+            CollectionAssert.Contains(ranges, Range.Parse("5"));
+            CollectionAssert.Contains(ranges, Range.Parse("10-11"));
         }
 
         [Test]

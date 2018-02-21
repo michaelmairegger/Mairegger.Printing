@@ -73,10 +73,6 @@ namespace Mairegger.Printing.Definition
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
             if (!(obj is Range<T>))
             {
                 return false;

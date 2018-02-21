@@ -214,6 +214,8 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(5));
             pd.SetHeightValue(PrintAppendixes.Summary, 6);
             Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(6));
+
+            Assert.That(()=> pd.SetHeightValue(PrintAppendixes.Summary, -1), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         [Test]
@@ -241,6 +243,8 @@ namespace Mairegger.Printing.Tests.Definition
             pd.RecalculateHeightValueWhen(() => true, PrintAppendixes.Summary);
 
             Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(initialHeight));
+
+            Assert.That(() => pd.RecalculateHeightValueWhen(null, PrintAppendixes.Summary), Throws.ArgumentNullException);
         }
 
         private static void SetPageSizeToPrintDimension(PrintDimension printingDimension, Size pageSize)

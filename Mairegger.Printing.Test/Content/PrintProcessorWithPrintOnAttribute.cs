@@ -17,6 +17,7 @@ namespace Mairegger.Printing.Tests.Content
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Media;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
     using Moq;
@@ -53,6 +54,8 @@ namespace Mairegger.Printing.Tests.Content
 
                 yield return itemCollection.Object;
             }
+
+            yield return new TextBlock { Background = Brushes.Red }.ToPrintContent();
         }
     }
 }

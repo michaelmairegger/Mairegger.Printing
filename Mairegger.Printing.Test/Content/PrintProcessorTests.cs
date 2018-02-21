@@ -122,33 +122,33 @@ namespace Mairegger.Printing.Tests.Content
         }
 
         [Test]
-        public void GetBackgound_Default_Null()
+        public void GetBackgound_Throws_IfNotImplemented()
         {
-            Assert.That(new TestPrintProcessor().GetBackgound(), Is.Null);
+            Assert.That(() => new TestPrintProcessor().GetBackgound(), Throws.InstanceOf<NotImplementedException>());
         }
 
         [Test]
-        public void GetFooter_Default_Null()
+        public void GetFooter_Throws_IfNotImplemented()
         {
-            Assert.That(new TestPrintProcessor().GetFooter(), Is.Null);
+            Assert.That(() => new TestPrintProcessor().GetFooter(), Throws.InstanceOf<NotImplementedException>());
         }
 
         [Test]
-        public void GetHeader_Default_Null()
+        public void GetHeader_Throws_IfNotImplemented()
         {
-            Assert.That(new TestPrintProcessor().GetHeader(), Is.Null);
+            Assert.That(() => new TestPrintProcessor().GetHeader(), Throws.InstanceOf<NotImplementedException>());
         }
 
         [Test]
-        public void GetHeaderDescription_Default_Null()
+        public void GetHeaderDescription_Throws_IfNotImplemented()
         {
-            Assert.That(new TestPrintProcessor().GetHeaderDescription(), Is.Null);
+            Assert.That(()=> new TestPrintProcessor().GetHeaderDescription(), Throws.InstanceOf<NotImplementedException>());
         }
 
         [Test]
-        public void GetSummary_Default_Null()
+        public void GetSummary_Throws_IfNotImplemented()
         {
-            Assert.That(new TestPrintProcessor().GetSummary(), Is.Null);
+            Assert.That(() => new TestPrintProcessor().GetSummary(), Throws.InstanceOf<NotImplementedException>());
         }
 
         [Test]
@@ -193,14 +193,16 @@ namespace Mairegger.Printing.Tests.Content
             Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(pp.AlternatingRowColors[2 % 2]));
         }
 
-        [Test]
-        public void PreviewDocument()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void PreviewDocument(bool colorPrintPartsForDebug)
         {
             var printDialog = new Mock<IPrintDialog>();
             var printProcessor = new TestPrintProcessor
                                  {
-                                     PrintDialog = printDialog.Object
-                                 };
+                                     PrintDialog = printDialog.Object,
+                                     ColorPrintPartsForDebug = colorPrintPartsForDebug
+            };
 
             var windowProvider = new Mock<IWindowProvider>();
             windowProvider.Setup(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()));

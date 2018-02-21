@@ -16,10 +16,13 @@ namespace Mairegger.Printing.Tests.Content
 {
     using System.Collections.Generic;
     using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Media;
     using Mairegger.Printing.Content;
+    using Mairegger.Printing.Definition;
     using Mairegger.Printing.PrintProcessor;
 
+    [PrintOnPage(PrintAppendixes.PageNumbers, 2)]
     public class TestPrintProcessor : PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
@@ -31,7 +34,28 @@ namespace Mairegger.Printing.Tests.Content
 
         public override IEnumerable<IPrintContent> ItemCollection()
         {
-            yield break;
+            yield return PrintContent.TextLine("Test", 10);
+            yield return PrintContent.BlankLine(50);
+            yield return PrintContent.PageBreak();
+            yield return PrintContent.BlankLine(50);
+            yield return PrintContent.BlankLine(90);
+            yield return new DirectPrintContent { Content = new TextBlock { Background = Brushes.Red } };
+            yield return PrintContent.BlankLine(100);
+        }
+
+        protected override void PreparePrint()
+        {
+            base.PreparePrint();
+            PrintDimension.PageSize = new Size(500, 100);
+        }
+
+        public override IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
+        {
+            foreach (var item in base.GetCustomPageContent(pageNumber))
+            {
+                yield return item;
+            }
+            yield return new DirectPrintContent { Content = new TextBlock() };
         }
     }
 }
