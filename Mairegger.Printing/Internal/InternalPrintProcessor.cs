@@ -395,7 +395,7 @@ namespace Mairegger.Printing.Internal
             _printProcessor.CurrentPage++;
             _printProcessor.OnPageBreak();
 
-            var table = _printProcessor.GetTable(out var gridTableHeight, out var borderBrush);
+            var table = _printProcessor.GetTable(out var reserveHeightOf, out var borderBrush);
 
             var itemsControl = new ItemsControl();
 
@@ -411,7 +411,7 @@ namespace Mairegger.Printing.Internal
 
             var pageHelper = new PageHelper { PageContent = GetNewDocumentPage() };
 
-            pageHelper.RemoveRemainingSpace(gridTableHeight);
+            pageHelper.RemoveRemainingSpace(reserveHeightOf);
 
             pageHelper.PrintingDimension = _printProcessor.PrintDimension;
             pageHelper.BodyGrid = itemsControl;
