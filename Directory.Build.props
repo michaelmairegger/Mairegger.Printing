@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup Condition="'$(SolutionName)' != 'Mairegger.Printing'" >
+    <!-- Exclude the project from analysis if this project referenced by another project other than the main project.-->
+    <SonarQubeExclude>true</SonarQubeExclude>
+  </PropertyGroup>
+</Project>
