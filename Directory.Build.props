@@ -1,4 +1,8 @@
 <Project>
+  <PropertyGroup>
+    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\$(MSBuildProjectName)\</OutputPath>
+  </PropertyGroup>
+  
   <PropertyGroup Condition="'$(SolutionName)' != 'Mairegger.Printing'" >
     <!-- Exclude the project from analysis if this project referenced by another project other than the main project.-->
     <SonarQubeExclude>true</SonarQubeExclude>

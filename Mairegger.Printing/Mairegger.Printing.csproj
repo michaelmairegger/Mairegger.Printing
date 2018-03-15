@@ -1,128 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mairegger.Printing</RootNamespace>
-    <AssemblyName>Mairegger.Printing</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net45</TargetFramework>
+    <Description>Printing library for WPF</Description>
+    <Copyright>Copyright 2016-2018 Michael Mairegger</Copyright>
+    <Authors>Michael Mairegger</Authors>
+    <GithubUrl>https://github.com/xxMUROxx/Mairegger.Printing</GithubUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>WPF Printing</PackageTags>
+    <PackageProjectUrl>$(GithubUrl)</PackageProjectUrl>
+    <PackageLicenseUrl>$(GithubUrl)/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>$(GithubUrl)</RepositoryUrl>
+
+    <Version>1.3.1</Version>
+    <PackageReleaseNotes>Change return value of GetPrintPart from null to throw NotImplementedException
+[Fix] Warning when alternating row colors and line item has its own color is not shown</PackageReleaseNotes>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\Mairegger.Printing\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\Mairegger.Printing\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\Mairegger.Printing\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)\Mairegger.Printing\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=10.4.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)packages\JetBrains.Annotations.10.4.0\lib\net\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="ReachFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Printing" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="System.Printing" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Content\BlankLine.cs" />
-    <Compile Include="Content\DirectContentLineItem.cs" />
-    <Compile Include="Content\DirectPrintContent.cs" />
-    <Compile Include="Content\HorizontalLine.cs" />
-    <Compile Include="Content\IDirectPrintContent.cs" />
-    <Compile Include="Content\IPageBreakAware.cs" />
-    <Compile Include="Content\PrintContent.cs" />
-    <Compile Include="Content\StringLineItem.cs" />
-    <Compile Include="Content\StringLineItemConfiguration.cs" />
-    <Compile Include="Definition\ColumnDimensionAttribute.cs" />
-    <Compile Include="Definition\ColumnDimensionType.cs" />
-    <Compile Include="Content\CombinedPrintContentCollection.cs" />
-    <Compile Include="Definition\ExcludeFromAllPagesAttribute.cs" />
-    <Compile Include="Definition\ExcludeFromPageAttribute.cs" />
-    <Compile Include="Internal\InternalPrintProcessor.cs" />
-    <Compile Include="Content\IPrintContent.cs" />
-    <Compile Include="Definition\IPrintPartDefinition.cs" />
-    <Compile Include="Internal\PrintDialogWrapper.cs" />
-    <Compile Include="PrintProcessor\IPrintDialog.cs" />
-    <Compile Include="PrintProcessor\IPrintProcessor.cs" />
-    <Compile Include="PrintProcessor\IPrintProcessorPrinter.cs" />
-    <Compile Include="Content\PageBreak.cs" />
-    <Compile Include="Internal\PageHelper.cs" />
-    <Compile Include="Internal\PrinOnAttributeHelper.cs" />
-    <Compile Include="Definition\PrintAppendixes.cs" />
-    <Compile Include="Definition\PrintDefinition.cs" />
-    <Compile Include="Definition\PrintDimension.cs" />
-    <Compile Include="Definition\PrintOnAllPagesAttribute.cs" />
-    <Compile Include="Definition\PrintOnPageAttribute.cs" />
-    <Compile Include="Definition\PrintPartDefinitionAttribute.cs" />
-    <Compile Include="Definition\PrintPartStatus.cs" />
-    <Compile Include="PrintProcessor\IWindowProvider.cs" />
-    <Compile Include="PrintProcessor\PrintProcessor.cs" />
-    <Compile Include="Content\PrintDocumentBackground.cs" />
-    <Compile Include="PrintProcessor\PrintProcessorCollection.cs" />
-    <Compile Include="Internal\WindowsProvider.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Definition\Range.cs" />
-    <Compile Include="PrintProcessor\XPSHelper.cs" />
+    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" PrivateAssets="All" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Mairegger.Printing.nuspec" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
 </Project>
