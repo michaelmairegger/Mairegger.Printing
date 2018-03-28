@@ -254,15 +254,8 @@ namespace Mairegger.Printing.Internal
 
                     if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
                     {
-                        // if (_printProcessor.BreakLastItemIfLastPageWouldBeEmpty)
-                        // { 
-                        //     doAction(concludePage, addLastLineData);
-                        // }
-                        // else
-                        {
-                            AddLineData(content);
-                            ConcludeDocumentPage(_pageHelper, true);
-                        }
+                        AddLineData(content);
+                        ConcludeDocumentPage(_pageHelper, true);
                     }
                     else
                     {

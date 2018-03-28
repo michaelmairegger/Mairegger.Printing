@@ -73,7 +73,7 @@ namespace Mairegger.Printing.Sample
             return l;
         }
 
-        public override UIElement GetTable(out double tableHeaderHeight, out Brush borderBrush)
+        public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {
             Grid g = new Grid();
             borderBrush = Brushes.Gray;
@@ -92,14 +92,13 @@ namespace Mairegger.Printing.Sample
             g.Children.Add(tb);
             g.Children.Add(t1);
             g.Children.Add(t2);
-            tableHeaderHeight = 30;
+            reserveHeightOf = 30;
             return g;
         }
 
         public override IEnumerable<IPrintContent> ItemCollection()
         {
             return _collToPrint.Select(obj => PrintContent.TextLine(obj.Text));
-            //return _collToPrint.Select(obj => new MyShownObjectLineItem(obj, _printDimensions));
         }
 
         protected override void PreparePrint()

@@ -184,7 +184,7 @@ namespace Mairegger.Printing.Tests.Definition
         public void SetColumnDimensionToPropertyWithWrongType_ThrowsException()
         {
             var invalidPrintDimension = new InvalidPrintDimension();
-            invalidPrintDimension.Column1 = invalidPrintDimension.Column1;
+            invalidPrintDimension.Column1 = new InvalidPrintDimension().Column1;
             Assert.That(() => SetPageSizeToPrintDimension(invalidPrintDimension, new Size(500, 1000)), Throws.InstanceOf<InvalidOperationException>());
         }
 

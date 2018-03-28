@@ -178,7 +178,7 @@ namespace Mairegger.Printing.Tests.Content
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
                      {
-                         ItemCount = 3,
+                         ItemCount = 10,
                          IsAlternatingRowColor = true
                      };
 
@@ -188,9 +188,12 @@ namespace Mairegger.Printing.Tests.Content
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
 
-            Assert.That(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(pp.AlternatingRowColors[0]));
-            Assert.That(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(pp.AlternatingRowColors[1 % 2]));
-            Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(pp.AlternatingRowColors[2 % 2]));
+
+            for (int j = 0; j < retrievedContent.Count; j++)
+            {
+                Assert.That(retrievedContent[j].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(pp.AlternatingRowColors[j % 2]));
+
+            }
         }
 
         [TestCase(true)]
