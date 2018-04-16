@@ -3,9 +3,6 @@
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net462</TargetFrameworks>
     <EmbeddedResourceGeneratorVisibilityIsInternal>false</EmbeddedResourceGeneratorVisibilityIsInternal>
-    
-    <!-- workaround for https://stackoverflow.com/a/41472556/2964291 -->
-    <OutputPath>$(SolutionDir)\bin\$(Configuration)\$(Platform)\SampleProject</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
