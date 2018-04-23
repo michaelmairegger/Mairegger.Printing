@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mairegger.Printing", "Maire
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleProject", "SampleProject\SampleProject.csproj", "{D5374955-B77F-4C54-B3DA-616723DDC5D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mairegger.Printing.Test", "Mairegger.Printing.Test\Mairegger.Printing.Test.csproj", "{5C6303B0-8F86-495B-A4FF-EAFB52849CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mairegger.Printing.Test", "Mairegger.Printing.Test\Mairegger.Printing.Tests.csproj", "{5C6303B0-8F86-495B-A4FF-EAFB52849CE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
