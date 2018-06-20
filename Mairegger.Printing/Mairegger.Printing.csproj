@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="10.4.0" PrivateAssets="All" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

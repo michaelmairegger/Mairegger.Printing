@@ -1,7 +1,7 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net462</TargetFrameworks>
+    <TargetFrameworks>net461</TargetFrameworks>
     <EmbeddedResourceGeneratorVisibilityIsInternal>false</EmbeddedResourceGeneratorVisibilityIsInternal>
   </PropertyGroup>
 
