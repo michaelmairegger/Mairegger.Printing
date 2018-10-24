@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!--NOTE Do not change the following line to anything that is not matching the RegEx "<Version>.*</Version>" -->
+    <!--NOTE The version will be overwritten by Azure DevOps Build Pipeline-->
+  </PropertyGroup>
+</Project>
