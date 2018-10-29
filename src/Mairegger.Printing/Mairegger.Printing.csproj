@@ -1,25 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFrameworks>net45</TargetFrameworks>
+  
     <Description>Printing library for WPF</Description>
 
-    <PackageReleaseNotes>Change return value of GetPrintPart from null to throw NotImplementedException
-[Fix] Warning when alternating row colors and line item has its own color is not shown</PackageReleaseNotes>
+    <PackageReleaseNotes>Internal project structure changes</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="WindowsBase" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="ReachFramework" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="PresentationCore" />
+    <Reference Include="ReachFramework" />
     <Reference Include="System.Printing" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" PrivateAssets="All" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
