@@ -40,7 +40,7 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: PublishBuildArtifacts@1
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
     ArtifactName: Mairegger.Printing
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
