@@ -12,14 +12,15 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-
-- task: gittools.gitversion.gitversion-task.GitVersion@4
-
-- task: knom.regexreplace-task.regex-replace.RegexReplace@3
+- task: DotNetCoreCLI@2  
   inputs:
-    InputSearchPattern: 'src\Directory.Build.props'
-    FindRegex: '<Version>.*</Version>'
-    ReplaceRegex: '<Version>$(GitVersion.FullSemVer)</Version>'
+    command: custom
+    custom: tool
+    arguments: install --tool-path . nbgv
+  displayName: Install NBGV tool
+
+- script: nbgv cloud
+  displayName: Set Version
 
 - task: NuGetToolInstaller@0
 
