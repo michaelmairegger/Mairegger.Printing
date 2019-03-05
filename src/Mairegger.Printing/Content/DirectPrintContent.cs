@@ -18,7 +18,7 @@ namespace Mairegger.Printing.Content
 
     /// <inheritdoc />
     /// <summary>
-    ///     A print content that can be positionized freely on the page.
+    ///     A print content that can be positioned freely on the page.
     /// </summary>
     /// <remarks>
     ///     By returning an instance of this class from a

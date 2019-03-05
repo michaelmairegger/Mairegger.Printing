@@ -21,11 +21,11 @@ namespace Mairegger.Printing.Definition
 
     public class PrintDefinition
     {
-        private readonly PrinOnAttributeHelper _prinOnAttributeHelper = new PrinOnAttributeHelper();
+        private readonly PrintOnAttributeHelper _printOnAttributeHelper = new PrintOnAttributeHelper();
 
         public bool IsDefined(PrintAppendixes value)
         {
-            return _prinOnAttributeHelper.IsDefined(value);
+            return _printOnAttributeHelper.IsDefined(value);
         }
 
         public bool IsToPrint(PrintAppendixes pa, int pageNumber, bool isLastPage)
@@ -35,7 +35,7 @@ namespace Mairegger.Printing.Definition
 
         public void SetPrintAttribute(IPrintPartDefinition printPartDefinition)
         {
-            _prinOnAttributeHelper.AddAttribute(printPartDefinition);
+            _printOnAttributeHelper.AddAttribute(printPartDefinition);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Mairegger.Printing.Definition
             {
                 throw new ArgumentException(nameof(pa));
             }
-            return _prinOnAttributeHelper.IsPrintOnPage(pa, pageNumber);
+            return _printOnAttributeHelper.IsPrintOnPage(pa, pageNumber);
         }
 
         [SuppressMessage("ReSharper", "BitwiseOperatorOnEnumWithoutFlags", Justification = "This is OK, because PrintPartStatus should not have a flag-attribute and the line with & should be a bit-flag")]

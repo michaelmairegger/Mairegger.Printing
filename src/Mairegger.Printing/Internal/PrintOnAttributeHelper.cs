@@ -20,7 +20,7 @@ namespace Mairegger.Printing.Internal
     using System.Linq;
     using Mairegger.Printing.Definition;
 
-    internal class PrinOnAttributeHelper
+    internal class PrintOnAttributeHelper
     {
         private readonly List<IPrintPartDefinition> _printOnAttributes = new List<IPrintPartDefinition>();
 

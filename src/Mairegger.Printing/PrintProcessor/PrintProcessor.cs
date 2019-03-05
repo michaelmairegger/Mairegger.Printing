@@ -105,9 +105,9 @@ namespace Mairegger.Printing.PrintProcessor
             return true;
         }
 
-        public virtual PrintDocumentBackground GetBackgound()
+        public virtual PrintDocumentBackground GetBackground()
         {
-            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetBackgound)}\" if \"{nameof(PrintAppendixes.Background)}\" is set.");
+            throw new NotImplementedException($"{typeof(PrintProcessor)} must implement \"{nameof(GetBackground)}\" if \"{nameof(PrintAppendixes.Background)}\" is set.");
         }
 
         public virtual IEnumerable<IDirectPrintContent> GetCustomPageContent(int pageNumber)
@@ -268,7 +268,7 @@ namespace Mairegger.Printing.PrintProcessor
             PrintDimension.PrintProcessor = this;
             PrintDimension.PageSize = pageSize;
             PreparePrint();
-            PrintDimension.PositionizeRelative();
+            PrintDimension.PositionRelative();
         }
 
         private void SetPrintOnAttributes()

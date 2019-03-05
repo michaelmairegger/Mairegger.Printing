@@ -35,7 +35,7 @@ namespace Mairegger.Printing.Definition
         ///     The following defines an attribute on a property that is used for a column that takes 20% of the total width.
         ///     <code>
         /// [ColumnDimension(0.2d)]
-        /// public double ColumnWidht { get; private set; }
+        /// public double ColumnWidth { get; private set; }
         ///      </code>
         /// </example>
         public ColumnDimensionAttribute(double columnWidth)
@@ -72,7 +72,7 @@ namespace Mairegger.Printing.Definition
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ColumnDimensionAttribute" /> class  defining the column width width
+        ///     Initializes a new instance of the <see cref="T:Mairegger.Printing.Definition.ColumnDimensionAttribute" /> class  defining the column width width
         ///     the passed value. The column width is either Relative or Absolute.
         /// </summary>
         /// <param name="columnWidth"> The width of the column. </param>

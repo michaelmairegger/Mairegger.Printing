@@ -87,7 +87,7 @@ namespace Mairegger.Printing.Internal
                         i < FixedDocument.Pages.Count;
                         i++, j++)
                     {
-                        AddCustomPositionizedContent(FixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
+                        AddCustomPositionedContent(FixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
                     }
                 }
 
@@ -105,7 +105,7 @@ namespace Mairegger.Printing.Internal
             return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));
         }
 
-        private static void PositionizeUiElement(PageContent pageContent, UIElement frameworkElement, Point positioningPoint)
+        private static void PositionUiElement(PageContent pageContent, UIElement frameworkElement, Point positioningPoint)
         {
             FixedPage.SetTop(frameworkElement, positioningPoint.Y);
             FixedPage.SetLeft(frameworkElement, positioningPoint.X);
@@ -113,11 +113,11 @@ namespace Mairegger.Printing.Internal
             pageContent.Child.Children.Add(frameworkElement);
         }
 
-        private static void AddCustomPositionizedContent(PageContent page, IEnumerable<IDirectPrintContent> customContent)
+        private static void AddCustomPositionedContent(PageContent page, IEnumerable<IDirectPrintContent> customContent)
         {
             foreach (var content in customContent)
             {
-                PositionizeUiElement(page, content.Content, content.Position);
+                PositionUiElement(page, content.Content, content.Position);
             }
         }
 
@@ -128,16 +128,16 @@ namespace Mairegger.Printing.Internal
                 return;
             }
 
-            var backgound = _printProcessor.GetBackgound();
-            if (backgound == null)
+            var background = _printProcessor.GetBackground();
+            if (background == null)
             {
-                throw new InvalidOperationException($"The instance of type \"{_printProcessor.GetType()}\" must return a value for \"{nameof(PrintProcessor.GetBackgound)}()\" if \"{PrintAppendixes.Background}\" is set.");
+                throw new InvalidOperationException($"The instance of type \"{_printProcessor.GetType()}\" must return a value for \"{nameof(PrintProcessor.GetBackground)}()\" if \"{PrintAppendixes.Background}\" is set.");
             }
 
-            var positioningPoint = new Point(backgound.Size.Left, backgound.Size.Top);
+            var positioningPoint = new Point(background.Size.Left, background.Size.Top);
 
             Debug.WriteLine($"PRINTING: Print background on page #{CurrentPageNumber} ");
-            PositionizeUiElement(pageContent, backgound.Element, positioningPoint);
+            PositionUiElement(pageContent, background.Element, positioningPoint);
         }
 
         private void AddItems(IList<IPrintContent> itemCollection)
@@ -199,81 +199,66 @@ namespace Mairegger.Printing.Internal
             else if (item is IDirectPrintContent directPrintContent)
             {
                 var position = new Point(directPrintContent.Position.X + _pageHelper.PrintingDimension.Margin.Left, directPrintContent.Position.Y + _pageHelper.PrintingDimension.Margin.Top);
-                PositionizeUiElement(_pageHelper.PageContent, item.Content, position);
+                PositionUiElement(_pageHelper.PageContent, item.Content, position);
             }
             else
             {
                 var content = item.Content;
 
                 content.Measure(new Size(_pageHelper.BodyGrid.DesiredSize.Width, double.MaxValue));
-                var lineHeiht = content.DesiredSize.Height;
+                var lineHeight = content.DesiredSize.Height;
 
-                if (lineHeiht < _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
+                if (lineHeight < _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
                 {
                     // OK
                 }
                 else
                 {
-                    var formattableString = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
+                    var helpText = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
 
-                    if (lineHeiht > _pageHelper.PrintingDimension.PageSize.Height)
+                    if (lineHeight > _pageHelper.PrintingDimension.PageSize.Height)
                     {
-                        Trace.TraceWarning($"{Description} page-size. {formattableString}");
+                        Trace.TraceWarning($"{Description} page-size. {helpText}");
                     }
-                    else if (lineHeiht > _pageHelper.PrintingDimension.PrintablePageSize.Height)
+                    else if (lineHeight > _pageHelper.PrintingDimension.PrintablePageSize.Height)
                     {
-                        Trace.TraceWarning($"{Description} printable-page-size. {formattableString}");
+                        Trace.TraceWarning($"{Description} printable-page-size. {helpText}");
                     }
-                    else if (lineHeiht > _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
+                    else if (lineHeight > _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
                     {
-                        Trace.TraceWarning($"{Description} body grid. {formattableString}");
+                        Trace.TraceWarning($"{Description} body grid. {helpText}");
                     }
                 }
 
                 if (isLast)
                 {
-                    // otherwise the last item is put on a new pageContent if desired, or it is left on the current pageContent and the PrintAppendixes that have no space would be print on the next pageContent
+                    // otherwise the last item is put on a new pageContent if desired, or it is left on the current
+                    // pageContent and the PrintAppendixes that have no space would be print on the next pageContent
                     // should occur only if there are PrintAppendixes that have to be print on the last pageContent
-                    Action concludePage = () =>
-                    {
-                        ConcludeDocumentPage(_pageHelper, false);
-                        _pageHelper = CreateNewPageHelper();
-                    };
-                    Action addLastLineData = () =>
-                    {
-                        AddLineData(content);
-                        Debug.WriteLine("PRINTING: Last item print");
-                    };
-
-                    Action<Action, Action> doAction = (first, second) =>
-                    {
-                        first();
-                        second();
-                        ConcludeDocument();
-                    };
-
-                    if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
+                    if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
                     {
                         AddLineData(content);
                         ConcludeDocumentPage(_pageHelper, true);
                     }
                     else
                     {
-                        doAction(concludePage, addLastLineData);
+                        ConcludePage();
+                        AddLastLineData(content);
+                        ConcludeDocument();
                     }
                     return;
                 }
 
-                if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, true))
+                if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
                 {
                     AddLineData(content);
-                    _pageHelper.RemoveRemainingSpace(lineHeiht);
+                    _pageHelper.RemoveRemainingSpace(lineHeight);
                 }
-                else if (_pageHelper.HasSpace(lineHeiht, CurrentPageNumber, false))
+                else if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, false))
                 {
                     Debug.WriteLine("PRINTING: Second chance because item has no space");
                     AddLineData(content);
-                    _pageHelper.RemoveRemainingSpace(lineHeiht);
+                    _pageHelper.RemoveRemainingSpace(lineHeight);
                 }
                 else
                 {
@@ -282,9 +267,21 @@ namespace Mairegger.Printing.Internal
                     _pageHelper = CreateNewPageHelper();
 
                     AddLineData(content);
-                    _pageHelper.RemoveRemainingSpace(lineHeiht);
+                    _pageHelper.RemoveRemainingSpace(lineHeight);
                 }
             }
+        }
+
+        private void ConcludePage()
+        {
+            ConcludeDocumentPage(_pageHelper, false);
+            _pageHelper = CreateNewPageHelper();
+        }
+
+        private void AddLastLineData(UIElement content)
+        {
+            AddLineData(content);
+            Debug.WriteLine("PRINTING: Last item print");
         }
 
         private void AddLineItem(IPageBreakAware aware, bool isLast)
@@ -348,8 +345,8 @@ namespace Mairegger.Printing.Internal
                 throw new InvalidOperationException($"The {appendix} cannot be null if the corresponding flag in the PrintAppendix is set");
             }
 
-            Debug.WriteLine($"PRINTING: Print {appendix} desciption on page #{pageNumber} ");
-            PositionizeUiElement(pageContent, elementToPrint, appendix, pageNumber, isLastpage);
+            Debug.WriteLine($"PRINTING: Print {appendix} description on page #{pageNumber} ");
+            PositionUiElement(pageContent, elementToPrint, appendix, pageNumber, isLastpage);
         }
 
         private void ConcludeDocument()
@@ -374,7 +371,7 @@ namespace Mairegger.Printing.Internal
             grid.Height = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).Length;
 
             var positioningPoint = new Point(_printProcessor.PrintDimension.Margin.Left, _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).From);
-            PositionizeUiElement(pageHelper.PageContent, grid, positioningPoint);
+            PositionUiElement(pageHelper.PageContent, grid, positioningPoint);
 
             AddPrintAppendixes(pageHelper.PageContent, isLastPage);
 
@@ -433,10 +430,10 @@ namespace Mairegger.Printing.Internal
             return pageContent;
         }
 
-        private void PositionizeUiElement(PageContent pageContent, UIElement panel, PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
+        private void PositionUiElement(PageContent pageContent, UIElement panel, PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
-            var positioninRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, pageNumber, isLastPage);
-            var position = new Point(_printProcessor.PrintDimension.Margin.Left, positioninRange.From);
+            var positioningRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, pageNumber, isLastPage);
+            var position = new Point(_printProcessor.PrintDimension.Margin.Left, positioningRange.From);
 
             var contentControl = new ContentControl
                                  {
@@ -477,7 +474,7 @@ namespace Mairegger.Printing.Internal
                 contentControl.Content = panel;
             }
 
-            PositionizeUiElement(pageContent, contentControl, position);
+            PositionUiElement(pageContent, contentControl, position);
         }
     }
 }
