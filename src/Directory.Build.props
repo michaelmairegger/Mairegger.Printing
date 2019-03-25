@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Copyright>Copyright 2016-2018 Michael Mairegger</Copyright>
     <Authors>Michael Mairegger</Authors>
-    <GithubUrl>https://github.com/xxMUROxx/Mairegger.Printing</GithubUrl>
+    <GithubUrl>https://github.com/michaelmairegger/Mairegger.Printing</GithubUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>WPF Printing</PackageTags>
     <PackageProjectUrl>$(GithubUrl)</PackageProjectUrl>
@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" PrivateAssets="all" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.136" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.*" PrivateAssets="all" />
   </ItemGroup>
 
   <!--MSBuild.Sdk.Extras-->
