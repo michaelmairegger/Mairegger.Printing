@@ -30,6 +30,7 @@ steps:
 
 - task: VSBuild@1
   inputs:
+    maximumCpuCount: true
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
