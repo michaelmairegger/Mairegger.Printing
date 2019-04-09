@@ -6,7 +6,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>WPF Printing</PackageTags>
     <PackageProjectUrl>$(GithubUrl)</PackageProjectUrl>
-    <PackageLicenseUrl>$(GithubUrl)/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>$(GithubUrl)</RepositoryUrl>
   </PropertyGroup>
 
