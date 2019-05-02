@@ -166,6 +166,15 @@ namespace Mairegger.Printing.PrintProcessor
 
         public bool PrintDocument(string printQueueName)
         {
+            if (printQueueName.StartsWith(@"\\"))
+            {
+                var printServerName = new string(printQueueName.Substring(2).TakeWhile(c => c != '\\').ToArray());
+
+                using (var printServer = new PrintServer($@"\\{printServerName}"))
+                {
+                    return PrintDocument(printQueueName, printServer);
+                }
+            }
             using (var printServer = new LocalPrintServer())
             {
                 return PrintDocument(printQueueName, printServer);
