@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2019.*" PrivateAssets="all" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.*" PrivateAssets="all" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.25" PrivateAssets="all" />
   </ItemGroup>
 
   <!--MSBuild.Sdk.Extras-->
