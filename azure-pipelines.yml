@@ -3,8 +3,6 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
-pool:
-  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
@@ -14,6 +12,10 @@ variables:
 stages:
 - stage: Build
   jobs:
+  - job: Build
+    pool:
+      vmImage: 'windows-latest'
+    steps:
     # remove this when NetCore 3.0 is preinstalled on vmImage
     - task: UseDotNet@2
       displayName: 'Use .Net Core sdk 3.x'
