@@ -250,7 +250,7 @@ namespace Mairegger.Printing.Tests.Definition
         private static void SetPageSizeToPrintDimension(PrintDimension printingDimension, Size pageSize)
         {
             printingDimension.PageSize = pageSize;
-            printingDimension.PositionizeRelative();
+            printingDimension.PositionRelative();
         }
 
         private class InvalidPrintDimension : PrintDimension

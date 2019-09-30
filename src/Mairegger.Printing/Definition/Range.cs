@@ -31,7 +31,7 @@ namespace Mairegger.Printing.Definition
         /// <param name="fromValue"> the minimum value </param>
         /// <param name="toValue"> the maximum value </param>
         /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="fromValue" /> is greather than
+        ///     <paramref name="fromValue" /> is greater than
         ///     <paramref name="toValue" />.
         /// </exception>
         public Range(T fromValue, T toValue)
@@ -122,7 +122,7 @@ namespace Mairegger.Printing.Definition
         /// <param name="input"> the string representation of the range to convert to </param>
         /// <returns> the range representation </returns>
         /// <exception cref="ArgumentNullException">If the passed argument is null</exception>
-        /// <exception cref="ArgumentException">If the passed agrument is in a invalid format</exception>
+        /// <exception cref="ArgumentException">If the passed argument is in a invalid format</exception>
         /// <exception cref="FormatException">If the passed argument does not contains the correct number</exception>
         /// <example>
         ///     <code>Range r = Range.Parse("4-6");</code>

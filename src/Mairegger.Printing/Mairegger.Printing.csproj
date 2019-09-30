@@ -1,20 +1,32 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <TargetFrameworks>net45</TargetFrameworks>
-  
+    <TargetFrameworks>net45;netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
     <Description>Printing library for WPF</Description>
 
     <PackageReleaseNotes>Internal project structure changes</PackageReleaseNotes>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ReachFramework" />
     <Reference Include="System.Printing" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Properties\l10n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>l10n.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" PrivateAssets="All" />
+    <EmbeddedResource Update="Properties\l10n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>l10n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

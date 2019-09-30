@@ -17,7 +17,9 @@ namespace Mairegger.Printing.Internal
     using System;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
     using Mairegger.Printing.PrintProcessor;
+    using Mairegger.Printing.Properties;
 
     internal class WindowsProvider : IWindowProvider
     {
@@ -32,8 +34,17 @@ namespace Mairegger.Printing.Internal
         public void Show(string windowTitle, DocumentViewer documentViewer)
         {
             _window.Content = documentViewer;
-            _window.Title = $"Preview: {windowTitle}";
+            _window.Title = $"{l10n.Preview}: {windowTitle}";
+            _window.KeyDown += WindowOnKeyDown;
             _window.Show();
+
+            void WindowOnKeyDown(object sender, KeyEventArgs args)
+            {
+               if (args.Key == Key.Escape && sender is Window window)
+               {
+                   window.Close();
+               }
+            }
         }
     }
 }

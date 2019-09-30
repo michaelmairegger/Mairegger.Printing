@@ -124,7 +124,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void GetBackgound_Throws_IfNotImplemented()
         {
-            Assert.That(() => new TestPrintProcessor().GetBackgound(), Throws.InstanceOf<NotImplementedException>());
+            Assert.That(() => new TestPrintProcessor().GetBackground(), Throws.InstanceOf<NotImplementedException>());
         }
 
         [Test]

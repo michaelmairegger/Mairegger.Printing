@@ -85,10 +85,10 @@ namespace Mairegger.Printing.PrintProcessor
         /// </summary>
         /// <returns>UIElement containing the content.</returns>
         [NotNull]
-        PrintDocumentBackground GetBackgound();
+        PrintDocumentBackground GetBackground();
 
         /// <summary>
-        ///     Returns a list of <see cref="IDirectPrintContent" /> to allow custom positionizing element on the page.
+        ///     Returns a list of <see cref="IDirectPrintContent" /> to allow custom positioning elements on the page.
         /// </summary>
         /// <param name="pageNumber">The current page number. The numbering starts with 1.</param>
         /// <returns></returns>

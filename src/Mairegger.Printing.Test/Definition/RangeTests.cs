@@ -20,6 +20,7 @@ namespace Mairegger.Printing.Tests.Definition
     using Mairegger.Printing.Definition;
     using Microsoft.CSharp.RuntimeBinder;
     using NUnit.Framework;
+    using Range = Mairegger.Printing.Definition.Range;
 
     [TestFixture]
     public class RangeTests

@@ -42,13 +42,13 @@ namespace Mairegger.Printing.Content
         /// Returns a line containing a specified <paramref name="text"/>
         /// </summary>
         /// <param name="text">The text to print.</param>
-        /// <param name="fonzSize">The size of the text.</param>
+        /// <param name="fontSize">The size of the text.</param>
         /// <param name="horizontalAlignment">The alignment of the text.</param>
         /// <param name="fontFamily">The font type.</param>
         /// <returns></returns>
-        public static StringLineItem TextLine(string text, double? fonzSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left, FontFamily fontFamily = null)
+        public static StringLineItem TextLine(string text, double? fontSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left, FontFamily fontFamily = null)
         {
-            return new StringLineItem(text, fonzSize, horizontalAlignment)
+            return new StringLineItem(text, fontSize, horizontalAlignment)
             {
                 FontFamily = fontFamily
             };

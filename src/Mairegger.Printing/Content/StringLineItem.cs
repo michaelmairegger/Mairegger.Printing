@@ -100,12 +100,12 @@ namespace Mairegger.Printing.Content
                     }
                 }
 
-                var lenght = (int)reflectionLineLength.GetValue(line);
+                var length = (int)reflectionLineLength.GetValue(line);
 
-                var substring = Text.Substring(currentPosition, lenght);
+                var substring = Text.Substring(currentPosition, length);
                 stringBuilder.Append(substring);
 
-                currentPosition += lenght;
+                currentPosition += length;
                 currentLineOnPage++;
                 currentLine++;
 

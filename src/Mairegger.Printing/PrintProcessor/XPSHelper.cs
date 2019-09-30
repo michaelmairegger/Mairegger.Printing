@@ -16,6 +16,7 @@ namespace Mairegger.Printing.PrintProcessor
 {
     using System;
     using System.IO;
+    using System.IO.Packaging;
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Markup;
@@ -135,11 +136,16 @@ namespace Mairegger.Printing.PrintProcessor
 
         private static void WriteXps(IDocumentPaginatorSource fixedDocument, string tempFileName)
         {
-            var paginator = fixedDocument.DocumentPaginator;
-            using (var xps = new XpsDocument(tempFileName, FileAccess.Write))
+            using (var stream = File.Open(tempFileName, FileMode.Create))
             {
-                var documentWriter = XpsDocument.CreateXpsDocumentWriter(xps);
-                documentWriter.Write(paginator);
+                using (var package = Package.Open(stream, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    using (var xpsDoc = new XpsDocument(package, CompressionOption.NotCompressed))
+                    {
+                        var docWriter = XpsDocument.CreateXpsDocumentWriter(xpsDoc);
+                        docWriter.Write(fixedDocument.DocumentPaginator);
+                    }
+                }
             }
         }
     }
