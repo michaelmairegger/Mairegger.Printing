@@ -1,17 +1,11 @@
-// Copyright 2016 Michael Mairegger
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//     http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
+// -----------------------------------------------------------------------
+// <copyright file="PageRange.cs"
+//            project="Mairegger.Printing"
+//            company="Mairegger Michael">
+//     Copyright © Mairegger Michael, 2009-2019
+//     All rights reserved
+// </copyright>
+// -----------------------------------------------------------------------
 namespace Mairegger.Printing.Definition
 {
     using System;
@@ -22,11 +16,10 @@ namespace Mairegger.Printing.Definition
     /// <summary>
     ///     Represents a contiguous area between two numeric
     /// </summary>
-    public struct Range<T> : IEquatable<Range<T>>
-        where T : IComparable<T>
+    public struct PageRange : IEquatable<PageRange>
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Range{T}" /> struct.
+        ///     Initializes a new instance of the <see cref="PageRange" /> struct.
         /// </summary>
         /// <param name="fromValue"> the minimum value </param>
         /// <param name="toValue"> the maximum value </param>
@@ -34,13 +27,14 @@ namespace Mairegger.Printing.Definition
         ///     <paramref name="fromValue" /> is greater than
         ///     <paramref name="toValue" />.
         /// </exception>
-        public Range(T fromValue, T toValue)
+        public PageRange(double fromValue, double toValue)
             : this()
         {
             if (fromValue.CompareTo(toValue) > 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(fromValue), $"{nameof(fromValue)} must be lower or equal than {nameof(toValue)}");
             }
+
             From = fromValue;
             To = toValue;
         }
@@ -48,39 +42,40 @@ namespace Mairegger.Printing.Definition
         /// <summary>
         ///     Gets the minimum bound of the range
         /// </summary>
-        public T From { get; }
+        public double From { get; }
 
         /// <summary>
         ///     Gets the difference between <see cref="To" /> and <see cref="From" />.
         /// </summary>
         /// <exception cref="RuntimeBinderException"><typeparamref name="T" /> does not overloads the --operator.</exception>
-        public T Length => (To as dynamic) - (From as dynamic);
+        public double Length => To - From;
 
         /// <summary>
         ///     Gets the maximum bound of the range
         /// </summary>
-        public T To { get; }
+        public double To { get; }
 
-        public static bool operator ==(Range<T> left, Range<T> right)
+        public static bool operator ==(PageRange left, PageRange right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Range<T> left, Range<T> right)
+        public static bool operator !=(PageRange left, PageRange right)
         {
             return !left.Equals(right);
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Range<T>))
+            if (!(obj is PageRange))
             {
                 return false;
             }
-            return Equals((Range<T>)obj);
+
+            return Equals((PageRange)obj);
         }
 
-        public bool Equals(Range<T> other)
+        public bool Equals(PageRange other)
         {
             return To.Equals(other.To) && From.Equals(other.From);
         }
@@ -93,12 +88,12 @@ namespace Mairegger.Printing.Definition
             }
         }
 
-        public bool IsInRange(T value)
+        public bool IsInRange(double value)
         {
             return (From.CompareTo(value) <= 0) && (To.CompareTo(value) >= 0);
         }
 
-        public bool IsInRange(Range<T> other)
+        public bool IsInRange(PageRange other)
         {
             return IsInRange(other.From) && IsInRange(other.To);
         }
@@ -107,17 +102,14 @@ namespace Mairegger.Printing.Definition
         {
             return $"{From}-{To}";
         }
-    }
 
-    public static class Range
-    {
-        public static Range<T> FromPoint<T>(T value) where T : IComparable<T>
+        public static PageRange FromPoint(double value)
         {
-            return new Range<T>(value, value);
+            return new PageRange(value, value);
         }
 
         /// <summary>
-        ///     Parses the input towards the corresponding <see cref="Range{T}" /> value
+        ///     Parses the input towards the corresponding <see cref="PageRange{T}" /> value
         /// </summary>
         /// <param name="input"> the string representation of the range to convert to </param>
         /// <returns> the range representation </returns>
@@ -127,12 +119,13 @@ namespace Mairegger.Printing.Definition
         /// <example>
         ///     <code>Range r = Range.Parse("4-6");</code>
         /// </example>
-        public static Range<double> Parse(string input)
+        public static PageRange Parse(string input)
         {
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
+
             if (input.Contains(',')) // TODO Remove this check in a future releases
             {
                 throw new ArgumentException("',' is not supported anymore change range to '-'");
@@ -140,7 +133,7 @@ namespace Mairegger.Printing.Definition
 
             var range = input.Split('-');
 
-            if ((range.Length != 2 && range.Length != 1) || range.Any(c => c.Length == 0))
+            if (((range.Length != 2) && (range.Length != 1)) || range.Any(c => c.Length == 0))
             {
                 throw new ArgumentException("invalid format", nameof(input));
             }
@@ -148,20 +141,20 @@ namespace Mairegger.Printing.Definition
             var fromString = range.First();
             var toString = range.Last();
 
-            if (!double.TryParse(fromString, out double min))
+            if (!double.TryParse(fromString, out var min))
             {
                 throw new FormatException($"Cannot convert '{fromString}' from '{input}'");
             }
 
-            if (!double.TryParse(toString, out double max))
+            if (!double.TryParse(toString, out var max))
             {
                 throw new FormatException($"Cannot convert '{toString}' from '{input}'");
             }
 
-            return new Range<double>(min, max);
+            return new PageRange(min, max);
         }
 
-        public static IList<Range<double>> ParseRanges(string input)
+        public static IList<PageRange> ParseRanges(string input)
         {
             var ranges = input.Split(',');
 
