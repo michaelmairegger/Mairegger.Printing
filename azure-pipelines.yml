@@ -63,3 +63,13 @@ stages:
       inputs:
         PathtoPublish: '$(build.artifactstagingdirectory)'
         ArtifactName: Mairegger.Printing
+        
+- stage: Release
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: Release
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - script: echo Hi!
