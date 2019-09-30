@@ -4,59 +4,60 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
+stages:
+- stage: Build
+  jobs:
+    # remove this when NetCore 3.0 is preinstalled on vmImage
+    - task: UseDotNet@2
+      displayName: 'Use .Net Core sdk 3.x'
+      inputs:
+        version: 3.x
 
-# remove this when NetCore 3.0 is preinstalled on vmImage
-- task: UseDotNet@2
-  displayName: 'Use .Net Core sdk 3.x'
-  inputs:
-      version: 3.x
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: custom
+        custom: tool
+        arguments: install --tool-path . nbgv
+      displayName: Install NBGV tool
 
-- task: DotNetCoreCLI@2  
-  inputs:
-    command: custom
-    custom: tool
-    arguments: install --tool-path . nbgv
-  displayName: Install NBGV tool
+    - script: nbgv cloud
+      displayName: Set Version
 
-- script: nbgv cloud
-  displayName: Set Version
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: restore
+        projects: $(solution)
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet restore'
-  inputs:
-    command: restore
-    projects: $(solution)
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        command: build
+        projects: $(solution)
+        arguments: '--configuration $(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build'
-  inputs:
-    command: build
-    projects: $(solution)
-    arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        command: test
+        projects: $(solution)
+        arguments: --collect:"Code Coverage"
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test'
-  inputs:
-    command: test
-    projects: $(solution)
-    arguments: --collect:"Code Coverage"
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet pack'
+      inputs:
+        command: pack
+        projects: $(solution)
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
-  inputs:
-    command: pack
-    projects: $(solution)
-
-- task: PublishBuildArtifacts@1
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
-    ArtifactName: Mairegger.Printing
+    - task: PublishBuildArtifacts@1
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+        ArtifactName: Mairegger.Printing
