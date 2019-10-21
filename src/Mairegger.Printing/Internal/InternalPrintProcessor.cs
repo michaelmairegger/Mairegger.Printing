@@ -18,7 +18,6 @@ namespace Mairegger.Printing.Internal
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Documents;
@@ -170,9 +169,8 @@ namespace Mairegger.Printing.Internal
                 var i = _itemCount++ % _printProcessor.AlternatingRowColors.Count;
                 var alternatingRowBackground = _printProcessor.AlternatingRowColors[i];
 
-                if (lineElement.GetType().GetProperty("Background") is PropertyInfo property 
-                    && property.GetValue(lineElement) != null 
-                    && !_alternatingWarningShown)
+                var propertyInfo = lineElement.GetType().GetProperty("Background");
+                if (propertyInfo?.GetValue(lineElement) != null && !_alternatingWarningShown)
                 {
                     _alternatingWarningShown = true;
                     Trace.TraceWarning("PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");

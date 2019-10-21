@@ -11,7 +11,6 @@ namespace Mairegger.Printing.Definition
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.CSharp.RuntimeBinder;
 
     /// <summary>
     ///     Represents a contiguous area between two numeric
@@ -47,7 +46,6 @@ namespace Mairegger.Printing.Definition
         /// <summary>
         ///     Gets the difference between <see cref="To" /> and <see cref="From" />.
         /// </summary>
-        /// <exception cref="RuntimeBinderException"><typeparamref name="T" /> does not overloads the --operator.</exception>
         public double Length => To - From;
 
         /// <summary>
@@ -109,7 +107,7 @@ namespace Mairegger.Printing.Definition
         }
 
         /// <summary>
-        ///     Parses the input towards the corresponding <see cref="PageRange{T}" /> value
+        ///     Parses the input towards the corresponding <see cref="PageRange" /> value
         /// </summary>
         /// <param name="input"> the string representation of the range to convert to </param>
         /// <returns> the range representation </returns>
