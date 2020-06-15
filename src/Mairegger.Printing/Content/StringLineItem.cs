@@ -1,4 +1,4 @@
-// Copyright 2017 Michael Mairegger
+﻿// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ namespace Mairegger.Printing.Content
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Reflection;
     using System.Text;
     using System.Windows;
@@ -76,7 +77,7 @@ namespace Mairegger.Printing.Content
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
 
-            var totalLines = (int)reflectionLineCount.GetValue(textBlock);
+            var totalLines = (int?)reflectionLineCount.GetValue(textBlock) ?? 0;
 
             var currentLine = 0;
             var currentLineOnPage = 0;
@@ -90,8 +91,11 @@ namespace Mairegger.Printing.Content
 
                 var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine });
 
+                Debug.Assert(line != null);
+
                 if (reflectionLineLength == null)
                 {
+
                     reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
 
                     if (reflectionLineLength == null)
@@ -100,7 +104,7 @@ namespace Mairegger.Printing.Content
                     }
                 }
 
-                var length = (int)reflectionLineLength.GetValue(line);
+                var length = (int?)reflectionLineLength.GetValue(line) ?? 0;
 
                 var substring = Text.Substring(currentPosition, length);
                 stringBuilder.Append(substring);
