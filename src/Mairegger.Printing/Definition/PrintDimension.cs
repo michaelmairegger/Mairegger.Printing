@@ -21,6 +21,7 @@ namespace Mairegger.Printing.Definition
     using System.Reflection;
     using System.Windows;
     using Mairegger.Printing.PrintProcessor;
+    using Mairegger.Printing.Properties;
 
     /// <summary>
     ///     Provides a class that contains several Printing Dimensions
@@ -106,7 +107,7 @@ namespace Mairegger.Printing.Definition
         {
             if (value < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), value, "Must be a positive number or null");
+                throw new ArgumentOutOfRangeException(nameof(value), value, l10n.PrintDimension_SetHeightValue_Must_be_a_positive_number_or_null);
             }
             if (_printPartDimensions.ContainsKey(printAppendix))
             {
@@ -142,7 +143,7 @@ namespace Mairegger.Printing.Definition
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
                     if (uiElement == null)
                     {
-                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", $"{typeof(PrintProcessor)} must return a value for \"Get{printAppendix}()\" if \"{printAppendix}\" is set.");
+                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(l10n.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
                     }
                     uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
                     value = uiElement.DesiredSize.Height;

@@ -2,7 +2,7 @@
 // <copyright file="PageRange.cs"
 //            project="Mairegger.Printing"
 //            company="Mairegger Michael">
-//     Copyright © Mairegger Michael, 2009-2019
+//     Copyright Â© Mairegger Michael, 2009-2019
 //     All rights reserved
 // </copyright>
 // -----------------------------------------------------------------------
@@ -11,6 +11,7 @@ namespace Mairegger.Printing.Definition
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Mairegger.Printing.Properties;
 
     /// <summary>
     ///     Represents a contiguous area between two numeric
@@ -31,7 +32,7 @@ namespace Mairegger.Printing.Definition
         {
             if (fromValue.CompareTo(toValue) > 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(fromValue), $"{nameof(fromValue)} must be lower or equal than {nameof(toValue)}");
+                throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(l10n.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
             }
 
             From = fromValue;
@@ -133,7 +134,7 @@ namespace Mairegger.Printing.Definition
 
             if (((range.Length != 2) && (range.Length != 1)) || range.Any(c => c.Length == 0))
             {
-                throw new ArgumentException("invalid format", nameof(input));
+                throw new ArgumentException(l10n.PageRange_Parse_Invalid_format, nameof(input));
             }
 
             var fromString = range.First();

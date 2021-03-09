@@ -35,7 +35,8 @@
 
         <ListBox ItemsSource="{Binding Path=CollectionToPrint}"
                  Grid.Row="1"
-                 Grid.ColumnSpan="2">
+                 Grid.ColumnSpan="2"
+                 Grid.Column="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -61,6 +62,7 @@
 
         <TextBox Name="TxtBox"
                  Grid.Row="2"
+                 Grid.Column="0"
                  AcceptsReturn="True"
                  Text='Pleas add text here and press "Add Text"'
                  x:FieldModifier="private" />
@@ -69,6 +71,7 @@
                       Content="Add Text"
                       Click="ButtonClick1" />
         <Button Grid.Row="3"
+                Grid.Column="0"
                 Content="Print"
                 Click="ButtonClick" />
         <Button Grid.Row="3"
@@ -77,6 +80,7 @@
                 Click="ButtonClick2" />
 
         <Button Grid.Row="4"
+                Grid.Column="0"
                 Content="AlternateRowCount"
                 Click="AlternateRowCount1" />
         <Button Grid.Row="4"

@@ -164,6 +164,7 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.False(Equals(r1, r2));
             Assert.False(r1.Equals(null));
             Assert.That(r1, Is.Not.EqualTo(null));
+            // ReSharper disable once SuspiciousTypeConversion.Global
             Assert.False(r1.Equals(5));
             Assert.That(r1.GetHashCode(), Is.Not.EqualTo(r2.GetHashCode()));
         }

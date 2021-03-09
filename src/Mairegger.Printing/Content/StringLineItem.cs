@@ -23,7 +23,7 @@ namespace Mairegger.Printing.Content
     using System.Windows.Controls;
     using System.Windows.Media;
 
-    public class StringLineItem : IPrintContent, IPageBreakAware
+    public class StringLineItem : IPageBreakAware
     {
         internal StringLineItem(string text, StringLineItemConfiguration configuration)
             : this(text, configuration.FontSize, configuration.HorizontalAlignment)
@@ -61,13 +61,8 @@ namespace Mairegger.Printing.Content
 
         public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
         {
-            var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic);
-            var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            if (reflectionGetLine == null || reflectionLineCount == null)
-            {
-                throw new InvalidOperationException("Exception in reflecting LineCount or GetLine on object of type TextBlock");
-            }
+            var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting LineCount on object of type TextBlock");
+            var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting GetLine on object of type TextBlock");
 
             PropertyInfo reflectionLineLength = null;
 
@@ -95,13 +90,7 @@ namespace Mairegger.Printing.Content
 
                 if (reflectionLineLength == null)
                 {
-
-                    reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    if (reflectionLineLength == null)
-                    {
-                        throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
-                    }
+                    reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
                 }
 
                 var length = (int?)reflectionLineLength.GetValue(line) ?? 0;
