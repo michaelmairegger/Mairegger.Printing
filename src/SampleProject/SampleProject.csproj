@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
     <RootNamespace>Mairegger.Printing.Sample</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <Reference Include="ReachFramework" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Mairegger.Printing\Mairegger.Printing.csproj" />
   </ItemGroup>
