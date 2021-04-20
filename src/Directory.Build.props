@@ -26,6 +26,11 @@
     <ExtrasEmbeddedResourceGeneratedCodeIsPublic>true</ExtrasEmbeddedResourceGeneratedCodeIsPublic>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- https://github.com/dotnet/Nerdbank.GitVersioning/blob/master/doc/msbuild.md#reducing-getbuildversion-invocations -->
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)..\</GitVersionBaseDirectory>
+  </PropertyGroup>
+
    <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Mairegger.Printing.Tests</_Parameter1>
