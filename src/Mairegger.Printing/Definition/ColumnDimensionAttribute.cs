@@ -18,6 +18,7 @@ namespace Mairegger.Printing.Definition
     using System.Globalization;
     using JetBrains.Annotations;
     using Mairegger.Printing.PrintProcessor;
+    using Mairegger.Printing.Properties;
 
     /// <summary>
     ///     Provides an attribute to define the columns in the Table of the <see cref="PrintProcessor" />
@@ -43,7 +44,7 @@ namespace Mairegger.Printing.Definition
         {
             if ((columnWidth <= 0) || (columnWidth > 1))
             {
-                throw new ArgumentOutOfRangeException(nameof(columnWidth), "The value must be between 0 and 1.");
+                throw new ArgumentOutOfRangeException(nameof(columnWidth), l10n.ColumnDimensionAttribute_ColumnDimensionAttribute_The_value_must_be_between_0_and_1_);
             }
         }
 
@@ -67,7 +68,7 @@ namespace Mairegger.Printing.Definition
             }
             else
             {
-                throw new ArgumentException($"{value} is no valid column dimension.", nameof(value));
+                throw new ArgumentException(string.Format(l10n.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
             }
         }
 

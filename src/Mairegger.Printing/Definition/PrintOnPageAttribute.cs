@@ -35,7 +35,7 @@ namespace Mairegger.Printing.Definition
         /// </summary>
         /// <param name="printAppendixes">The print parts that are defined by this attribute.</param>
         /// <param name="pages">The page range where the print parts are defined</param>
-        public PrintOnPageAttribute(PrintAppendixes printAppendixes, Range<int> pages)
+        public PrintOnPageAttribute(PrintAppendixes printAppendixes, PageRange pages)
             : base(printAppendixes, pages)
         {
         }

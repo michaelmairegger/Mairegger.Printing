@@ -19,7 +19,7 @@ namespace Mairegger.Printing.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class l10n {
@@ -61,11 +61,68 @@ namespace Mairegger.Printing.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} is no valid column dimension..
+        /// </summary>
+        public static string ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension {
+            get {
+                return ResourceManager.GetString("ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimensio" +
+                        "n", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value must be between 0 and 1..
+        /// </summary>
+        public static string ColumnDimensionAttribute_ColumnDimensionAttribute_The_value_must_be_between_0_and_1_ {
+            get {
+                return ResourceManager.GetString("ColumnDimensionAttribute_ColumnDimensionAttribute_The_value_must_be_between_0_and" +
+                        "_1_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be lower or equal than {1}..
+        /// </summary>
+        public static string PageRange_PageRange__0__must_be_lower_or_equal_than__1_ {
+            get {
+                return ResourceManager.GetString("PageRange_PageRange__0__must_be_lower_or_equal_than__1_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid format.
+        /// </summary>
+        public static string PageRange_Parse_Invalid_format {
+            get {
+                return ResourceManager.GetString("PageRange_Parse_Invalid_format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string Preview {
             get {
                 return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must return a value for &quot;Get{1}()&quot; if &quot;{2}&quot; is set..
+        /// </summary>
+        public static string PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_ {
+            get {
+                return ResourceManager.GetString("PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_se" +
+                        "t_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must be a positive number or null..
+        /// </summary>
+        public static string PrintDimension_SetHeightValue_Must_be_a_positive_number_or_null {
+            get {
+                return ResourceManager.GetString("PrintDimension_SetHeightValue_Must_be_a_positive_number_or_null", resourceCulture);
             }
         }
     }

@@ -245,7 +245,7 @@ namespace Mairegger.Printing.PrintProcessor
         {
             return PrintDocument(printDialog, new PrintProcessorCollection(this));
         }
-
+        
         private static FixedDocument CreateDocument(Size pageSize, PrintProcessorCollection p)
         {
             if (p != null)
@@ -256,11 +256,7 @@ namespace Mairegger.Printing.PrintProcessor
 
                     if ((index > 0) && p.IndividualPageOrientation)
                     {
-                        if (((pageSize.Width > pageSize.Height) && (printProcessor.PageOrientation == PageOrientation.Portrait)) ||
-                            ((pageSize.Height > pageSize.Width) && (printProcessor.PageOrientation == PageOrientation.Landscape)))
-                        {
-                            pageSize = new Size(pageSize.Height, pageSize.Width);
-                        }
+                        pageSize = printProcessor.GetOrientatedPageSize(pageSize);
                     }
 
                     printProcessor.SetPrintOnAttributes();
@@ -270,6 +266,17 @@ namespace Mairegger.Printing.PrintProcessor
 
             var internalPrintProcessor = new InternalPrintProcessor();
             return internalPrintProcessor.CreateFixedDocument(p);
+        }
+
+        private Size GetOrientatedPageSize(Size pageSize)
+        {
+            if (((pageSize.Width > pageSize.Height) && (PageOrientation == PageOrientation.Portrait)) ||
+                ((pageSize.Height > pageSize.Width) && (PageOrientation == PageOrientation.Landscape)))
+            {
+                pageSize = new Size(pageSize.Height, pageSize.Width);
+            }
+
+            return pageSize;
         }
 
         private void Prepare(Size pageSize)

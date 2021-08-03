@@ -18,7 +18,6 @@ namespace Mairegger.Printing.Internal
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Documents;
@@ -66,35 +65,37 @@ namespace Mairegger.Printing.Internal
         {
             FixedDocument = new FixedDocument();
 
-            if (collection != null)
+            if (collection == null)
             {
-                foreach (var pp in collection)
+                return FixedDocument;
+            }
+
+            foreach (var pp in collection)
+            {
+                var currentPage = FixedDocument.Pages.Count;
+                _printProcessor = pp;
+                CurrentPageNumber = 1;
+                _printProcessor = pp;
+                IList<IPrintContent> itemCollection = _printProcessor.ItemCollection().ToList();
+
+                AddItems(itemCollection);
+                if (collection.IndividualPageNumbers)
                 {
-                    var currentPage = FixedDocument.Pages.Count;
-                    _printProcessor = pp;
-                    CurrentPageNumber = 1;
-                    _printProcessor = pp;
-                    IList<IPrintContent> itemCollection = _printProcessor.ItemCollection().ToList();
-
-                    AddItems(itemCollection);
-                    if (collection.IndividualPageNumbers)
-                    {
-                        AddPageNumbers(currentPage);
-                    }
-
-                    for (int i = currentPage,
-                             j = 1;
-                        i < FixedDocument.Pages.Count;
-                        i++, j++)
-                    {
-                        AddCustomPositionedContent(FixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
-                    }
+                    AddPageNumbers(currentPage);
                 }
 
-                if (!collection.IndividualPageNumbers)
+                for (int i = currentPage,
+                         j = 1;
+                    i < FixedDocument.Pages.Count;
+                    i++, j++)
                 {
-                    AddPageNumbers();
+                    AddCustomPositionedContent(FixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
                 }
+            }
+
+            if (!collection.IndividualPageNumbers)
+            {
+                AddPageNumbers();
             }
             return FixedDocument;
         }
@@ -170,9 +171,8 @@ namespace Mairegger.Printing.Internal
                 var i = _itemCount++ % _printProcessor.AlternatingRowColors.Count;
                 var alternatingRowBackground = _printProcessor.AlternatingRowColors[i];
 
-                if (lineElement.GetType().GetProperty("Background") is PropertyInfo property 
-                    && property.GetValue(lineElement) != null 
-                    && !_alternatingWarningShown)
+                var propertyInfo = lineElement.GetType().GetProperty("Background");
+                if (propertyInfo?.GetValue(lineElement) != null && !_alternatingWarningShown)
                 {
                     _alternatingWarningShown = true;
                     Trace.TraceWarning("PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");
@@ -203,72 +203,83 @@ namespace Mairegger.Printing.Internal
             }
             else
             {
-                var content = item.Content;
+                AddLineItemPlaceContentItem(item, isLast);
+            }
+        }
 
-                content.Measure(new Size(_pageHelper.BodyGrid.DesiredSize.Width, double.MaxValue));
-                var lineHeight = content.DesiredSize.Height;
+        private void AddLineItemPlaceContentItem(IPrintContent item, bool isLast)
+        {
+            var content = item.Content;
 
-                if (lineHeight < _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
+            content.Measure(new Size(_pageHelper.BodyGrid.DesiredSize.Width, double.MaxValue));
+            var lineHeight = content.DesiredSize.Height;
+
+            if (lineHeight >= _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
+            {
+                LogHeightWarning();
+            }
+
+            if (isLast)
+            {
+                PlaceLastItem(lineHeight, content);
+                return;
+            }
+
+            if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
+            {
+                AddLineData(content);
+                _pageHelper.RemoveRemainingSpace(lineHeight);
+            }
+            else if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, false))
+            {
+                Debug.WriteLine("PRINTING: Second chance because item has no space");
+                AddLineData(content);
+                _pageHelper.RemoveRemainingSpace(lineHeight);
+            }
+            else
+            {
+                ConcludeDocumentPage(_pageHelper, false);
+
+                _pageHelper = CreateNewPageHelper();
+
+                AddLineData(content);
+                _pageHelper.RemoveRemainingSpace(lineHeight);
+            }
+
+            void LogHeightWarning()
+            {
+                var helpText = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
+
+                if (lineHeight > _pageHelper.PrintingDimension.PageSize.Height)
                 {
-                    // OK
+                    Trace.TraceWarning($"{Description} page-size. {helpText}");
                 }
-                else
+                else if (lineHeight > _pageHelper.PrintingDimension.PrintablePageSize.Height)
                 {
-                    var helpText = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
-
-                    if (lineHeight > _pageHelper.PrintingDimension.PageSize.Height)
-                    {
-                        Trace.TraceWarning($"{Description} page-size. {helpText}");
-                    }
-                    else if (lineHeight > _pageHelper.PrintingDimension.PrintablePageSize.Height)
-                    {
-                        Trace.TraceWarning($"{Description} printable-page-size. {helpText}");
-                    }
-                    else if (lineHeight > _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
-                    {
-                        Trace.TraceWarning($"{Description} body grid. {helpText}");
-                    }
+                    Trace.TraceWarning($"{Description} printable-page-size. {helpText}");
                 }
-
-                if (isLast)
+                else if (lineHeight > _pageHelper.PrintingDimension.GetHeightForBodyGrid(CurrentPageNumber, isLast))
                 {
-                    // otherwise the last item is put on a new pageContent if desired, or it is left on the current
-                    // pageContent and the PrintAppendixes that have no space would be print on the next pageContent
-                    // should occur only if there are PrintAppendixes that have to be print on the last pageContent
-                    if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
-                    {
-                        AddLineData(content);
-                        ConcludeDocumentPage(_pageHelper, true);
-                    }
-                    else
-                    {
-                        ConcludePage();
-                        AddLastLineData(content);
-                        ConcludeDocument();
-                    }
-                    return;
+                    Trace.TraceWarning($"{Description} body grid. {helpText}");
                 }
+            }
+        }
 
-                if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
-                {
-                    AddLineData(content);
-                    _pageHelper.RemoveRemainingSpace(lineHeight);
-                }
-                else if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, false))
-                {
-                    Debug.WriteLine("PRINTING: Second chance because item has no space");
-                    AddLineData(content);
-                    _pageHelper.RemoveRemainingSpace(lineHeight);
-                }
-                else
-                {
-                    ConcludeDocumentPage(_pageHelper, false);
-
-                    _pageHelper = CreateNewPageHelper();
-
-                    AddLineData(content);
-                    _pageHelper.RemoveRemainingSpace(lineHeight);
-                }
+        private void PlaceLastItem(double lineHeight, UIElement content)
+        {
+            // otherwise the last item is put on a new pageContent if desired, or it is left on the current
+            // pageContent and the PrintAppendixes that have no space would be print on the next pageContent
+            // should occur only if there are PrintAppendixes that have to be print on the last pageContent
+            if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
+            {
+                AddLineData(content);
+                ConcludeDocumentPage(_pageHelper, true);
+            }
+            else
+            {
+                ConcludePage();
+                AddLastLineData(content);
+                ConcludeDocument();
             }
         }
 

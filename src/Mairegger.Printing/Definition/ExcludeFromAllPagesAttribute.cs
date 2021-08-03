@@ -33,7 +33,7 @@ namespace Mairegger.Printing.Definition
         /// </summary>
         /// <param name="printAppendixes">The print parts that are defined by this attribute.</param>
         public ExcludeFromAllPagesAttribute(PrintAppendixes printAppendixes)
-            : base(printAppendixes, new Range<int>(FirstPage, LastPage))
+            : base(printAppendixes, new PageRange(FirstPage, LastPage))
         {
         }
     }

@@ -32,9 +32,9 @@ namespace Mairegger.Printing.Definition
         public const int LastPage = int.MaxValue;
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        private readonly List<Range<int>> _validPrintRanges = new List<Range<int>>();
+        private readonly List<PageRange> _validPrintRanges = new List<PageRange>();
 
-        protected PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, Range<int> pages)
+        protected PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, PageRange pages)
             : this(printAppendixes)
         {
             AddRange(pages);
@@ -50,13 +50,13 @@ namespace Mairegger.Printing.Definition
             PrintAppendixes = printAppendixes;
             if (definedPages != null)
             {
-                var ranges = definedPages.Select(Range.FromPoint).ToArray();
+                var ranges = definedPages.Select(e => PageRange.FromPoint(e)).ToArray();
                 AddRange(ranges);
             }
         }
 
         private PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, int firstPage, int lastPage)
-            : this(printAppendixes, new Range<int>(firstPage, lastPage))
+            : this(printAppendixes, new PageRange(firstPage, lastPage))
         {
         }
 
@@ -72,7 +72,7 @@ namespace Mairegger.Printing.Definition
             return _validPrintRanges.Any(r => r.IsInRange(page));
         }
 
-        private void AddRange(params Range<int>[] pages)
+        private void AddRange(params PageRange[] pages)
         {
             _validPrintRanges.AddRange(pages);
         }
