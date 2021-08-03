@@ -1,0 +1,43 @@
+name: Publish
+
+on:
+  push:
+    tags: 
+      - 'v*.*.*'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        
+    - uses: dotnet/nbgv@master
+      id: nbgv
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+       dotnet-version: 3.1.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+       dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: src
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: src
+    - name: Test
+      run: dotnet test --configuration Release --no-build #--verbosity normal
+      working-directory: src
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build --output artifacts /p:Version=${{ steps.nbgv.outputs.NuGetPackageVersion }}
+      working-directory: src
+      
+    - name: Push with dotnet
+      run: dotnet nuget push artifacts\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      working-directory: src

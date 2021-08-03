@@ -1,15 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
-    <PackageReference Include="Moq" Version="4.13.0" />
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    
+    <Reference Include="System.Printing" Condition="'$(TargetFramework)' == net45" />
+    <Reference Include="ReachFramework" Condition="'$(TargetFramework)' == net45" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" Condition="'$(TargetFramework)' != net45" />
   </ItemGroup>
   
   <ItemGroup>

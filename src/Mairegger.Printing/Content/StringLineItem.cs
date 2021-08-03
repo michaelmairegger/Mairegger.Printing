@@ -1,4 +1,4 @@
-// Copyright 2017 Michael Mairegger
+﻿// Copyright 2017 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@ namespace Mairegger.Printing.Content
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Reflection;
     using System.Text;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
 
-    public class StringLineItem : IPrintContent, IPageBreakAware
+    public class StringLineItem : IPageBreakAware
     {
         internal StringLineItem(string text, StringLineItemConfiguration configuration)
             : this(text, configuration.FontSize, configuration.HorizontalAlignment)
@@ -60,13 +61,8 @@ namespace Mairegger.Printing.Content
 
         public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
         {
-            var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic);
-            var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            if (reflectionGetLine == null || reflectionLineCount == null)
-            {
-                throw new InvalidOperationException("Exception in reflecting LineCount or GetLine on object of type TextBlock");
-            }
+            var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting LineCount on object of type TextBlock");
+            var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting GetLine on object of type TextBlock");
 
             PropertyInfo reflectionLineLength = null;
 
@@ -76,7 +72,7 @@ namespace Mairegger.Printing.Content
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
 
-            var totalLines = (int)reflectionLineCount.GetValue(textBlock);
+            var totalLines = (int?)reflectionLineCount.GetValue(textBlock) ?? 0;
 
             var currentLine = 0;
             var currentLineOnPage = 0;
@@ -90,17 +86,14 @@ namespace Mairegger.Printing.Content
 
                 var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine });
 
+                Debug.Assert(line != null);
+
                 if (reflectionLineLength == null)
                 {
-                    reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                    if (reflectionLineLength == null)
-                    {
-                        throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
-                    }
+                    reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
                 }
 
-                var length = (int)reflectionLineLength.GetValue(line);
+                var length = (int?)reflectionLineLength.GetValue(line) ?? 0;
 
                 var substring = Text.Substring(currentPosition, length);
                 stringBuilder.Append(substring);

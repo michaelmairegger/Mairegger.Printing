@@ -18,9 +18,7 @@ namespace Mairegger.Printing.Tests.Definition
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Mairegger.Printing.Definition;
-    using Microsoft.CSharp.RuntimeBinder;
     using NUnit.Framework;
-    using Range = Mairegger.Printing.Definition.Range;
 
     [TestFixture]
     public class RangeTests
@@ -28,8 +26,8 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void IsInRange_InRange_ReturnsTrue()
         {
-            var r1 = new Range<double>(5, 10);
-            var r2 = new Range<double>(6, 10);
+            var r1 = new PageRange(5, 10);
+            var r2 = new PageRange(6, 10);
 
             Assert.True(r1.IsInRange(r2));
         }
@@ -37,15 +35,15 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void IsInRange_InRange_True([Values(1, 2, 3, 4, 5)] double value)
         {
-            var r = new Range<double>(1, 100);
+            var r = new PageRange(1, 100);
             Assert.IsTrue(r.IsInRange(value));
         }
 
         [Test]
         public void IsInRange_NotInRange_ReturnsFalse()
         {
-            var r1 = new Range<double>(5, 10);
-            var r2 = new Range<double>(6, 10);
+            var r1 = new PageRange(5, 10);
+            var r2 = new PageRange(6, 10);
 
             Assert.False(r2.IsInRange(r1));
         }
@@ -53,14 +51,14 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void IsInRange_OutOfRange_False([Values(1, 2, 3, 4, 5)] double value)
         {
-            var r = new Range<double>(6, 10);
+            var r = new PageRange(6, 10);
             Assert.IsFalse(r.IsInRange(value));
         }
 
         [Test]
         public void IsInRange_SameRange_ReturnsTrue()
         {
-            var r1 = new Range<double>(5, 10);
+            var r1 = new PageRange(5, 10);
 
             Assert.True(r1.IsInRange(r1));
         }
@@ -68,29 +66,29 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void Length([Values(1, 2, 3, 4, 5)] double length)
         {
-            var r = new Range<double>(0, length);
+            var r = new PageRange(0, length);
             Assert.AreEqual(r.Length, length);
         }
 
         [Test]
         public void Parse_Invalid()
         {
-            Assert.Throws<ArgumentNullException>(() => Range.Parse(null));
+            Assert.Throws<ArgumentNullException>(() => PageRange.Parse(null));
             var input = string.Empty;
-            Assert.Throws<ArgumentException>(() => Range.Parse(input));
-            Assert.Throws<ArgumentException>(() => Range.Parse("-"));
-            Assert.Throws<FormatException>(() => Range.Parse("InvalidNumber-6"));
-            Assert.Throws<FormatException>(() => Range.Parse("6-InvalidNumber"));
+            Assert.Throws<ArgumentException>(() => PageRange.Parse(input));
+            Assert.Throws<ArgumentException>(() => PageRange.Parse("-"));
+            Assert.Throws<FormatException>(() => PageRange.Parse("InvalidNumber-6"));
+            Assert.Throws<FormatException>(() => PageRange.Parse("6-InvalidNumber"));
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => Range.Parse("6-4"));
+            Assert.Throws<ArgumentOutOfRangeException>(() => PageRange.Parse("6-4"));
 
-            Assert.Throws<ArgumentException>(() => Range.Parse("4,6"));
+            Assert.Throws<ArgumentException>(() => PageRange.Parse("4,6"));
         }
 
         [Test]
         public void Parse_ValidRange()
         {
-            var r = Range.Parse("4-6");
+            var r = PageRange.Parse("4-6");
             Assert.That(r.From, Is.EqualTo(4));
             Assert.That(r.To, Is.EqualTo(6));
         }
@@ -98,18 +96,18 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void ParseRanges()
         {
-            var ranges = Range.ParseRanges("1-2,5,10-11").ToList();
+            var ranges = PageRange.ParseRanges("1-2,5,10-11").ToList();
 
-            CollectionAssert.Contains(ranges, Range.Parse("1-2"));
-            CollectionAssert.Contains(ranges, Range.Parse("5"));
-            CollectionAssert.Contains(ranges, Range.Parse("10-11"));
+            CollectionAssert.Contains(ranges, PageRange.Parse("1-2"));
+            CollectionAssert.Contains(ranges, PageRange.Parse("5"));
+            CollectionAssert.Contains(ranges, PageRange.Parse("10-11"));
         }
 
         [Test]
         public void Range_Equals()
         {
-            var r1 = new Range<double>(5, 10);
-            var r2 = new Range<double>(5, 10);
+            var r1 = new PageRange(5, 10);
+            var r2 = new PageRange(5, 10);
 
             Assert.That(r1, Is.EqualTo(r2));
             Assert.True(r1 == r2);
@@ -120,7 +118,7 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void Range_FromPoint_ToString()
         {
-            var r = Range.FromPoint<double>(5);
+            var r = PageRange.FromPoint(5);
             Assert.That(r.ToString(), Is.EqualTo("5-5"));
         }
 
@@ -132,7 +130,7 @@ namespace Mairegger.Printing.Tests.Definition
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
         public void Range_MinEqualsMax_Valie(double min, double max)
         {
-            Assert.DoesNotThrow(() => new Range<double>(min, max));
+            Assert.DoesNotThrow(() => new PageRange(min, max));
         }
 
         [Test]
@@ -141,7 +139,7 @@ namespace Mairegger.Printing.Tests.Definition
             [Values(6, 7, 8, 9, 10)] double min,
             [Values(1, 2, 3, 4, 5)] double max)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Range<double>(min, max));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new PageRange(min, max));
         }
 
         [Test]
@@ -150,33 +148,14 @@ namespace Mairegger.Printing.Tests.Definition
             [Values(1, 2, 3, 4, 5)] double min,
             [Values(6, 7, 8, 9, 10)] double max)
         {
-            Assert.DoesNotThrow(() => new Range<double>(min, max));
-        }
-
-        [Test]
-        public void Range_Minus_ClassImplementingMinus()
-        {
-            var r = Range.FromPoint(new ClassWithMinusOperatorOverloading());
-
-            Assert.DoesNotThrow(() =>
-                                {
-                                    var i = r.Length;
-                                });
-        }
-
-        [Test]
-        public void Range_Minus_ClassNotImplementingMinus_ThrowsRuntimeBinderException()
-        {
-            var r = Range.FromPoint(new ClassWithoutMinusOperatorOverloading());
-
-            Assert.That(() => r.Length, Throws.TypeOf<RuntimeBinderException>());
+            Assert.DoesNotThrow(() => new PageRange(min, max));
         }
 
         [Test]
         public void Range_NotEquals()
         {
-            var r1 = new Range<double>(5, 10);
-            var r2 = new Range<double>(6, 10);
+            var r1 = new PageRange(5, 10);
+            var r2 = new PageRange(6, 10);
 
             Assert.That(r1, Is.Not.EqualTo(r2));
 
@@ -185,6 +164,7 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.False(Equals(r1, r2));
             Assert.False(r1.Equals(null));
             Assert.That(r1, Is.Not.EqualTo(null));
+            // ReSharper disable once SuspiciousTypeConversion.Global
             Assert.False(r1.Equals(5));
             Assert.That(r1.GetHashCode(), Is.Not.EqualTo(r2.GetHashCode()));
         }
@@ -192,7 +172,7 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void Range_SinglePoint()
         {
-            var r = Range.FromPoint(5);
+            var r = PageRange.FromPoint(5);
 
             Assert.That(r.From, Is.EqualTo(r.To));
         }
@@ -200,24 +180,8 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void Range_ToString()
         {
-            var r = new Range<double>(7, 11);
+            var r = new PageRange(7, 11);
             Assert.That(r.ToString(), Is.EqualTo("7-11"));
-        }
-
-        public class ClassWithMinusOperatorOverloading : ClassWithoutMinusOperatorOverloading
-        {
-            public static ClassWithMinusOperatorOverloading operator -(ClassWithMinusOperatorOverloading left, ClassWithMinusOperatorOverloading right)
-            {
-                return new ClassWithMinusOperatorOverloading();
-            }
-        }
-
-        public class ClassWithoutMinusOperatorOverloading : IComparable<ClassWithoutMinusOperatorOverloading>
-        {
-            public int CompareTo(ClassWithoutMinusOperatorOverloading other)
-            {
-                return 0;
-            }
         }
     }
 }

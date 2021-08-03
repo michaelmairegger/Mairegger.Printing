@@ -113,12 +113,12 @@ namespace Mairegger.Printing.Tests.Definition
                                 };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
-            Assert.That(pd.GetRangeFor(PrintAppendixes.Header, 1, false), Is.EqualTo(new Range<double>(10, 20)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(new Range<double>(20, 50)));
-            Assert.That(pd.GetRangeForBodyGrid(1, false), Is.EqualTo(new Range<double>(50, 905)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(new Range<double>(905, 945)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.Footer, 1, false), Is.EqualTo(new Range<double>(945, 965)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false), Is.EqualTo(new Range<double>(965, 990)));
+            Assert.That(pd.GetRangeFor(PrintAppendixes.Header, 1, false), Is.EqualTo(new Printing.Definition.PageRange(10, 20)));
+            Assert.That(pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(new Printing.Definition.PageRange(20, 50)));
+            Assert.That(pd.GetRangeForBodyGrid(1, false), Is.EqualTo(new Printing.Definition.PageRange(50, 905)));
+            Assert.That(pd.GetRangeFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(new Printing.Definition.PageRange(905, 945)));
+            Assert.That(pd.GetRangeFor(PrintAppendixes.Footer, 1, false), Is.EqualTo(new Printing.Definition.PageRange(945, 965)));
+            Assert.That(pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false), Is.EqualTo(new Printing.Definition.PageRange(965, 990)));
         }
 
         [Test]
