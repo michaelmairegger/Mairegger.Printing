@@ -120,4 +120,22 @@
   <data name="Preview" xml:space="preserve">
     <value>Preview</value>
   </data>
+  <data name="ColumnDimensionAttribute_ColumnDimensionAttribute_The_value_must_be_between_0_and_1_" xml:space="preserve">
+      <value>The value must be between 0 and 1.</value>
+  </data>
+  <data name="PageRange_PageRange__0__must_be_lower_or_equal_than__1_" xml:space="preserve">
+      <value>{0} must be lower or equal than {1}.</value>
+  </data>
+  <data name="PageRange_Parse_Invalid_format" xml:space="preserve">
+      <value>Invalid format</value>
+  </data>
+  <data name="PrintDimension_SetHeightValue_Must_be_a_positive_number_or_null" xml:space="preserve">
+      <value>Must be a positive number or null.</value>
+  </data>
+  <data name="PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_" xml:space="preserve">
+      <value>{0} must return a value for "Get{1}()" if "{2}" is set.</value>
+  </data>
+  <data name="ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension" xml:space="preserve">
+      <value>{0} is no valid column dimension.</value>
+  </data>
 </root>

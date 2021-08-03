@@ -126,7 +126,7 @@ namespace Mairegger.Printing.PrintProcessor
 
         private static EventHandler PreviewWindowOnClosed(string fileName, XpsDocument xpsDocument)
         {
-            return (sender, args) =>
+            return (_, _) =>
                    {
                        xpsDocument.Close();
 

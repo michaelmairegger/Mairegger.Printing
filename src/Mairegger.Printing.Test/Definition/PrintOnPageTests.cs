@@ -23,7 +23,7 @@ namespace Mairegger.Printing.Tests.Definition
         [Test]
         public void Ctor()
         {
-            var attribute = new PrintOnPageAttribute(PrintAppendixes.All, new Range<int>(2, 5));
+            var attribute = new PrintOnPageAttribute(PrintAppendixes.All, new PageRange(2, 5));
 
             Assert.That(attribute.GetPrintDefinition(1), Is.EqualTo(PrintPartStatus.NotDefined));
             Assert.That(attribute.GetPrintDefinition(2), Is.EqualTo(PrintPartStatus.Include));
