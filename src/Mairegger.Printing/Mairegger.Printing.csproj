@@ -4,7 +4,6 @@
     <Description>Printing library for WPF</Description>
 
     <PackageReleaseNotes>Internal project structure changes</PackageReleaseNotes>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
