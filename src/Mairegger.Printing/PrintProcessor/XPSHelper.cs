@@ -37,12 +37,9 @@ namespace Mairegger.Printing.PrintProcessor
             {
                 var xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(target);
 
-                if (filesToConcat != null)
+                foreach (var doc in filesToConcat)
                 {
-                    foreach (var doc in filesToConcat)
-                    {
-                        Add(doc, fixedDocumentSequence);
-                    }
+                    Add(doc, fixedDocumentSequence);
                 }
 
                 xpsDocumentWriter.Write(fixedDocumentSequence);

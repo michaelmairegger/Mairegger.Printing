@@ -71,7 +71,7 @@ namespace Mairegger.Printing.Content
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
 
-            var totalLines = (int?)reflectionLineCount.GetValue(textBlock) ?? 0;
+            var totalLines = (reflectionLineCount.GetValue(textBlock) as int?) ?? 0;
 
             var currentLine = 0;
             var currentLineOnPage = 0;
@@ -90,7 +90,7 @@ namespace Mairegger.Printing.Content
                     reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
                 }
 
-                var length = (int?)reflectionLineLength.GetValue(line) ?? 0;
+                var length = (reflectionLineLength.GetValue(line) as int?) ?? 0;
 
                 var substring = Text.Substring(currentPosition, length);
                 stringBuilder.Append(substring);

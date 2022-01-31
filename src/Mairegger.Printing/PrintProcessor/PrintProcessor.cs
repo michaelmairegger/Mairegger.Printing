@@ -24,7 +24,6 @@ namespace Mairegger.Printing.PrintProcessor
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Media;
-    using JetBrains.Annotations;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
     using Mairegger.Printing.Internal;
@@ -213,14 +212,8 @@ namespace Mairegger.Printing.PrintProcessor
             XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName, windowsProvider);
         }
 
-        [NotNull]
         internal static string ReplaceInvalidCharsFromFilename(string path)
         {
-            if (path == null)
-            {
-                return string.Empty;
-            }
-
             var invalidFileNameChars = Path.GetInvalidFileNameChars().Union(new[]
                                                                             {
                                                                                 '.'
@@ -248,20 +241,17 @@ namespace Mairegger.Printing.PrintProcessor
         
         private static FixedDocument CreateDocument(Size pageSize, PrintProcessorCollection p)
         {
-            if (p != null)
+            for (var index = 0; index < p.Count; index++)
             {
-                for (var index = 0; index < p.Count; index++)
+                var printProcessor = p[index];
+
+                if ((index > 0) && p.IndividualPageOrientation)
                 {
-                    var printProcessor = p[index];
-
-                    if ((index > 0) && p.IndividualPageOrientation)
-                    {
-                        pageSize = printProcessor.GetOrientatedPageSize(pageSize);
-                    }
-
-                    printProcessor.SetPrintOnAttributes();
-                    printProcessor.Prepare(pageSize);
+                    pageSize = printProcessor.GetOrientatedPageSize(pageSize);
                 }
+
+                printProcessor.SetPrintOnAttributes();
+                printProcessor.Prepare(pageSize);
             }
 
             return InternalPrintProcessor.CreateFixedDocument(p);

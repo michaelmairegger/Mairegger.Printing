@@ -17,7 +17,6 @@ namespace Mairegger.Printing.Content
     using System;
     using System.Windows;
     using System.Windows.Media;
-    using JetBrains.Annotations;
 
     public static class PrintContent
     {
@@ -54,7 +53,7 @@ namespace Mairegger.Printing.Content
             };
         }
 
-        public static StringLineItem TextLine(string text, [NotNull] StringLineItemConfiguration configuration)
+        public static StringLineItem TextLine(string text, StringLineItemConfiguration configuration)
         {
             return new StringLineItem(text, configuration ?? throw new ArgumentNullException(nameof(configuration)));
         }
