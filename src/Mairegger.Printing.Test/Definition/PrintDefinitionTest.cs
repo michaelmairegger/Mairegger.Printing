@@ -115,13 +115,5 @@ namespace Mairegger.Printing.Tests.Definition
 
             Assert.That(pd.IsDefined(PrintAppendixes.Footer), Is.True);
         }
-
-        [Test]
-        public void SetPrintAttribute_Null_ThrowsException()
-        {
-            var pd = new PrintDefinition();
-
-            Assert.That(() => pd.SetPrintAttribute(null), Throws.ArgumentNullException);
-        }
     }
 }

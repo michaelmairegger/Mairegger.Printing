@@ -51,11 +51,5 @@ namespace Mairegger.Printing.Tests.Content
                 mock.VerifyAll();
             }
         }
-
-        [Test]
-        public void Ctor_Null_ThrowsArgumentNullException()
-        {
-            Assert.That(() => new CombinedPrintContentCollection(null), Throws.ArgumentNullException);
-        }
     }
 }

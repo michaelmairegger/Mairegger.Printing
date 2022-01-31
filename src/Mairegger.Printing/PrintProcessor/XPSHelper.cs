@@ -37,12 +37,9 @@ namespace Mairegger.Printing.PrintProcessor
             {
                 var xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(target);
 
-                if (filesToConcat != null)
+                foreach (var doc in filesToConcat)
                 {
-                    foreach (var doc in filesToConcat)
-                    {
-                        Add(doc, fixedDocumentSequence);
-                    }
+                    Add(doc, fixedDocumentSequence);
                 }
 
                 xpsDocumentWriter.Write(fixedDocumentSequence);
@@ -71,7 +68,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="fixedDocument">The fixed document to display.</param>
         /// <param name="title">Title of the preview window</param>
         /// <param name="windowProvider">An implementation for creating a customized window. If null, default implementation is used.</param>
-        public static void ShowFixedDocument(FixedDocument fixedDocument, string title, IWindowProvider windowProvider = null)
+        public static void ShowFixedDocument(FixedDocument fixedDocument, string title, IWindowProvider? windowProvider = null)
         {
             var tempFileName = Path.GetTempFileName();
 
@@ -85,7 +82,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="fileName">The file to open.</param>
         /// <param name="title">The tile of the window.</param>
         /// <param name="windowProvider">An implementation for creating a customized window. If null, default implementation is used.</param>
-        public static void ShowXps(string fileName, string title, IWindowProvider windowProvider = null)
+        public static void ShowXps(string fileName, string title, IWindowProvider? windowProvider = null)
         {
             var xpsDocument = new XpsDocument(fileName, FileAccess.Read);
 

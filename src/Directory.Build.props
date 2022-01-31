@@ -16,6 +16,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Label="CompilerInformation">
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+  </PropertyGroup>
+
   <PropertyGroup>
     <NerdbankGitVersioningVersion>3.4.244</NerdbankGitVersioningVersion>
   </PropertyGroup>

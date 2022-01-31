@@ -48,11 +48,9 @@ namespace Mairegger.Printing.Definition
         protected PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, params int[] definedPages)
         {
             PrintAppendixes = printAppendixes;
-            if (definedPages != null)
-            {
-                var ranges = definedPages.Select(e => PageRange.FromPoint(e)).ToArray();
-                AddRange(ranges);
-            }
+            
+            var ranges = definedPages.Select(e => PageRange.FromPoint(e)).ToArray();
+            AddRange(ranges);
         }
 
         private PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, int firstPage, int lastPage)

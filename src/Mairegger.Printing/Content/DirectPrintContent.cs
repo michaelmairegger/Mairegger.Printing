@@ -14,6 +14,7 @@
 
 namespace Mairegger.Printing.Content
 {
+    using System;
     using System.Windows;
 
     /// <inheritdoc />
@@ -46,7 +47,13 @@ namespace Mairegger.Printing.Content
     /// </remarks>
     public class DirectPrintContent : IDirectPrintContent
     {
-        public virtual UIElement Content { get; set; }
+        private UIElement? _content;
+
+        public virtual UIElement Content
+        {
+            get => _content ?? throw new InvalidOperationException($"{nameof(Content)} must be set before accessing this property");
+            set => _content = value;
+        }
 
         public Point Position { get; set; }
     }

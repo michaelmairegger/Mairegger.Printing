@@ -19,13 +19,12 @@ namespace Mairegger.Printing.PrintProcessor
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Printing;
-    using JetBrains.Annotations;
 
     public class PrintProcessorCollection : Collection<PrintProcessor>, IPrintProcessorPrinter
     {
         private string _fileName = string.Empty;
 
-        public PrintProcessorCollection([NotNull] PrintProcessor printProcessor)
+        public PrintProcessorCollection(PrintProcessor printProcessor)
             : this(new List<PrintProcessor> { printProcessor })
         {
             if (printProcessor == null)
@@ -36,12 +35,12 @@ namespace Mairegger.Printing.PrintProcessor
             _fileName = printProcessor.FileName;
         }
 
-        public PrintProcessorCollection([NotNull] IEnumerable<PrintProcessor> coll, string fileName = "")
+        public PrintProcessorCollection(IEnumerable<PrintProcessor> coll, string fileName = "")
             : this(new List<PrintProcessor>(coll), fileName)
         {
         }
 
-        public PrintProcessorCollection([NotNull] IList<PrintProcessor> coll, string fileName = "")
+        public PrintProcessorCollection(IList<PrintProcessor> coll, string fileName = "")
         {
             if (coll == null)
             {
@@ -51,10 +50,7 @@ namespace Mairegger.Printing.PrintProcessor
             FileName = fileName;
             foreach (var printProcessor in coll)
             {
-                if (printProcessor != null)
-                {
-                    Add(printProcessor);
-                }
+                Add(printProcessor);
             }
         }
 
@@ -84,7 +80,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <summary>
         ///     Creates the document in order to provide a preview of the document
         /// </summary>
-        public void PreviewDocument(IWindowProvider windowsProvider = null)
+        public void PreviewDocument(IWindowProvider? windowsProvider = null)
         {
             PrintProcessor.PreviewDocument(this, windowsProvider);
         }
