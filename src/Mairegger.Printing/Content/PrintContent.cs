@@ -25,7 +25,7 @@ namespace Mairegger.Printing.Content
         /// Returns a new <see cref="IPrintContent"/> defining a horizontal line.
         /// </summary>
         /// <returns></returns>
-        public static IPrintContent HorizontalLine(double? lineHeight = 1, Thickness margin = new Thickness(), Brush lineColor = null)
+        public static IPrintContent HorizontalLine(double? lineHeight = 1, Thickness margin = new Thickness(), Brush? lineColor = null)
         {
             return new HorizontalLine(lineHeight, margin, lineColor);
         }
@@ -46,7 +46,7 @@ namespace Mairegger.Printing.Content
         /// <param name="horizontalAlignment">The alignment of the text.</param>
         /// <param name="fontFamily">The font type.</param>
         /// <returns></returns>
-        public static StringLineItem TextLine(string text, double? fontSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left, FontFamily fontFamily = null)
+        public static StringLineItem TextLine(string text, double? fontSize = null, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Left, FontFamily? fontFamily = null)
         {
             return new StringLineItem(text, fontSize, horizontalAlignment)
             {

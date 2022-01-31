@@ -124,13 +124,6 @@ namespace Mairegger.Printing.Tests.Content
         }
 
         [Test]
-        public void TextLine_Configuration_Null_Throws()
-        {
-
-            Assert.That(() => PrintContent.TextLine("Test", null), Throws.ArgumentNullException);
-        }
-
-        [Test]
         [Apartment(ApartmentState.STA)]
         public void ToPrintContent()
         {

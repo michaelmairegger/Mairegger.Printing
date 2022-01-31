@@ -91,9 +91,9 @@ namespace Mairegger.Printing.Definition
             }
         }
 
-        internal PrintDefinition InternalPrintDefinition { get; set; }
+        internal PrintDefinition? InternalPrintDefinition { get; set; }
 
-        internal IPrintProcessor PrintProcessor { get; set; }
+        internal IPrintProcessor? PrintProcessor { get; set; }
 
         protected bool UseRelativeColumnPosition { get; set; }
 
@@ -135,10 +135,10 @@ namespace Mairegger.Printing.Definition
 
         internal double GetHeightFor(PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
-            if (InternalPrintDefinition.IsToPrint(printAppendix, pageNumber, isLastPage))
+            if (InternalPrintDefinition?.IsToPrint(printAppendix, pageNumber, isLastPage) == true)
             {
                 double? value = _printPartDimensions[printAppendix];
-                if (!value.HasValue)
+                if (!value.HasValue && PrintProcessor != null)
                 {
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
                     if (uiElement == null)
@@ -149,7 +149,7 @@ namespace Mairegger.Printing.Definition
                     value = uiElement.DesiredSize.Height;
                     _printPartDimensions[printAppendix] = value;
                 }
-                return value.Value;
+                return value ?? 0;
             }
             return 0;
         }

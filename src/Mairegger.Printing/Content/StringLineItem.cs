@@ -16,7 +16,6 @@ namespace Mairegger.Printing.Content
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Reflection;
     using System.Text;
     using System.Windows;
@@ -41,13 +40,13 @@ namespace Mairegger.Printing.Content
             Padding = new Thickness(5, 0, 5, 0);
         }
 
-        public Brush Background { get; set; }
+        public Brush? Background { get; set; }
 
         public double? FontSize { get; set; }
 
         public FontWeight FontWeight { get; set; }
 
-        public FontFamily FontFamily { get; set; }
+        public FontFamily? FontFamily { get; set; }
 
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
@@ -64,7 +63,7 @@ namespace Mairegger.Printing.Content
             var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting LineCount on object of type TextBlock");
             var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting GetLine on object of type TextBlock");
 
-            PropertyInfo reflectionLineLength = null;
+            PropertyInfo? reflectionLineLength = null;
 
             var lineHeight = GetLineHeight();
             var printablePageHeight = currentPageHeight;
@@ -84,9 +83,7 @@ namespace Mairegger.Printing.Content
             {
                 var linesThatHaveSpace = (int)(printablePageHeight / lineHeight * .95); // remove 5% of the page height
 
-                var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine });
-
-                Debug.Assert(line != null);
+                var line = reflectionGetLine.Invoke(textBlock, new object[] { currentLine }) ?? throw new InvalidOperationException("Reception exception");
 
                 if (reflectionLineLength == null)
                 {

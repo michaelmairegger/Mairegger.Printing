@@ -14,7 +14,6 @@
 
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Drawing.Printing;
     using System.IO;
     using System.Linq;
@@ -42,14 +41,6 @@ namespace Mairegger.Printing.Tests.Content
             CollectionAssert.AreEqual(m1.Select(i => i.Object), pp);
 
             Assert.That(pp.FileName, Is.EqualTo("FileName"));
-        }
-
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute", Justification = "OK for UnitTests")]
-        public void Ctor_Null_ThrowsArgumentNullException()
-        {
-            Assert.That(() => new PrintProcessorCollection(null, "FileName"), Throws.ArgumentNullException);
-            Assert.That(() => new PrintProcessorCollection(null), Throws.ArgumentNullException);
         }
 
         [Test]
@@ -82,14 +73,6 @@ namespace Mairegger.Printing.Tests.Content
 
             ppcoll.FileName = formattableString;
             CollectionAssert.DoesNotContain(ppcoll.FileName, Path.GetInvalidFileNameChars());
-        }
-
-        [Test]
-        public void FileName_Null_IsStringEmpty()
-        {
-            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>()) { FileName = null };
-
-            Assert.That(ppcoll.FileName, Is.Empty);
         }
 
         [Test]

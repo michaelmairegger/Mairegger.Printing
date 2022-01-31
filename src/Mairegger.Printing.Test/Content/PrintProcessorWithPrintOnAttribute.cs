@@ -25,7 +25,7 @@ namespace Mairegger.Printing.Tests.Content
     [PrintOnAllPages(PrintAppendixes.Footer)]
     public class PrintProcessorWithPrintOnAttribute : TestPrintProcessor
     {
-        private readonly IList<IPrintContent> _retrievedContent;
+        private readonly IList<IPrintContent>? _retrievedContent;
 
         public PrintProcessorWithPrintOnAttribute()
         {
