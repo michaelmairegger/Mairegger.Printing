@@ -18,7 +18,7 @@
 
   <PropertyGroup Label="CompilerInformation">
     <Nullable>enable</Nullable>
-    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup>
