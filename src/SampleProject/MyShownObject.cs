@@ -21,14 +21,14 @@ namespace Mairegger.Printing.Sample
     {
         private int _lenghtOfText;
         private int _numberOfLines;
-        private string _text;
+        private string? _text;
 
         public MyShownObject(string text)
         {
             Text = text;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public int LenghtOfText
         {
@@ -50,7 +50,7 @@ namespace Mairegger.Printing.Sample
             }
         }
 
-        public string Text
+        public string? Text
         {
             get { return _text; }
             set
@@ -67,10 +67,7 @@ namespace Mairegger.Printing.Sample
 
         private void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

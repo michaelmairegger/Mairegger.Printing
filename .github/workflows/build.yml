@@ -1,16 +1,9 @@
 name: Build
-
 on:
   push:
-#   branches: [ master ]
-# pull_request:
-#   branches: [ master ]
-
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v2
       with:
@@ -18,23 +11,30 @@ jobs:
         
     - uses: dotnet/nbgv@master
       id: nbgv
-    - name: Setup .NET
+
+    - name: Setup .NET 3.1
       uses: actions/setup-dotnet@v1
       with:
        dotnet-version: 3.1.x
-    - name: Setup .NET
+
+    - name: Setup .NET 5.0
       uses: actions/setup-dotnet@v1
       with:
        dotnet-version: 5.0.x
+
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v1
+      with:
+       dotnet-version: 6.0.x
+
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src
+
     - name: Build
       run: dotnet build --configuration Release --no-restore
       working-directory: src
+
     - name: Test
-      run: dotnet test --configuration Release --no-build #--verbosity normal
-      working-directory: src
-    - name: Pack
-      run: dotnet pack --configuration Release --no-build /p:Version=${{ steps.nbgv.outputs.NuGetPackageVersion }}
+      run: dotnet test --configuration Release --no-build
       working-directory: src

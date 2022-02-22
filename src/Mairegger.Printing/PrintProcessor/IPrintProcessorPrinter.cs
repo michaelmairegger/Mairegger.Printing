@@ -23,7 +23,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <summary>
         ///     Creates the document in order to provide a preview of the document
         /// </summary>
-        void PreviewDocument(IWindowProvider windowsProvider = null);
+        void PreviewDocument(IWindowProvider? windowsProvider = null);
 
         /// <summary>
         ///     Prints the document.

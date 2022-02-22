@@ -24,7 +24,6 @@ namespace Mairegger.Printing.PrintProcessor
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Media;
-    using JetBrains.Annotations;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
     using Mairegger.Printing.Internal;
@@ -34,15 +33,15 @@ namespace Mairegger.Printing.PrintProcessor
     /// </summary>
     public abstract class PrintProcessor : IPrintProcessor
     {
-        private static Action<IPrintDialog> _configurePrintDialog;
+        private static Action<IPrintDialog>? _globalConfigurePrintDialog;
         private string _fileName = string.Empty;
         private IPrintDialog _printDialog;
         private PrintDimension _printDimension = new PrintDimension();
 
         protected PrintProcessor()
         {
-            PrintDialog = new PrintDialogWrapper();
-            _configurePrintDialog?.Invoke(PrintDialog);
+            _printDialog = new PrintDialogWrapper();
+            _globalConfigurePrintDialog?.Invoke(PrintDialog);
 
             PageOrientation = PageOrientation.Portrait;
         }
@@ -91,7 +90,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="configuration"></param>
         public static void ConfigurePrintDialog(Action<IPrintDialog> configuration)
         {
-            _configurePrintDialog = configuration;
+            _globalConfigurePrintDialog = configuration;
         }
 
         public static bool PrintDocument(IPrintDialog printDialog, PrintProcessorCollection pp)
@@ -152,7 +151,7 @@ namespace Mairegger.Printing.PrintProcessor
         {
         }
 
-        public void PreviewDocument(IWindowProvider windowsProvider = null)
+        public void PreviewDocument(IWindowProvider? windowsProvider = null)
         {
             PreviewDocument(new PrintProcessorCollection(this), windowsProvider);
         }
@@ -200,7 +199,7 @@ namespace Mairegger.Printing.PrintProcessor
             XpsHelper.SaveFixedDocument(fixedDocument, file);
         }
 
-        internal static void PreviewDocument(PrintProcessorCollection ppc, IWindowProvider windowsProvider = null)
+        internal static void PreviewDocument(PrintProcessorCollection ppc, IWindowProvider? windowsProvider = null)
         {
             if (!ppc.Any())
             {
@@ -213,14 +212,8 @@ namespace Mairegger.Printing.PrintProcessor
             XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName, windowsProvider);
         }
 
-        [NotNull]
         internal static string ReplaceInvalidCharsFromFilename(string path)
         {
-            if (path == null)
-            {
-                return string.Empty;
-            }
-
             var invalidFileNameChars = Path.GetInvalidFileNameChars().Union(new[]
                                                                             {
                                                                                 '.'
@@ -248,24 +241,20 @@ namespace Mairegger.Printing.PrintProcessor
         
         private static FixedDocument CreateDocument(Size pageSize, PrintProcessorCollection p)
         {
-            if (p != null)
+            for (var index = 0; index < p.Count; index++)
             {
-                for (var index = 0; index < p.Count; index++)
+                var printProcessor = p[index];
+
+                if ((index > 0) && p.IndividualPageOrientation)
                 {
-                    var printProcessor = p[index];
-
-                    if ((index > 0) && p.IndividualPageOrientation)
-                    {
-                        pageSize = printProcessor.GetOrientatedPageSize(pageSize);
-                    }
-
-                    printProcessor.SetPrintOnAttributes();
-                    printProcessor.Prepare(pageSize);
+                    pageSize = printProcessor.GetOrientatedPageSize(pageSize);
                 }
+
+                printProcessor.SetPrintOnAttributes();
+                printProcessor.Prepare(pageSize);
             }
 
-            var internalPrintProcessor = new InternalPrintProcessor();
-            return internalPrintProcessor.CreateFixedDocument(p);
+            return InternalPrintProcessor.CreateFixedDocument(p);
         }
 
         private Size GetOrientatedPageSize(Size pageSize)

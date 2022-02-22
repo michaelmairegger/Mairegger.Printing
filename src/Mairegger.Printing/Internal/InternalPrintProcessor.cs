@@ -1,4 +1,4 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2022 Michael Mairegger
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 namespace Mairegger.Printing.Internal
 {
     using System;
@@ -24,94 +23,48 @@ namespace Mairegger.Printing.Internal
     using System.Windows.Markup;
     using System.Windows.Media;
     using System.Windows.Shapes;
-    using JetBrains.Annotations;
     using Mairegger.Printing.Content;
     using Mairegger.Printing.Definition;
     using Mairegger.Printing.PrintProcessor;
 
-    /// <summary>
-    ///     Internal helper class for Printing
-    /// </summary>
     internal class InternalPrintProcessor
     {
         private const string Description = "Current line is higher than the";
+        private readonly FixedDocument _fixedDocument;
         private readonly Thickness _pageMargin = new Thickness(0);
+        private readonly IPrintProcessor _printProcessor;
         private bool _alternatingWarningShown;
         private int _itemCount;
         private PageHelper _pageHelper;
-        private IPrintProcessor _printProcessor;
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="InternalPrintProcessor" /> class.
-        /// </summary>
-        public InternalPrintProcessor()
+        private InternalPrintProcessor(IPrintProcessor printProcessor, FixedDocument fixedDocument)
         {
+            _printProcessor = printProcessor;
+            _fixedDocument = fixedDocument;
+            _pageHelper = CreateNewPageHelper();
+        }
+
+        private int CurrentPageNumber { get; set; } = 1;
+
+        private void Process(bool individualPageNumbering)
+        {
+            var documentPages = _fixedDocument.Pages.Count;
             CurrentPageNumber = 1;
-        }
+            IList<IPrintContent> itemCollection = _printProcessor.ItemCollection().ToList();
 
-        private int CurrentPageNumber { get; set; }
-
-        private FixedDocument FixedDocument { get; set; }
-
-        /// <summary>
-        ///     Creates the whole documents
-        /// </summary>
-        public FixedDocument CreateFixedDocument(PrintProcessor pp)
-        {
-            return CreateFixedDocument(new PrintProcessorCollection(pp));
-        }
-
-        public FixedDocument CreateFixedDocument(PrintProcessorCollection collection)
-        {
-            FixedDocument = new FixedDocument();
-
-            if (collection == null)
+            AddItems(itemCollection);
+            if (individualPageNumbering)
             {
-                return FixedDocument;
+                AddPageNumbers(documentPages);
             }
 
-            foreach (var pp in collection)
+            for (int i = documentPages,
+                     j = 1;
+                 i < _fixedDocument.Pages.Count;
+                 i++, j++)
             {
-                var currentPage = FixedDocument.Pages.Count;
-                _printProcessor = pp;
-                CurrentPageNumber = 1;
-                _printProcessor = pp;
-                IList<IPrintContent> itemCollection = _printProcessor.ItemCollection().ToList();
-
-                AddItems(itemCollection);
-                if (collection.IndividualPageNumbers)
-                {
-                    AddPageNumbers(currentPage);
-                }
-
-                for (int i = currentPage,
-                         j = 1;
-                    i < FixedDocument.Pages.Count;
-                    i++, j++)
-                {
-                    AddCustomPositionedContent(FixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
-                }
+                AddCustomPositionedContent(_fixedDocument.Pages[i], _printProcessor.GetCustomPageContent(j));
             }
-
-            if (!collection.IndividualPageNumbers)
-            {
-                AddPageNumbers();
-            }
-            return FixedDocument;
-        }
-
-        private static Brush ComputeBackGround(PrintAppendixes printAppendix)
-        {
-            var factor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enum.GetValues(typeof(PrintAppendixes)).Length) * (byte)printAppendix));
-            return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));
-        }
-
-        private static void PositionUiElement(PageContent pageContent, UIElement frameworkElement, Point positioningPoint)
-        {
-            FixedPage.SetTop(frameworkElement, positioningPoint.Y);
-            FixedPage.SetLeft(frameworkElement, positioningPoint.X);
-
-            pageContent.Child.Children.Add(frameworkElement);
         }
 
         private static void AddCustomPositionedContent(PageContent page, IEnumerable<IDirectPrintContent> customContent)
@@ -122,28 +75,9 @@ namespace Mairegger.Printing.Internal
             }
         }
 
-        private void AddBackground(PageContent pageContent, bool isLastpage)
-        {
-            if (!_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.Background, CurrentPageNumber, isLastpage))
-            {
-                return;
-            }
-
-            var background = _printProcessor.GetBackground();
-            if (background == null)
-            {
-                throw new InvalidOperationException($"The instance of type \"{_printProcessor.GetType()}\" must return a value for \"{nameof(PrintProcessor.GetBackground)}()\" if \"{PrintAppendixes.Background}\" is set.");
-            }
-
-            var positioningPoint = new Point(background.Size.Left, background.Size.Top);
-
-            Debug.WriteLine($"PRINTING: Print background on page #{CurrentPageNumber} ");
-            PositionUiElement(pageContent, background.Element, positioningPoint);
-        }
-
         private void AddItems(IList<IPrintContent> itemCollection)
         {
-            _pageHelper = CreateNewPageHelper();
+            // _pageHelper = CreateNewPageHelper();
 
             if (itemCollection.Count > 0)
             {
@@ -160,36 +94,11 @@ namespace Mairegger.Printing.Internal
             }
         }
 
-        private void AddLineData(UIElement lineContent)
-        {
-            var bodyGrid = _pageHelper.BodyGrid;
-            var lineElement = lineContent;
-            var contentControl = new ContentControl { Content = lineElement };
-
-            if (_printProcessor.IsAlternatingRowColor)
-            {
-                var i = _itemCount++ % _printProcessor.AlternatingRowColors.Count;
-                var alternatingRowBackground = _printProcessor.AlternatingRowColors[i];
-
-                var propertyInfo = lineElement.GetType().GetProperty("Background");
-                if (propertyInfo?.GetValue(lineElement) != null && !_alternatingWarningShown)
-                {
-                    _alternatingWarningShown = true;
-                    Trace.TraceWarning("PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value.");
-                }
-
-                lineElement.SetValue(Panel.BackgroundProperty, alternatingRowBackground);
-                contentControl.Background = alternatingRowBackground;
-            }
-
-            bodyGrid.Items.Add(contentControl);
-        }
-
         private void AddLineItem(IPrintContent item, bool isLast)
         {
             if (item is PageBreak)
             {
-                ConcludeDocumentPage(_pageHelper, false);
+                ConcludeDocumentPage(false);
                 _pageHelper = CreateNewPageHelper();
             }
             else if (item is IPageBreakAware pageBreakAware)
@@ -198,12 +107,30 @@ namespace Mairegger.Printing.Internal
             }
             else if (item is IDirectPrintContent directPrintContent)
             {
-                var position = new Point(directPrintContent.Position.X + _pageHelper.PrintingDimension.Margin.Left, directPrintContent.Position.Y + _pageHelper.PrintingDimension.Margin.Top);
+                var position = new Point(
+                    directPrintContent.Position.X + _pageHelper.PrintingDimension.Margin.Left,
+                    directPrintContent.Position.Y + _pageHelper.PrintingDimension.Margin.Top
+                );
                 PositionUiElement(_pageHelper.PageContent, item.Content, position);
             }
             else
             {
                 AddLineItemPlaceContentItem(item, isLast);
+            }
+        }
+
+        private void AddLineItem(IPageBreakAware aware, bool isLast)
+        {
+            var currentPageHeight = _pageHelper.GetRemainingSpace(CurrentPageNumber, isLast);
+            var rangeForBodyGrid = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLast);
+            var printablePageSize = new Size(_printProcessor.PrintDimension.PrintablePageSize.Width, rangeForBodyGrid.Length);
+
+            var pageContents = aware.PageContents(currentPageHeight, printablePageSize).ToList();
+            var last = pageContents.Last();
+
+            foreach (var item in pageContents)
+            {
+                AddLineItem(item.ToPrintContent(), isLast && Equals(item, last));
             }
         }
 
@@ -238,7 +165,7 @@ namespace Mairegger.Printing.Internal
             }
             else
             {
-                ConcludeDocumentPage(_pageHelper, false);
+                ConcludeDocumentPage(false);
 
                 _pageHelper = CreateNewPageHelper();
 
@@ -273,7 +200,7 @@ namespace Mairegger.Printing.Internal
             if (_pageHelper.HasSpace(lineHeight, CurrentPageNumber, true))
             {
                 AddLineData(content);
-                ConcludeDocumentPage(_pageHelper, true);
+                ConcludeDocumentPage(true);
             }
             else
             {
@@ -285,7 +212,7 @@ namespace Mairegger.Printing.Internal
 
         private void ConcludePage()
         {
-            ConcludeDocumentPage(_pageHelper, false);
+            ConcludeDocumentPage(false);
             _pageHelper = CreateNewPageHelper();
         }
 
@@ -295,100 +222,31 @@ namespace Mairegger.Printing.Internal
             Debug.WriteLine("PRINTING: Last item print");
         }
 
-        private void AddLineItem(IPageBreakAware aware, bool isLast)
+        private void AddLineData(UIElement lineContent)
         {
-            var currentPageHeight = _pageHelper.GetRemainingSpace(CurrentPageNumber, isLast);
-            var rangeForBodyGrid = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLast);
-            var printablePageSize = new Size(_printProcessor.PrintDimension.PrintablePageSize.Width, rangeForBodyGrid.Length);
+            var bodyGrid = _pageHelper.BodyGrid;
+            var lineElement = lineContent;
+            var contentControl = new ContentControl { Content = lineElement };
 
-            var pageContents = aware.PageContents(currentPageHeight, printablePageSize).ToList();
-            var last = pageContents.Last();
-
-            foreach (var item in pageContents)
+            if (_printProcessor.IsAlternatingRowColor)
             {
-                AddLineItem(item.ToPrintContent(), isLast && Equals(item, last));
-            }
-        }
+                var i = _itemCount++ % _printProcessor.AlternatingRowColors.Count;
+                var alternatingRowBackground = _printProcessor.AlternatingRowColors[i];
 
-        private void AddPageNumbers(int from = 0, int to = int.MaxValue)
-        {
-            var currentPageCount = 1;
-            int maxPages = FixedDocument.Pages.Count - from;
-
-            foreach (var pageContent in FixedDocument.Pages.Skip(from).Take(to))
-            {
-                if (_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.PageNumbers, currentPageCount, false))
+                var propertyInfo = lineElement.GetType().GetProperty("Background");
+                if ((propertyInfo?.GetValue(lineElement) != null) && !_alternatingWarningShown)
                 {
-                    Debug.WriteLine($"PRINTING: Print Page Numbers on page #{currentPageCount}");
-
-                    var count = currentPageCount;
-                    AddSpecialElement(currentPageCount == to, currentPageCount, pageContent, PrintAppendixes.PageNumbers, () => _printProcessor.GetPageNumbers(count, maxPages));
+                    _alternatingWarningShown = true;
+                    Trace.TraceWarning(
+                        "PRINTING: Control your IPrintContent.Content's background. In order to correct alternate your columns you should not set the background to any value."
+                    );
                 }
 
-                currentPageCount++;
-            }
-        }
-
-        private void AddPrintAppendixes(PageContent content, bool isLastPage)
-        {
-            AddBackground(content, isLastPage);
-
-            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Header, () => _printProcessor.GetHeader());
-            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.HeaderDescription, () => _printProcessor.GetHeaderDescription());
-            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Summary, () => _printProcessor.GetSummary());
-            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Footer, () => _printProcessor.GetFooter());
-        }
-
-        private void AddSpecialElement(bool isLastpage, int pageNumber, PageContent pageContent, PrintAppendixes appendix, [NotNull]Func<UIElement> printElement)
-        {
-            if (printElement == null)
-            {
-                throw new ArgumentNullException(nameof(printElement));
-            }
-            if (!_printProcessor.PrintDefinition.IsToPrint(appendix, pageNumber, isLastpage))
-            {
-                return;
+                lineElement.SetValue(Panel.BackgroundProperty, alternatingRowBackground);
+                contentControl.Background = alternatingRowBackground;
             }
 
-            var elementToPrint = printElement();
-            if (elementToPrint == null)
-            {
-                throw new InvalidOperationException($"The {appendix} cannot be null if the corresponding flag in the PrintAppendix is set");
-            }
-
-            Debug.WriteLine($"PRINTING: Print {appendix} description on page #{pageNumber} ");
-            PositionUiElement(pageContent, elementToPrint, appendix, pageNumber, isLastpage);
-        }
-
-        private void ConcludeDocument()
-        {
-            ConcludeDocumentPage(_pageHelper, true);
-        }
-
-        private void ConcludeDocumentPage(PageHelper pageHelper, bool isLastPage)
-        {
-            Debug.WriteLine("PRINTING: Conclude Document Page");
-
-            var grid = new Grid();
-            grid.Children.Add(pageHelper.BodyGrid);
-
-            var rectangle = new Rectangle
-                            {
-                                Stroke = pageHelper.BorderBrush,
-                                StrokeThickness = .5d
-                            };
-
-            grid.Children.Add(rectangle);
-            grid.Height = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).Length;
-
-            var positioningPoint = new Point(_printProcessor.PrintDimension.Margin.Left, _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).From);
-            PositionUiElement(pageHelper.PageContent, grid, positioningPoint);
-
-            AddPrintAppendixes(pageHelper.PageContent, isLastPage);
-
-            FixedDocument.Pages.Add(pageHelper.PageContent);
-            CurrentPageNumber++;
-            _pageHelper = null;
+            bodyGrid.Items.Add(contentControl);
         }
 
         private PageHelper CreateNewPageHelper()
@@ -410,15 +268,7 @@ namespace Mairegger.Printing.Internal
             itemsControl.VerticalAlignment = VerticalAlignment.Top;
             itemsControl.Items.Add(table);
 
-            var pageHelper = new PageHelper { PageContent = GetNewDocumentPage() };
-
-            pageHelper.RemoveRemainingSpace(reserveHeightOf);
-
-            pageHelper.PrintingDimension = _printProcessor.PrintDimension;
-            pageHelper.BodyGrid = itemsControl;
-            pageHelper.BodyGrid.Measure(new Size(double.MaxValue, double.MaxValue));
-            pageHelper.BorderBrush = borderBrush;
-            return pageHelper;
+            return new PageHelper(itemsControl, borderBrush, GetNewDocumentPage(), _printProcessor.PrintDimension, reserveHeightOf);
         }
 
         private PageContent GetNewDocumentPage()
@@ -441,15 +291,68 @@ namespace Mairegger.Printing.Internal
             return pageContent;
         }
 
+        private void AddPageNumbers(int from = 0, int to = int.MaxValue)
+        {
+            var currentPageCount = 1;
+            var maxPages = _fixedDocument.Pages.Count - from;
+
+            foreach (var pageContent in _fixedDocument.Pages.Skip(from).Take(to))
+            {
+                if (_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.PageNumbers, currentPageCount, false))
+                {
+                    Debug.WriteLine($"PRINTING: Print Page Numbers on page #{currentPageCount}");
+
+                    var count = currentPageCount;
+                    AddSpecialElement(
+                        currentPageCount == to,
+                        currentPageCount,
+                        pageContent,
+                        PrintAppendixes.PageNumbers,
+                        () => _printProcessor.GetPageNumbers(count, maxPages)
+                    );
+                }
+
+                currentPageCount++;
+            }
+        }
+
+        private void AddSpecialElement(bool isLastPage, int pageNumber, PageContent pageContent, PrintAppendixes appendix,
+                                       Func<UIElement> printElement)
+        {
+            if (printElement == null)
+            {
+                throw new ArgumentNullException(nameof(printElement));
+            }
+
+            if (!_printProcessor.PrintDefinition.IsToPrint(appendix, pageNumber, isLastPage))
+            {
+                return;
+            }
+
+            var elementToPrint = printElement();
+            if (elementToPrint == null)
+            {
+                throw new InvalidOperationException($"The {appendix} cannot be null if the corresponding flag in the PrintAppendix is set");
+            }
+
+            Debug.WriteLine($"PRINTING: Print {appendix} description on page #{pageNumber} ");
+            PositionUiElement(pageContent, elementToPrint, appendix, pageNumber, isLastPage);
+        }
+
+        private static void PositionUiElement(PageContent pageContent, UIElement frameworkElement, Point positioningPoint)
+        {
+            FixedPage.SetTop(frameworkElement, positioningPoint.Y);
+            FixedPage.SetLeft(frameworkElement, positioningPoint.X);
+
+            pageContent.Child.Children.Add(frameworkElement);
+        }
+
         private void PositionUiElement(PageContent pageContent, UIElement panel, PrintAppendixes printAppendix, int pageNumber, bool isLastPage)
         {
             var positioningRange = _printProcessor.PrintDimension.GetRangeFor(printAppendix, pageNumber, isLastPage);
             var position = new Point(_printProcessor.PrintDimension.Margin.Left, positioningRange.From);
 
-            var contentControl = new ContentControl
-                                 {
-                                     Width = _printProcessor.PrintDimension.PrintablePageSize.Width
-                                 };
+            var contentControl = new ContentControl { Width = _printProcessor.PrintDimension.PrintablePageSize.Width };
 
             if (_printProcessor.ColorPrintPartsForDebug)
             {
@@ -460,11 +363,13 @@ namespace Mairegger.Printing.Internal
                                              {
                                                  new Rectangle
                                                  {
-                                                     StrokeDashArray = new DoubleCollection(new double[]
-                                                                                            {
-                                                                                                20,
-                                                                                                20
-                                                                                            }),
+                                                     StrokeDashArray = new DoubleCollection(
+                                                         new double[]
+                                                         {
+                                                             20,
+                                                             20
+                                                         }
+                                                     ),
                                                      Stroke = Brushes.Black,
                                                      StrokeThickness = 2d
                                                  },
@@ -486,6 +391,112 @@ namespace Mairegger.Printing.Internal
             }
 
             PositionUiElement(pageContent, contentControl, position);
+        }
+
+        private static Brush ComputeBackGround(PrintAppendixes printAppendix)
+        {
+            var factor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enum.GetValues(typeof(PrintAppendixes)).Length) * (byte)printAppendix));
+            return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));
+        }
+
+        private void ConcludeDocument()
+        {
+            ConcludeDocumentPage(true);
+        }
+
+        private void ConcludeDocumentPage(bool isLastPage)
+        {
+            Debug.WriteLine("PRINTING: Conclude Document Page");
+
+            var grid = new Grid();
+            grid.Children.Add(_pageHelper.BodyGrid);
+
+            var rectangle = new Rectangle
+                            {
+                                Stroke = _pageHelper.BorderBrush,
+                                StrokeThickness = .5d
+                            };
+
+            grid.Children.Add(rectangle);
+            grid.Height = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).Length;
+
+            var positioningPoint = new Point(
+                _printProcessor.PrintDimension.Margin.Left,
+                _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).From
+            );
+            PositionUiElement(_pageHelper.PageContent, grid, positioningPoint);
+
+            AddPrintAppendixes(_pageHelper.PageContent, isLastPage);
+
+            _fixedDocument.Pages.Add(_pageHelper.PageContent);
+            CurrentPageNumber++;
+        }
+
+        private void AddPrintAppendixes(PageContent content, bool isLastPage)
+        {
+            AddBackground(content, isLastPage);
+
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Header, () => _printProcessor.GetHeader());
+            AddSpecialElement(
+                isLastPage,
+                CurrentPageNumber,
+                content,
+                PrintAppendixes.HeaderDescription,
+                () => _printProcessor.GetHeaderDescription()
+            );
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Summary, () => _printProcessor.GetSummary());
+            AddSpecialElement(isLastPage, CurrentPageNumber, content, PrintAppendixes.Footer, () => _printProcessor.GetFooter());
+        }
+
+        private void AddBackground(PageContent pageContent, bool isLastPage)
+        {
+            if (!_printProcessor.PrintDefinition.IsToPrint(PrintAppendixes.Background, CurrentPageNumber, isLastPage))
+            {
+                return;
+            }
+
+            var background = _printProcessor.GetBackground();
+            if (background == null)
+            {
+                throw new InvalidOperationException(
+                    $"The instance of type \"{_printProcessor.GetType()}\" must return a value for \"{nameof(PrintProcessor.GetBackground)}()\" if \"{PrintAppendixes.Background}\" is set."
+                );
+            }
+
+            var positioningPoint = new Point(background.Size.Left, background.Size.Top);
+
+            Debug.WriteLine($"PRINTING: Print background on page #{CurrentPageNumber} ");
+            PositionUiElement(pageContent, background.Element, positioningPoint);
+        }
+
+        /// <summary>
+        ///     Creates the whole documents
+        /// </summary>
+        public static FixedDocument CreateFixedDocument(PrintProcessor pp)
+        {
+            return CreateFixedDocument(new PrintProcessorCollection(pp));
+        }
+
+        public static FixedDocument CreateFixedDocument(PrintProcessorCollection? collection)
+        {
+            var fixedDocument = new FixedDocument();
+
+            if (collection == null)
+            {
+                return fixedDocument;
+            }
+
+            foreach (var pp in collection)
+            {
+                new InternalPrintProcessor(pp, fixedDocument).Process(collection.IndividualPageNumbers);
+            }
+
+            if (!collection.IndividualPageNumbers)
+            {
+                // AddPageNumbers(FixedDocument);
+            }
+
+            return fixedDocument;
         }
     }
 }

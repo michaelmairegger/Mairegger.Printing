@@ -14,7 +14,6 @@
 
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
@@ -31,13 +30,6 @@ namespace Mairegger.Printing.Tests.Content
             Panel p = new StackPanel();
             var printDocumentBackground = new PrintDocumentBackground(p, Rect.Empty);
             Assert.That(printDocumentBackground.Element, Is.EqualTo(p));
-        }
-
-        [Test]
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute", Justification = "OK for UnitTests")]
-        public void Ctor_Null_ThrowsArgumentNullException()
-        {
-            Assert.That(() => new PrintDocumentBackground(null, Rect.Empty), Throws.ArgumentNullException);
         }
 
         [Test]

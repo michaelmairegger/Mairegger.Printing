@@ -19,7 +19,7 @@ namespace Mairegger.Printing.Content
 
     public sealed class StringLineItemConfiguration
     {
-        public FontFamily FontFamily { get; set; }
+        public FontFamily? FontFamily { get; set; }
 
         public double? FontSize { get; set; }
 

@@ -23,9 +23,9 @@ namespace Mairegger.Printing.Content
     {
         private readonly double? _lineHeight;
         private readonly Thickness _margin;
-        private readonly Brush _lineColor;
+        private readonly Brush? _lineColor;
 
-        internal HorizontalLine(double? lineHeight = 1, Thickness margin = new Thickness(), Brush lineColor = null)
+        internal HorizontalLine(double? lineHeight = 1, Thickness margin = new Thickness(), Brush? lineColor = null)
         {
             _lineHeight = lineHeight;
             _margin = margin;
