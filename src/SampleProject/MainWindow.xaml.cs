@@ -78,12 +78,12 @@ namespace Mairegger.Printing.Sample
 
         private void MenuItemClick(object sender, RoutedEventArgs e)
         {
-            MenuItem mi = sender as MenuItem;
+            MenuItem? mi = sender as MenuItem;
             if (mi == null)
             {
                 return;
             }
-            MyShownObject mso = mi.Tag as MyShownObject;
+            MyShownObject? mso = mi.Tag as MyShownObject;
             if (mso == null)
             {
                 return;

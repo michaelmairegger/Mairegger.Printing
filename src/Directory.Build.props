@@ -11,24 +11,26 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <TargetFrameworks>net45;netcoreapp3.1;net5.0-windows</TargetFrameworks>
+    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
+    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
+    <TargetFrameworks>net462;netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="CompilerInformation">
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.4.220</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.4.244</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" PrivateAssets="all" />
+    <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" PrivateAssets="all" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningVersion)" PrivateAssets="all" />
   </ItemGroup>
-
-  <!--MSBuild.Sdk.Extras-->
-  <PropertyGroup>
-    <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
-    <ExtrasEmbeddedResourceGeneratedCodeIsPublic>true</ExtrasEmbeddedResourceGeneratedCodeIsPublic>
-  </PropertyGroup>
 
   <PropertyGroup>
     <!-- https://github.com/dotnet/Nerdbank.GitVersioning/blob/master/doc/msbuild.md#reducing-getbuildversion-invocations -->

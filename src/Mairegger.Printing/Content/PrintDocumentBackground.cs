@@ -17,11 +17,10 @@ namespace Mairegger.Printing.Content
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    using JetBrains.Annotations;
 
     public sealed class PrintDocumentBackground
     {
-        public PrintDocumentBackground([NotNull] Panel panel, Rect size = new Rect())
+        public PrintDocumentBackground(Panel panel, Rect size = new Rect())
         {
             Element = panel ?? throw new ArgumentNullException(nameof(panel));
             Size = size;

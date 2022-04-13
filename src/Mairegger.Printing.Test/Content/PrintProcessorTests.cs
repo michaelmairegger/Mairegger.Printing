@@ -113,15 +113,6 @@ namespace Mairegger.Printing.Tests.Content
         }
 
         [Test]
-        public void FileName_Null_IsStringEmpty()
-        {
-            Mock<Printing.PrintProcessor.PrintProcessor> mock = new Mock<Printing.PrintProcessor.PrintProcessor>();
-            mock.Object.FileName = null;
-
-            Assert.That(mock.Object.FileName, Is.Empty);
-        }
-
-        [Test]
         public void GetBackgound_Throws_IfNotImplemented()
         {
             Assert.That(() => new TestPrintProcessor().GetBackground(), Throws.InstanceOf<NotImplementedException>());
@@ -216,28 +207,12 @@ namespace Mairegger.Printing.Tests.Content
         }
 
         [Test]
-        public void PrintDialog_Null_ThrowsArgumentNullException()
-        {
-            var printProcessor = new Mock<Printing.PrintProcessor.PrintProcessor>();
-
-            Assert.That(() => printProcessor.Object.PrintDialog = null, Throws.ArgumentNullException);
-        }
-
-        [Test]
         public void PrintDimension()
         {
             var pp = new PrintProcessorWithPrintOnAttribute();
             var pd = new PrintDimension();
             pp.PrintDimension = pd;
             Assert.That(pp.PrintDimension, Is.EqualTo(pd));
-        }
-
-        [Test]
-        public void PrintDimension_SetNull_ThrowsArgumentNullException()
-        {
-            var pp = new PrintProcessorWithPrintOnAttribute();
-            Assert.That(pp.PrintDimension, Is.Not.Null);
-            Assert.That(() => pp.PrintDimension = null, Throws.ArgumentNullException);
         }
 
         [Test]

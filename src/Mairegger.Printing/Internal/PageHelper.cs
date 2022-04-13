@@ -14,6 +14,7 @@
 
 namespace Mairegger.Printing.Internal
 {
+    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Media;
@@ -23,13 +24,24 @@ namespace Mairegger.Printing.Internal
     {
         private const double Threshold = 0;
 
-        public ItemsControl BodyGrid { get; set; }
+        public PageHelper(ItemsControl bodyGrid, Brush borderBrush, PageContent pageContent, PrintDimension printingDimension, double usedSpace)
+        {
+            BodyGrid = bodyGrid;
+            BorderBrush = borderBrush;
+            PageContent = pageContent;
+            PrintingDimension = printingDimension;
+            
+            BodyGrid.Measure(new Size(double.MaxValue, double.MaxValue));
+            RemoveRemainingSpace(usedSpace);
+        }
 
-        public Brush BorderBrush { get; set; }
+        public ItemsControl BodyGrid { get; }
 
-        public PageContent PageContent { get; set; }
+        public Brush BorderBrush { get; }
 
-        public PrintDimension PrintingDimension { get; set; }
+        public PageContent PageContent { get; }
+
+        public PrintDimension PrintingDimension { get; }
 
         private double UsedSpace { get; set; }
 

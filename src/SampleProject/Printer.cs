@@ -98,7 +98,9 @@ namespace Mairegger.Printing.Sample
 
         public override IEnumerable<IPrintContent> ItemCollection()
         {
-            return _collToPrint.Select(obj => PrintContent.TextLine(obj.Text));
+            return _collToPrint.Where(e => e.Text != null)
+                .Select(e => e.Text!)
+                .Select(text => PrintContent.TextLine(text));
         }
 
         protected override void PreparePrint()
