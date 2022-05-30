@@ -40,7 +40,7 @@ runs:
 
   - name: Sonarscanner begin
     shell: pwsh
-    run: dotnet sonarscanner begin /k:"michaelmairegger_Mairegger.Printing" /o:"mairegger-printing" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
+    run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
     working-directory: ${{ inputs.workingDirectory }}
 
   - name: Build
