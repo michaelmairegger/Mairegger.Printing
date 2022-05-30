@@ -77,8 +77,6 @@ namespace Mairegger.Printing.Internal
 
         private void AddItems(IList<IPrintContent> itemCollection)
         {
-            // _pageHelper = CreateNewPageHelper();
-
             if (itemCollection.Count > 0)
             {
                 for (var i = 0; i < itemCollection.Count; i++)

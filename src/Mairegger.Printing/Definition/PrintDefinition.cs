@@ -51,7 +51,7 @@ namespace Mairegger.Printing.Definition
         {
             if (!Enum.IsDefined(typeof(PrintAppendixes), pa))
             {
-                throw new ArgumentException(nameof(pa));
+                throw new ArgumentException($"Enum value {pa} is not defined on enum {typeof(PrintAppendixes).FullName}", nameof(pa));
             }
             return _printOnAttributeHelper.IsPrintOnPage(pa, pageNumber);
         }
