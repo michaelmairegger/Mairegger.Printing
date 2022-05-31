@@ -16,6 +16,7 @@ namespace Mairegger.Printing.Internal
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
@@ -77,8 +78,6 @@ namespace Mairegger.Printing.Internal
 
         private void AddItems(IList<IPrintContent> itemCollection)
         {
-            // _pageHelper = CreateNewPageHelper();
-
             if (itemCollection.Count > 0)
             {
                 for (var i = 0; i < itemCollection.Count; i++)
@@ -173,6 +172,7 @@ namespace Mairegger.Printing.Internal
                 _pageHelper.RemoveRemainingSpace(lineHeight);
             }
 
+            [ExcludeFromCodeCoverage]
             void LogHeightWarning()
             {
                 var helpText = $"Either reduce size of the line or consider deriving {item.GetType()} form {nameof(IPageBreakAware)}";
@@ -319,11 +319,6 @@ namespace Mairegger.Printing.Internal
         private void AddSpecialElement(bool isLastPage, int pageNumber, PageContent pageContent, PrintAppendixes appendix,
                                        Func<UIElement> printElement)
         {
-            if (printElement == null)
-            {
-                throw new ArgumentNullException(nameof(printElement));
-            }
-
             if (!_printProcessor.PrintDefinition.IsToPrint(appendix, pageNumber, isLastPage))
             {
                 return;
@@ -456,13 +451,6 @@ namespace Mairegger.Printing.Internal
             }
 
             var background = _printProcessor.GetBackground();
-            if (background == null)
-            {
-                throw new InvalidOperationException(
-                    $"The instance of type \"{_printProcessor.GetType()}\" must return a value for \"{nameof(PrintProcessor.GetBackground)}()\" if \"{PrintAppendixes.Background}\" is set."
-                );
-            }
-
             var positioningPoint = new Point(background.Size.Left, background.Size.Top);
 
             Debug.WriteLine($"PRINTING: Print background on page #{CurrentPageNumber} ");
@@ -477,14 +465,9 @@ namespace Mairegger.Printing.Internal
             return CreateFixedDocument(new PrintProcessorCollection(pp));
         }
 
-        public static FixedDocument CreateFixedDocument(PrintProcessorCollection? collection)
+        public static FixedDocument CreateFixedDocument(PrintProcessorCollection collection)
         {
             var fixedDocument = new FixedDocument();
-
-            if (collection == null)
-            {
-                return fixedDocument;
-            }
 
             foreach (var pp in collection)
             {

@@ -14,12 +14,14 @@
 
 namespace Mairegger.Printing.Internal
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Printing;
     using System.Windows.Controls;
     using System.Windows.Documents;
     using System.Windows.Media;
     using Mairegger.Printing.PrintProcessor;
 
+    [ExcludeFromCodeCoverage]
     internal class PrintDialogWrapper : IPrintDialog
     {
         private readonly PrintDialog _printDialog = new PrintDialog();

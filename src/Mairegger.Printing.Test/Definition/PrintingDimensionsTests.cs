@@ -245,6 +245,12 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(initialHeight));
         }
 
+        [Test]
+        public void RecalculateHeightValueWhen()
+        {
+            Assert.That(()=> new PrintDimension().RecalculateHeightValueWhen(null!, PrintAppendixes.None), Throws.ArgumentNullException);
+        }
+
         private static void SetPageSizeToPrintDimension(PrintDimension printingDimension, Size pageSize)
         {
             printingDimension.PageSize = pageSize;

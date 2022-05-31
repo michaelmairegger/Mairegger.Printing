@@ -33,6 +33,12 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Test]
+        public void SetPrintAttributeNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new PrintDefinition().SetPrintAttribute(null!));
+        }
+
+        [Test]
         public void IsToPrint_CheckSinglePage()
         {
             var pd = new PrintDefinition();

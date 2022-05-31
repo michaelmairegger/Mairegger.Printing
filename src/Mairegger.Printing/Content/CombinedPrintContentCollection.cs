@@ -14,20 +14,15 @@
 
 namespace Mairegger.Printing.Content
 {
-    using System;
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Controls;
 
     internal sealed class CombinedPrintContentCollection : List<IPrintContent>, IPrintContent
     {
-        public CombinedPrintContentCollection(params IPrintContent[] content)
+        public CombinedPrintContentCollection(params IPrintContent[] collection)
         {
-            if (content == null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-            AddRange(content);
+            AddRange(collection);
         }
 
         public UIElement Content

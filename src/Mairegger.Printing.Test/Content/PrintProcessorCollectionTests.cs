@@ -85,6 +85,20 @@ namespace Mairegger.Printing.Tests.Content
 
             windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Never);
         }
+        
+        [Test]
+        [Apartment(ApartmentState.STA)]
+        public void PrintEverything()
+        {
+            var printDialog = new Mock<IPrintDialog>();
+            var printProcessor = new PrintEverything() { PrintDialog = printDialog.Object };
+            
+            var windowProvider = new Mock<IWindowProvider>();
+            Assert.That(printProcessor.PrintDocument(), Is.True);
+            printProcessor.PreviewDocument(windowProvider.Object);
+            
+            windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Once);
+        }
 
         [Test]
         [Apartment(ApartmentState.STA)]

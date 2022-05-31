@@ -15,7 +15,6 @@
 namespace Mairegger.Printing.Sample
 {
     using System.ComponentModel;
-    using System.Linq;
 
     public class MyShownObject : INotifyPropertyChanged
     {
@@ -58,7 +57,7 @@ namespace Mairegger.Printing.Sample
                 if (value != null)
                 {
                     LenghtOfText = value.Length;
-                    NumberOfLines = value.Split('\n').Count();
+                    NumberOfLines = value.Split('\n').Length;
                 }
                 _text = value;
                 OnPropertyChanged("Text");

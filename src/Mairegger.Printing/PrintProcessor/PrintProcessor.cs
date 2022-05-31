@@ -199,7 +199,7 @@ namespace Mairegger.Printing.PrintProcessor
             XpsHelper.SaveFixedDocument(fixedDocument, file);
         }
 
-        internal static void PreviewDocument(PrintProcessorCollection ppc, IWindowProvider? windowsProvider = null)
+        public static void PreviewDocument(PrintProcessorCollection ppc, IWindowProvider? windowsProvider = null)
         {
             if (!ppc.Any())
             {

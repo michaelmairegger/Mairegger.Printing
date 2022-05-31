@@ -220,7 +220,7 @@ namespace Mairegger.Printing.Definition
                     height = GetHeightFor(printAppendix, pageNumber, isLastPage);
                     break;
                 default:
-                    throw new ArgumentException(nameof(printAppendix));
+                    throw new ArgumentException($"Enum value {printAppendix} is not defined on enum {typeof(PrintAppendixes).FullName}", nameof(printAppendix));
             }
             return new PageRange(fromValue, fromValue + height);
         }

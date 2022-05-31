@@ -32,7 +32,7 @@ namespace Mairegger.Printing.PrintProcessor
         {
             var fixedDocumentSequence = new FixedDocumentSequence();
 
-            var tempFileName = Path.GetTempFileName();
+            var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             using (var target = new XpsDocument(tempFileName, FileAccess.Write))
             {
                 var xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(target);
@@ -70,7 +70,7 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="windowProvider">An implementation for creating a customized window. If null, default implementation is used.</param>
         public static void ShowFixedDocument(FixedDocument fixedDocument, string title, IWindowProvider? windowProvider = null)
         {
-            var tempFileName = Path.GetTempFileName();
+            var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
             WriteXps(fixedDocument, tempFileName);
             ShowXps(tempFileName, title, windowProvider);
