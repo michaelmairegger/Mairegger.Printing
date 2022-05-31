@@ -73,7 +73,7 @@ namespace Mairegger.Printing.PrintProcessor
             var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
             WriteXps(fixedDocument, tempFileName);
-            ShowXps(tempFileName, title, windowProvider);
+            InternalShowXps(tempFileName, title, true, windowProvider);
         }
 
         /// <summary>
@@ -84,6 +84,11 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="windowProvider">An implementation for creating a customized window. If null, default implementation is used.</param>
         public static void ShowXps(string fileName, string title, IWindowProvider? windowProvider = null)
         {
+            InternalShowXps(fileName, title, false, windowProvider);
+        }
+
+        private static void InternalShowXps(string fileName, string title, bool deleteFileOnClose, IWindowProvider? windowProvider = null)
+        {
             var xpsDocument = new XpsDocument(fileName, FileAccess.Read);
 
             var documentViewer = new DocumentViewer { Document = xpsDocument.GetFixedDocumentSequence() };
@@ -93,9 +98,8 @@ namespace Mairegger.Printing.PrintProcessor
                 windowProvider = new WindowsProvider();
             }
 
-            windowProvider.Closed += PreviewWindowOnClosed(fileName, xpsDocument);
+            windowProvider.Closed += PreviewWindowOnClosed(fileName, xpsDocument, deleteFileOnClose);
             windowProvider.Show(title, documentViewer);
-            windowProvider.Closed -= PreviewWindowOnClosed(fileName, xpsDocument);
         }
 
         private static void Add(string path, FixedDocumentSequence fixedDocumentSequence)
@@ -121,13 +125,16 @@ namespace Mairegger.Printing.PrintProcessor
             }
         }
 
-        private static EventHandler PreviewWindowOnClosed(string fileName, XpsDocument xpsDocument)
+        private static EventHandler PreviewWindowOnClosed(string fileName, XpsDocument xpsDocument, bool deleteFile)
         {
             return (_, _) =>
                    {
                        xpsDocument.Close();
 
-                       File.Delete(fileName);
+                       if (deleteFile)
+                       {
+                           File.Delete(fileName);
+                       }
                    };
         }
 
