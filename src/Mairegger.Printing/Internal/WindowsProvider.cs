@@ -15,12 +15,14 @@
 namespace Mairegger.Printing.Internal
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using Mairegger.Printing.PrintProcessor;
     using Mairegger.Printing.Properties;
 
+    [ExcludeFromCodeCoverage]
     internal class WindowsProvider : IWindowProvider
     {
         private readonly Window _window = new Window { WindowStartupLocation = WindowStartupLocation.CenterOwner };
@@ -38,7 +40,7 @@ namespace Mairegger.Printing.Internal
             _window.KeyDown += WindowOnKeyDown;
             _window.Show();
 
-            void WindowOnKeyDown(object sender, KeyEventArgs args)
+            void WindowOnKeyDown(object? sender, KeyEventArgs args)
             {
                if (args.Key == Key.Escape && sender is Window window)
                {

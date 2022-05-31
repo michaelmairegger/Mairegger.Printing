@@ -187,6 +187,18 @@ namespace Mairegger.Printing.Tests.Content
             }
         }
 
+        [Test]
+        public void NoItemsOnPrintout()
+        {
+            var printDialog = new Mock<IPrintDialog>();
+            var printProcessor = new NoLineItemsTestPrintProcessor
+                                 {
+                                     PrintDialog = printDialog.Object
+                                 };
+            
+            Assert.That(printProcessor.PrintDocument(), Is.True);
+        }
+
         [TestCase(true)]
         [TestCase(false)]
         public void PreviewDocument(bool colorPrintPartsForDebug)

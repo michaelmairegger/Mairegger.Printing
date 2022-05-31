@@ -15,6 +15,7 @@
 namespace Mairegger.Printing.Content
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
 
     /// <inheritdoc />
@@ -55,6 +56,7 @@ namespace Mairegger.Printing.Content
             set => _content = value;
         }
 
+        [ExcludeFromCodeCoverage]
         public Point Position { get; set; }
     }
 }

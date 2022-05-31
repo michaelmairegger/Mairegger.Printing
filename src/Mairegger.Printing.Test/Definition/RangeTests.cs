@@ -74,6 +74,7 @@ namespace Mairegger.Printing.Tests.Definition
         public void Parse_Invalid()
         {
             var input = string.Empty;
+            Assert.Throws<ArgumentNullException>(() => PageRange.Parse(null!));
             Assert.Throws<ArgumentException>(() => PageRange.Parse(input));
             Assert.Throws<ArgumentException>(() => PageRange.Parse("-"));
             Assert.Throws<FormatException>(() => PageRange.Parse("InvalidNumber-6"));
