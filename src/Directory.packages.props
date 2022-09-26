@@ -2,6 +2,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors> <!-- Duplicate 'PackageVersion' items found -->
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="JetBrains.Annotations" Version="2022.1.0" />
