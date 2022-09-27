@@ -1,7 +1,12 @@
 <Project>
+  
   <ItemGroup Label="Rider">
     <None Remove="$(MSBuildProjectDirectory)\*.DotSettings" />
   </ItemGroup>
-    
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <ParentDirectoryBuildPropsPath>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryBuildPropsPath>
+  </PropertyGroup>
+  <Import Project="$(ParentDirectoryBuildPropsPath)" Condition="'$(ParentDirectoryBuildPropsPath)' != '' and Exists($(ParentDirectoryBuildPropsPath))" />
+  
 </Project>
