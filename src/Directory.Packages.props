@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
     <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors> <!-- Duplicate 'PackageVersion' items found -->
+    <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors> <!-- Duplicate 'PackageReference' items found -->
   </PropertyGroup>
 
   <PropertyGroup>
