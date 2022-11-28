@@ -9,8 +9,7 @@
     </PackageReference>
     <Reference Include="System.Printing" Condition="$(TargetFramework.StartsWith('net4'))"/>
     <Reference Include="ReachFramework" Condition="$(TargetFramework.StartsWith('net4'))"/>
-    <PackageReference Include="System.Drawing.Common" Condition="!$(TargetFramework.StartsWith('net4')) and '$(TargetFramework)' != 'netcoreapp3.1'"/>
-    <PackageReference Include="System.Drawing.Common" Condition="'$(TargetFramework)' == 'netcoreapp3.1'" VersionOverride="6.0.0"/>
+    <PackageReference Include="System.Drawing.Common" Condition="!$(TargetFramework.StartsWith('net4'))"/>
     <PackageReference Include="coverlet.collector">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
