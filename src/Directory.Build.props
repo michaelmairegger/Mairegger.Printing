@@ -31,6 +31,10 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'"/>
+
+    <!-- TODO Try GlobalPackageReference later -->
+    <PackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'"
+                      IncludeAssets="Runtime;Build;Native;contentFiles;Analyzers" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
