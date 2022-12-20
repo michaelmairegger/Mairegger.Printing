@@ -125,9 +125,9 @@ namespace Mairegger.Printing.Definition
                 throw new ArgumentNullException(nameof(input));
             }
 
-            if (input.Contains(',')) // TODO Remove this check in a future releases
+            if (input.Contains(','))
             {
-                throw new ArgumentException("',' is not supported anymore change range to '-'");
+                throw new ArgumentException($"Use {nameof(ParseRanges)} for parsing multi-range values");
             }
 
             var range = input.Split('-');
