@@ -9,11 +9,11 @@
   <PropertyGroup>
     <NerdbankGitVersioningVersion>3.5.107</NerdbankGitVersioningVersion>
     <!--Testing -->
-    <MoqVersion>4.18.1</MoqVersion>
+    <MoqVersion>4.18.3</MoqVersion>
     <NUnitVersion>3.13.3</NUnitVersion>
-    <NUnit3TestAdapter>4.2.1</NUnit3TestAdapter>
-    <MicrosoftNETTestSdkVersion>17.2.0</MicrosoftNETTestSdkVersion>
-    <CoverletCollectorVersion>3.1.2</CoverletCollectorVersion>
+    <NUnit3TestAdapter>4.3.1</NUnit3TestAdapter>
+    <MicrosoftNETTestSdkVersion>17.4.1</MicrosoftNETTestSdkVersion>
+    <CoverletCollectorVersion>3.2.0</CoverletCollectorVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
   </PropertyGroup>
   
