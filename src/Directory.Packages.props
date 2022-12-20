@@ -1,0 +1,31 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors> <!-- Duplicate 'PackageVersion' items found -->
+    <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors> <!-- Duplicate 'PackageReference' items found -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NerdbankGitVersioningVersion>3.5.107</NerdbankGitVersioningVersion>
+    <!--Testing -->
+    <MoqVersion>4.18.3</MoqVersion>
+    <NUnitVersion>3.13.3</NUnitVersion>
+    <NUnit3TestAdapter>4.3.1</NUnit3TestAdapter>
+    <MicrosoftNETTestSdkVersion>17.4.1</MicrosoftNETTestSdkVersion>
+    <CoverletCollectorVersion>3.2.0</CoverletCollectorVersion>
+    <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageVersion Include="JetBrains.Annotations" Version="2022.3.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
+    <PackageVersion Include="Moq" Version="$(MoqVersion)" />
+    <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="$(NUnit3TestAdapter)" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningVersion)" />
+    <PackageVersion Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageVersion Include="WpfAnalyzers" Version="$(WpfAnalyzersVersion)" />
+    <PackageVersion Include="coverlet.collector" Version="$(CoverletCollectorVersion)" />
+  </ItemGroup>
+</Project>
