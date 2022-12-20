@@ -3,6 +3,11 @@ on:
   push:
     tags: 
       - 'v*.*.*'
+
+env:
+  buildConfiguration: 'Release'
+  workingDirectory: 'src'
+  
 jobs:
   build:
     runs-on: windows-latest
