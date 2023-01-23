@@ -23,9 +23,7 @@
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
     <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
     <PackageVersion Include="NUnit3TestAdapter" Version="$(NUnit3TestAdapter)" />
-    <PackageVersion Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningVersion)" />
     <PackageVersion Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageVersion Include="WpfAnalyzers" Version="$(WpfAnalyzersVersion)" />
     <PackageVersion Include="coverlet.collector" Version="$(CoverletCollectorVersion)" />
   </ItemGroup>
 </Project>
