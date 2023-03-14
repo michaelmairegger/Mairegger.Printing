@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Copyright>Copyright 2016-2018 Michael Mairegger</Copyright>
+    <Copyright>Copyright 2016-$([System.DateTime]::Now.ToString(`yyyy`)) Michael Mairegger</Copyright>
     <Authors>Michael Mairegger</Authors>
     <GithubUrl>https://github.com/michaelmairegger/Mairegger.Printing</GithubUrl>
     <RepositoryType>git</RepositoryType>
@@ -11,14 +11,6 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <NetCoreAppMinimum>net6.0</NetCoreAppMinimum>
-    <NetCoreAppCurrent>net7.0</NetCoreAppCurrent>
-    
-    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <TargetFrameworks>net462;$(NetCoreAppMinimum)-windows;$(NetCoreAppCurrent)-windows</TargetFrameworks>
-    <UseWPF>true</UseWPF>
-    
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -27,15 +19,6 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
-    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'"/>
-
-    <!-- TODO Try GlobalPackageReference later -->
-    <PackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'"
-                      IncludeAssets="Runtime;Build;Native;contentFiles;Analyzers" PrivateAssets="All" />
-  </ItemGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
