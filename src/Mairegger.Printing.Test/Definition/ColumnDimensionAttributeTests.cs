@@ -48,6 +48,22 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Test]
+        public void RelativeWidth_Px()
+        {
+            var v = new ColumnDimensionAttribute("2px");
+            Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Pixels));
+            Assert.That(v.ColumnWidth, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void RelativeWidth_Start()
+        {
+            var v = new ColumnDimensionAttribute("3*");
+            Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Star));
+            Assert.That(v.ColumnWidth, Is.EqualTo(3));
+        }
+
+        [Test]
         public void InvalidPrintDimension()
         {
             Assert.Throws<ArgumentException>(() => new ColumnDimensionAttribute(string.Empty));
