@@ -29,7 +29,9 @@
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'" Version="$(NerdbankGitVersioningVersion)" />
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" Condition="'$(IsPackable)' == 'true'"/>
   </ItemGroup>
+  
   <ItemGroup>
     <PackageVersion Include="JetBrains.Annotations" Version="2022.3.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
