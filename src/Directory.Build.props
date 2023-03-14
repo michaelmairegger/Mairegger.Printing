@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Copyright>Copyright 2016-2018 Michael Mairegger</Copyright>
+    <Copyright>Copyright 2016-$([System.DateTime]::Now.ToString(`yyyy`)) Michael Mairegger</Copyright>
     <Authors>Michael Mairegger</Authors>
     <GithubUrl>https://github.com/michaelmairegger/Mairegger.Printing</GithubUrl>
     <RepositoryType>git</RepositoryType>
@@ -11,26 +11,14 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <TargetFrameworks>net462;netcoreapp3.1;net6.0-windows</TargetFrameworks>
-    <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Label="CompilerInformation">
     <Nullable>enable</Nullable>
     <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.5.107</NerdbankGitVersioningVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2022.1.0" PrivateAssets="all" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="$(NerdbankGitVersioningVersion)" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'"/>
-  </ItemGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

@@ -35,8 +35,8 @@ namespace Mairegger.Printing.Internal
 
         public void Show(string windowTitle, DocumentViewer documentViewer)
         {
-            _window.Content = documentViewer;
-            _window.Title = $"{l10n.Preview}: {windowTitle}";
+            _window.SetCurrentValue(ContentControl.ContentProperty, documentViewer);
+            _window.SetCurrentValue(Window.TitleProperty, $"{l10n.Preview}: {windowTitle}");
             _window.KeyDown += WindowOnKeyDown;
             _window.Show();
 

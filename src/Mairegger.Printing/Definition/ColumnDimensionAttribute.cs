@@ -58,13 +58,21 @@ namespace Mairegger.Printing.Definition
 
                 if (value.Length > 1)
                 {
+                    #if NET7_0_OR_GREATER
+                    ColumnWidth = double.Parse(value.AsSpan(0, value.Length - 1), CultureInfo.InvariantCulture);
+                    #else
                     ColumnWidth = double.Parse(value.Substring(0, value.Length - 1), CultureInfo.InvariantCulture);
+                    #endif
                 }
             }
             else if (value.EndsWith("px"))
             {
                 DimensionType = ColumnDimensionType.Pixels;
+                #if NET7_0_OR_GREATER
+                ColumnWidth = double.Parse(value.AsSpan(0, value.Length - 2), CultureInfo.InvariantCulture);
+                #else
                 ColumnWidth = double.Parse(value.Substring(0, value.Length - 2), CultureInfo.InvariantCulture);
+                #endif
             }
             else
             {

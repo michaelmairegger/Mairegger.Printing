@@ -5,15 +5,18 @@ inputs:
   workingDirectory:
     required: true
 
+outputs:
+  nuget-package-version:
+    value: ${{ steps.nbgv.outputs.NuGetPackageVersion }}
+
 runs:
   using: "composite"
   steps:
   - uses: actions/setup-dotnet@v2
     with:
       dotnet-version: |
-        3.1.x
-        5.0.x
         6.0.x
+        7.0.x
       
   - uses: dotnet/nbgv@master
     id: nbgv
@@ -40,7 +43,7 @@ runs:
 
   - name: Sonarscanner begin
     shell: pwsh
-    run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
+    run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /v:"${{ steps.nbgv.outputs.NuGetPackageVersion }}" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
     working-directory: ${{ inputs.workingDirectory }}
 
   - name: Build
