@@ -1,12 +1,16 @@
 name: 'Compile, test'
+description: 'Compiles and tests the project'
 inputs:
   buildConfiguration:
+    description: Defines the build configuration like Debug or Release
     required: true
   workingDirectory:
+    description: Defines the base working directory containing the solution file
     required: true
 
 outputs:
   nuget-package-version:
+    description: Returns the nuget package version
     value: ${{ steps.nbgv.outputs.NuGetPackageVersion }}
 
 runs:
