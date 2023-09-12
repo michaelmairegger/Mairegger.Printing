@@ -35,7 +35,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void CheckPrintDimensions_HasPrintDimensionsSet()
         {
-            var print = new PrintProcessorWithPrintOnAttribute();
+            var print = new PrintProcessorWithPrintOnAllPages();
 
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(true);
@@ -68,7 +68,7 @@ namespace Mairegger.Printing.Tests.Content
         public void CustomAlternatingRowColors([Random(10, 20, 1)] int itemCount, [Random(3, 7, 1)] int differentColors)
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+            var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = itemCount,
                          IsAlternatingRowColor = true
@@ -146,7 +146,7 @@ namespace Mairegger.Printing.Tests.Content
         public void IsAlternatingRowColor_False_NotColoring()
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+            var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = 3,
                          IsAlternatingRowColor = false
@@ -167,7 +167,7 @@ namespace Mairegger.Printing.Tests.Content
         public void IsAlternatingRowColor_True_Coloring()
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+            var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = 10,
                          IsAlternatingRowColor = true
@@ -221,7 +221,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void PrintDimension()
         {
-            var pp = new PrintProcessorWithPrintOnAttribute();
+            var pp = new PrintProcessorWithPrintOnAllPages();
             var pd = new PrintDimension();
             pp.PrintDimension = pd;
             Assert.That(pp.PrintDimension, Is.EqualTo(pd));

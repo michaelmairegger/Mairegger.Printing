@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Globalization;
+
 namespace Mairegger.Printing.Definition
 {
     using System;
@@ -143,7 +145,7 @@ namespace Mairegger.Printing.Definition
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
                     if (uiElement == null)
                     {
-                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(l10n.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
+                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10n.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
                     }
                     uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
                     value = uiElement.DesiredSize.Height;

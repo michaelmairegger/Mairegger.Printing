@@ -165,7 +165,7 @@ namespace Mairegger.Printing.PrintProcessor
 
         public bool PrintDocument(string printQueueName)
         {
-            if (printQueueName.StartsWith(@"\\"))
+            if (printQueueName.StartsWith(@"\\", StringComparison.Ordinal))
             {
                 var printServerName = new string(printQueueName.Substring(2).TakeWhile(c => c != '\\').ToArray());
 

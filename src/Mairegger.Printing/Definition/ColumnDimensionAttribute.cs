@@ -50,7 +50,7 @@ namespace Mairegger.Printing.Definition
 
         public ColumnDimensionAttribute(string value)
         {
-            if (value.EndsWith("*"))
+            if (value.EndsWith("*", StringComparison.Ordinal))
             {
                 DimensionType = ColumnDimensionType.Star;
 
@@ -65,7 +65,7 @@ namespace Mairegger.Printing.Definition
                     #endif
                 }
             }
-            else if (value.EndsWith("px"))
+            else if (value.EndsWith("px", StringComparison.Ordinal))
             {
                 DimensionType = ColumnDimensionType.Pixels;
                 #if NET7_0_OR_GREATER
@@ -76,7 +76,7 @@ namespace Mairegger.Printing.Definition
             }
             else
             {
-                throw new ArgumentException(string.Format(l10n.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, l10n.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
             }
         }
 
