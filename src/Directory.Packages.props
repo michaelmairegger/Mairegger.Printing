@@ -1,13 +1,7 @@
 <Project>
-  <PropertyGroup Label="Target Frameworks">
-    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>8.0.0</CurrentNetVersion>
-    <PreviousNetVersion>7.0.13</PreviousNetVersion>
-    <MinimumNetVersion>6.0.24</MinimumNetVersion>
-    <NetFrameworkMinimum>net462</NetFrameworkMinimum>
-    <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
+  <Import Project="Versions.props" />
 
+  <PropertyGroup Label="Target Frameworks">
     <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,3))</NetCoreAppCurrent>
     <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,3))</NetCoreAppPrevious>
     <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,3))</NetCoreAppMinimum>
@@ -34,16 +28,7 @@
     <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors>
     <!-- Duplicate 'PackageReference' items found -->
   </PropertyGroup>
-  <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.6.133</NerdbankGitVersioningVersion>
-    <!--Testing -->
-    <MoqVersion>4.20.69</MoqVersion>
-    <NUnitVersion>3.14.0</NUnitVersion>
-    <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
-    <MicrosoftNETTestSdkVersion>17.8.0</MicrosoftNETTestSdkVersion>
-    <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
-    <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
-  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'" Version="$(NerdbankGitVersioningVersion)" />
