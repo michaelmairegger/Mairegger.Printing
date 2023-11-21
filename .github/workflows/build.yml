@@ -4,6 +4,7 @@ on:
     branches:
     - main
     - dev
+    - migrate/net8
 
 env:
   buildConfiguration: 'Release'
