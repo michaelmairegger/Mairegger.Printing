@@ -1,12 +1,25 @@
 <Project>
+  <Import Project="Versions.props" />
+
   <PropertyGroup Label="Target Frameworks">
-    <NetCoreAppMinimum>net6.0</NetCoreAppMinimum>
-    <NetCoreAppCurrent>net7.0</NetCoreAppCurrent>
-    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <TargetFrameworks>net462;$(NetCoreAppMinimum)-windows;$(NetCoreAppCurrent)-windows</TargetFrameworks>
+    <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,3))</NetCoreAppCurrent>
+    <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,3))</NetCoreAppPrevious>
+    <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,3))</NetCoreAppMinimum>
+
+    <NetCoreWpfCurrent Condition="'$(CurrentNetVersion)' != ''">$(NetCoreAppCurrent)-windows$(WindowsSdkVersion)</NetCoreWpfCurrent>
+    <NetCoreWpfPrevious Condition="'$(PreviousNetVersion)' != ''">$(NetCoreAppPrevious)-windows$(WindowsSdkVersion)</NetCoreWpfPrevious>
+    <NetCoreWpfMinimum Condition="'$(MinimumNetVersion)' != ''">$(NetCoreAppMinimum)-windows$(WindowsSdkVersion)</NetCoreWpfMinimum>
+
+    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Set WPF properties">
+    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum);$(NetFrameworkMinimum)</TargetFrameworks>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+
   <PropertyGroup Label="NuGet settings">
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
@@ -15,30 +28,21 @@
     <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors>
     <!-- Duplicate 'PackageReference' items found -->
   </PropertyGroup>
-  <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.6.133</NerdbankGitVersioningVersion>
-    <!--Testing -->
-    <MoqVersion>4.20.69</MoqVersion>
-    <NUnitVersion>3.13.3</NUnitVersion>
-    <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
-    <MicrosoftNETTestSdkVersion>17.7.2</MicrosoftNETTestSdkVersion>
-    <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
-    <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
-  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'" Version="$(NerdbankGitVersioningVersion)" />
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
-    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" Condition="'$(IsPackable)' == 'true'"/>
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" Condition="'$(IsPackable)' == 'true'"/>
   </ItemGroup>
   
   <ItemGroup>
-    <PackageVersion Include="JetBrains.Annotations" Version="2023.2.0" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
     <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
     <PackageVersion Include="NUnit3TestAdapter" Version="$(NUnit3TestAdapter)" />
-    <PackageVersion Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageVersion Include="System.Drawing.Common" Version="8.0.0" />
     <PackageVersion Include="coverlet.collector" Version="$(CoverletCollectorVersion)" />
   </ItemGroup>
 </Project>
