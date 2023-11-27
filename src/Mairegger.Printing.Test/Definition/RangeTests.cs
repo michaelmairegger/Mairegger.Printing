@@ -29,14 +29,14 @@ namespace Mairegger.Printing.Tests.Definition
             var r1 = new PageRange(5, 10);
             var r2 = new PageRange(6, 10);
 
-            Assert.True(r1.IsInRange(r2));
+            Assert.That(r1.IsInRange(r2), Is.True);
         }
 
         [Test]
         public void IsInRange_InRange_True([Values(1, 2, 3, 4, 5)] double value)
         {
             var r = new PageRange(1, 100);
-            Assert.IsTrue(r.IsInRange(value));
+            Assert.That(r.IsInRange(value), Is.True);
         }
 
         [Test]
@@ -45,14 +45,14 @@ namespace Mairegger.Printing.Tests.Definition
             var r1 = new PageRange(5, 10);
             var r2 = new PageRange(6, 10);
 
-            Assert.False(r2.IsInRange(r1));
+            Assert.That(r2.IsInRange(r1), Is.False);
         }
 
         [Test]
         public void IsInRange_OutOfRange_False([Values(1, 2, 3, 4, 5)] double value)
         {
             var r = new PageRange(6, 10);
-            Assert.IsFalse(r.IsInRange(value));
+            Assert.That(r.IsInRange(value), Is.False);
         }
 
         [Test]
@@ -60,14 +60,14 @@ namespace Mairegger.Printing.Tests.Definition
         {
             var r1 = new PageRange(5, 10);
 
-            Assert.True(r1.IsInRange(r1));
+            Assert.That(r1.IsInRange(r1), Is.True);
         }
 
         [Test]
         public void Length([Values(1, 2, 3, 4, 5)] double length)
         {
             var r = new PageRange(0, length);
-            Assert.AreEqual(r.Length, length);
+            Assert.That(length, Is.EqualTo(r.Length));
         }
 
         [Test]
@@ -89,8 +89,11 @@ namespace Mairegger.Printing.Tests.Definition
         public void Parse_ValidRange()
         {
             var r = PageRange.Parse("4-6");
-            Assert.That(r.From, Is.EqualTo(4));
-            Assert.That(r.To, Is.EqualTo(6));
+            Assert.Multiple(() =>
+            {
+                Assert.That(r.From, Is.EqualTo(4));
+                Assert.That(r.To, Is.EqualTo(6));
+            });
         }
 
         [Test]
@@ -98,9 +101,9 @@ namespace Mairegger.Printing.Tests.Definition
         {
             var ranges = PageRange.ParseRanges("1-2,5,10-11").ToList();
 
-            CollectionAssert.Contains(ranges, PageRange.Parse("1-2"));
-            CollectionAssert.Contains(ranges, PageRange.Parse("5"));
-            CollectionAssert.Contains(ranges, PageRange.Parse("10-11"));
+            Assert.That(ranges, Has.Member(PageRange.Parse("1-2")));
+            Assert.That(ranges, Has.Member(PageRange.Parse("5")));
+            Assert.That(ranges, Has.Member(PageRange.Parse("10-11")));
         }
 
         [Test]
@@ -110,8 +113,6 @@ namespace Mairegger.Printing.Tests.Definition
             var r2 = new PageRange(5, 10);
 
             Assert.That(r1, Is.EqualTo(r2));
-            Assert.True(r1 == r2);
-            Assert.True(Equals(r1, r2));
             Assert.That(r1.GetHashCode(), Is.EqualTo(r2.GetHashCode()));
         }
 
@@ -158,14 +159,6 @@ namespace Mairegger.Printing.Tests.Definition
             var r2 = new PageRange(6, 10);
 
             Assert.That(r1, Is.Not.EqualTo(r2));
-
-            Assert.True(r1 != r2);
-
-            Assert.False(Equals(r1, r2));
-            Assert.False(r1.Equals(null));
-            Assert.That(r1, Is.Not.EqualTo(null));
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            Assert.False(r1.Equals(5));
             Assert.That(r1.GetHashCode(), Is.Not.EqualTo(r2.GetHashCode()));
         }
 

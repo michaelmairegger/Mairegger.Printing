@@ -43,24 +43,33 @@ namespace Mairegger.Printing.Tests.Definition
         {
             double width = param * 100;
             var v = new ColumnDimensionAttribute(width, ColumnDimensionType.Pixels);
-            Assert.AreEqual(width, v.ColumnWidth);
-            Assert.AreEqual(ColumnDimensionType.Pixels, v.DimensionType);
+            Assert.Multiple(() =>
+            {
+                Assert.That(v.ColumnWidth, Is.EqualTo(width));
+                Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Pixels));
+            });
         }
 
         [Test]
         public void RelativeWidth_Px()
         {
             var v = new ColumnDimensionAttribute("2px");
-            Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Pixels));
-            Assert.That(v.ColumnWidth, Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Pixels));
+                Assert.That(v.ColumnWidth, Is.EqualTo(2));
+            });
         }
 
         [Test]
         public void RelativeWidth_Start()
         {
             var v = new ColumnDimensionAttribute("3*");
-            Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Star));
-            Assert.That(v.ColumnWidth, Is.EqualTo(3));
+            Assert.Multiple(() =>
+            {
+                Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Star));
+                Assert.That(v.ColumnWidth, Is.EqualTo(3));
+            });
         }
 
         [Test]
@@ -89,8 +98,11 @@ namespace Mairegger.Printing.Tests.Definition
         {
             double width = 1 / param;
             var v = new ColumnDimensionAttribute(width);
-            Assert.AreEqual(width, v.ColumnWidth);
-            Assert.AreEqual(ColumnDimensionType.Star, v.DimensionType);
+            Assert.Multiple(() =>
+            {
+                Assert.That(v.ColumnWidth, Is.EqualTo(width));
+                Assert.That(v.DimensionType, Is.EqualTo(ColumnDimensionType.Star));
+            });
         }
     }
 }
