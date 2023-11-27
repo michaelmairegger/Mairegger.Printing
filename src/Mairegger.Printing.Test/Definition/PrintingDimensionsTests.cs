@@ -42,12 +42,15 @@ namespace Mairegger.Printing.Tests.Definition
                                 };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header | PrintAppendixes.Footer | PrintAppendixes.Summary));
 
-            Assert.That(pd.GetHeightFor(PrintAppendixes.Header, 1, false), Is.EqualTo(1));
-            Assert.That(pd.GetHeightFor(PrintAppendixes.Footer, 1, false), Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(pd.GetHeightFor(PrintAppendixes.Header, 1, false), Is.EqualTo(1));
+                Assert.That(pd.GetHeightFor(PrintAppendixes.Footer, 1, false), Is.EqualTo(2));
 
-            Assert.That(pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(0));
+                Assert.That(pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(0));
 
-            Assert.That(() => pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Throws.ArgumentNullException);
+                Assert.That(() => pd.GetHeightFor(PrintAppendixes.Summary, 1, false), Throws.ArgumentNullException);
+            });
 
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.HeaderDescription));
             Assert.That(pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(3));
@@ -113,12 +116,15 @@ namespace Mairegger.Printing.Tests.Definition
                                 };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
-            Assert.That(pd.GetRangeFor(PrintAppendixes.Header, 1, false), Is.EqualTo(new Printing.Definition.PageRange(10, 20)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(new Printing.Definition.PageRange(20, 50)));
-            Assert.That(pd.GetRangeForBodyGrid(1, false), Is.EqualTo(new Printing.Definition.PageRange(50, 905)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(new Printing.Definition.PageRange(905, 945)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.Footer, 1, false), Is.EqualTo(new Printing.Definition.PageRange(945, 965)));
-            Assert.That(pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false), Is.EqualTo(new Printing.Definition.PageRange(965, 990)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(pd.GetRangeFor(PrintAppendixes.Header, 1, false), Is.EqualTo(new Printing.Definition.PageRange(10, 20)));
+                Assert.That(pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false), Is.EqualTo(new Printing.Definition.PageRange(20, 50)));
+                Assert.That(pd.GetRangeForBodyGrid(1, false), Is.EqualTo(new Printing.Definition.PageRange(50, 905)));
+                Assert.That(pd.GetRangeFor(PrintAppendixes.Summary, 1, false), Is.EqualTo(new Printing.Definition.PageRange(905, 945)));
+                Assert.That(pd.GetRangeFor(PrintAppendixes.Footer, 1, false), Is.EqualTo(new Printing.Definition.PageRange(945, 965)));
+                Assert.That(pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false), Is.EqualTo(new Printing.Definition.PageRange(965, 990)));
+            });
         }
 
         [Test]
@@ -137,7 +143,7 @@ namespace Mairegger.Printing.Tests.Definition
             Size pageSize = new Size(500, 1000);
             SetPageSizeToPrintDimension(printingDimensions, pageSize);
 
-            Assert.AreEqual(pageSize, printingDimensions.PageSize);
+            Assert.That(printingDimensions.PageSize, Is.EqualTo(pageSize));
         }
 
         [Test]
@@ -155,7 +161,7 @@ namespace Mairegger.Printing.Tests.Definition
 
             Size expected = new Size(pageSize.Width - margin.Left - margin.Right, pageSize.Height - margin.Top - margin.Bottom);
 
-            Assert.AreEqual(expected, printingDimensions.PrintablePageSize);
+            Assert.That(printingDimensions.PrintablePageSize, Is.EqualTo(expected));
         }
 
         [Test]
@@ -174,10 +180,13 @@ namespace Mairegger.Printing.Tests.Definition
             double pieces = 5; // sum of TestPrintDimensions
             double widthPerPiece = (totalWidth - 100) / pieces;
 
-            Assert.That(tpd.Column1, Is.EqualTo(1 * widthPerPiece), $"{nameof(tpd.Column1)}");
-            Assert.That(tpd.Column2, Is.EqualTo(3 * widthPerPiece), $"{nameof(tpd.Column2)}");
-            Assert.That(tpd.Column3, Is.EqualTo(100), $"{nameof(tpd.Column3)}");
-            Assert.That(tpd.Column4, Is.EqualTo(1 * widthPerPiece), $"{nameof(tpd.Column4)}");
+            Assert.Multiple(() =>
+            {
+                Assert.That(tpd.Column1, Is.EqualTo(1 * widthPerPiece), $"{nameof(tpd.Column1)}");
+                Assert.That(tpd.Column2, Is.EqualTo(3 * widthPerPiece), $"{nameof(tpd.Column2)}");
+                Assert.That(tpd.Column3, Is.EqualTo(100), $"{nameof(tpd.Column3)}");
+                Assert.That(tpd.Column4, Is.EqualTo(1 * widthPerPiece), $"{nameof(tpd.Column4)}");
+            });
         }
 
         [Test]

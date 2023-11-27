@@ -60,8 +60,11 @@ namespace Mairegger.Printing.Tests.Content
         {
             var printProcessor = new Mock<Printing.PrintProcessor.PrintProcessor>();
 
-            Assert.That(printProcessor.Object.PrintDialog, Is.Not.Null);
-            Assert.That(printProcessor.Object.PageOrientation, Is.EqualTo(PageOrientation.Portrait));
+            Assert.Multiple(() =>
+            {
+                Assert.That(printProcessor.Object.PrintDialog, Is.Not.Null);
+                Assert.That(printProcessor.Object.PageOrientation, Is.EqualTo(PageOrientation.Portrait));
+            });
         }
 
         [Test]
@@ -109,7 +112,7 @@ namespace Mairegger.Printing.Tests.Content
 
             mock.Object.FileName = formattableString;
 
-            CollectionAssert.DoesNotContain(mock.Object.FileName, Path.GetInvalidFileNameChars());
+            Assert.That(mock.Object.FileName, Has.No.Member(Path.GetInvalidFileNameChars()));
         }
 
         [Test]
@@ -158,9 +161,12 @@ namespace Mairegger.Printing.Tests.Content
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
 
-            Assert.That(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
-            Assert.That(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
-            Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+            Assert.Multiple(() =>
+            {
+                Assert.That(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+                Assert.That(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+                Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+            });
         }
 
         [Test]
@@ -263,8 +269,11 @@ namespace Mairegger.Printing.Tests.Content
 
             printProcessor.PrintDialog = printDialog.Object;
 
-            Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()), Is.True);
-            Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()), Is.True);
+                Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.True);
+            });
         }
 
         [Test]
