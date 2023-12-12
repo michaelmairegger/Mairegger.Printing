@@ -23,10 +23,15 @@
   <PropertyGroup Label="NuGet settings">
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
-    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
-    <!-- Duplicate 'PackageVersion' items found -->
     <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors>
     <!-- Duplicate 'PackageReference' items found -->
+    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
+    <!-- Duplicate 'PackageVersion' items found -->
+    <!--<WarningsAsErrors>$(WarningsAsErrors);NU1507</WarningsAsErrors> -->
+    <!-- Multiple package source defined in config file -->
+
+    <!-- A package restored for your project has a known vulnerability. -->
+    <WarningsAsErrors>$(WarningsAsErrors);<!--low-->NU1901;<!--moderate-->NU1902;<!--high-->NU1903;<!--citical-->NU1904</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
