@@ -46,7 +46,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
     <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
-    <PackageVersion Include="NUnit.Analyzers" Version="3.10.0-beta1">
+    <PackageVersion Include="NUnit.Analyzers" Version="3.10.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>

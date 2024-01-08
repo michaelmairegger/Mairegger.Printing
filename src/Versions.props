@@ -12,8 +12,8 @@
   <PropertyGroup>
     <NerdbankGitVersioningVersion>3.6.133</NerdbankGitVersioningVersion>
     <!--Testing -->
-    <MoqVersion>4.20.69</MoqVersion>
-    <NUnitVersion>4.0.0</NUnitVersion>
+    <MoqVersion>4.20.70</MoqVersion>
+    <NUnitVersion>4.0.1</NUnitVersion>
     <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
     <MicrosoftNETTestSdkVersion>17.8.0</MicrosoftNETTestSdkVersion>
     <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
