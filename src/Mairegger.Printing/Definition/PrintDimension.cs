@@ -145,7 +145,11 @@ namespace Mairegger.Printing.Definition
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
                     if (uiElement == null)
                     {
+                        #if NET8_0_OR_GREATER
+                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10nComposite.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
+                        #else
                         throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10n.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
+                        #endif
                     }
                     uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
                     value = uiElement.DesiredSize.Height;

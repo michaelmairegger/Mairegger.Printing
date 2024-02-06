@@ -388,7 +388,7 @@ namespace Mairegger.Printing.Internal
             PositionUiElement(pageContent, contentControl, position);
         }
 
-        private static Brush ComputeBackGround(PrintAppendixes printAppendix)
+        private static SolidColorBrush ComputeBackGround(PrintAppendixes printAppendix)
         {
             var factor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enum.GetValues(typeof(PrintAppendixes)).Length) * (byte)printAppendix));
             return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));

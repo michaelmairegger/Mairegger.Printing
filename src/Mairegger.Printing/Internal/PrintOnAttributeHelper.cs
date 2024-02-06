@@ -47,7 +47,7 @@ namespace Mairegger.Printing.Internal
             }
 
             var printOnPageAttributes = GetPossiblePrintDefinitionAttributes(printA).ToList();
-            if (!printOnPageAttributes.Any())
+            if (printOnPageAttributes.Count == 0)
             {
                 return PrintPartStatus.NotDefined;
             }
