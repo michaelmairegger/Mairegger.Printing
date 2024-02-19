@@ -27,7 +27,7 @@ jobs:
           SONAR_HOST: ${{ secrets.SONAR_HOST }}
 
       - name: Pack
-        run: dotnet pack --configuration Release --no-build /p:Version=${{ steps.build-and-test.outputs.nuget-package-version }} --output artifacts
+        run: dotnet pack --configuration Release --no-build --output artifacts
         working-directory: src
 
       - name: Push with dotnet

@@ -42,11 +42,6 @@ runs:
     shell: pwsh
     run: dotnet tool update dotnet-reportgenerator-globaltool -g
 
-  - name: Restore dependencies
-    shell: pwsh
-    run: dotnet restore
-    working-directory: ${{ inputs.workingDirectory }}
-
   - name: Sonarscanner begin
     shell: pwsh
     run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /v:"${{ steps.nbgv.outputs.NuGetPackageVersion }}" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_HOST }}" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
@@ -55,7 +50,7 @@ runs:
 
   - name: Build
     shell: pwsh
-    run: dotnet build --configuration ${{ inputs.buildConfiguration }} --no-restore
+    run: dotnet build --configuration ${{ inputs.buildConfiguration }}
     working-directory: ${{ inputs.workingDirectory }}
 
   - name: Test
