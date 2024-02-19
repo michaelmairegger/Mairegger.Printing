@@ -1,34 +1,35 @@
 name: Publish
 on:
   push:
-    tags: 
+    tags:
       - 'v*.*.*'
 
 env:
   buildConfiguration: 'Release'
   workingDirectory: 'src'
-  
+
 jobs:
-  build:
+  deploy:
     runs-on: windows-latest
+    environment: production
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - uses: ./.github/actions/build-and-test
-      id: build-and-test
-      with:
-        buildConfiguration: ${{ env.buildConfiguration }}
-        workingDirectory: ${{ env.workingDirectory }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - uses: ./.github/actions/build-and-test
+        id: build-and-test
+        with:
+          buildConfiguration: ${{ env.buildConfiguration }}
+          workingDirectory: ${{ env.workingDirectory }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST: ${{ secrets.SONAR_HOST }}
 
-    - name: Pack
-      run: dotnet pack --configuration Release --no-build /p:Version=${{ steps.build-and-test.outputs.nuget-package-version }} --output artifacts 
-      working-directory: src
-      
-    - name: Push with dotnet
-      run: dotnet nuget push artifacts\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-      working-directory: src
+      - name: Pack
+        run: dotnet pack --configuration Release --no-build /p:Version=${{ steps.build-and-test.outputs.nuget-package-version }} --output artifacts
+        working-directory: src
+
+      - name: Push with dotnet
+        run: dotnet nuget push artifacts\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        working-directory: src

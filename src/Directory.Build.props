@@ -8,11 +8,15 @@
     <PackageProjectUrl>$(GithubUrl)</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>$(GithubUrl)</RepositoryUrl>
+
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup Label="CompilerInformation">

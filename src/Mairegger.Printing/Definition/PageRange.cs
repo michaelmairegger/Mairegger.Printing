@@ -6,6 +6,9 @@
 //     All rights reserved
 // </copyright>
 // -----------------------------------------------------------------------
+
+using System.Globalization;
+
 namespace Mairegger.Printing.Definition
 {
     using System;
@@ -32,7 +35,11 @@ namespace Mairegger.Printing.Definition
         {
             if (fromValue.CompareTo(toValue) > 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(l10n.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
+                #if NET8_0_OR_GREATER
+                throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(CultureInfo.CurrentCulture, l10nComposite.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
+                #else
+                throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(CultureInfo.CurrentCulture, l10n.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
+                #endif
             }
 
             From = fromValue;
@@ -124,8 +131,11 @@ namespace Mairegger.Printing.Definition
             {
                 throw new ArgumentNullException(nameof(input));
             }
-
+#if NETFRAMEWORK
             if (input.Contains(','))
+#else
+            if (input.Contains(',', StringComparison.Ordinal))
+#endif
             {
                 throw new ArgumentException($"Use {nameof(ParseRanges)} for parsing multi-range values");
             }

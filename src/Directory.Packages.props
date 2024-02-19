@@ -1,44 +1,57 @@
 <Project>
+  <Import Project="Versions.props" />
+
   <PropertyGroup Label="Target Frameworks">
-    <NetCoreAppMinimum>net6.0</NetCoreAppMinimum>
-    <NetCoreAppCurrent>net7.0</NetCoreAppCurrent>
-    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <TargetFrameworks>net462;$(NetCoreAppMinimum)-windows;$(NetCoreAppCurrent)-windows</TargetFrameworks>
+    <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,3))</NetCoreAppCurrent>
+    <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,3))</NetCoreAppPrevious>
+    <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,3))</NetCoreAppMinimum>
+
+    <NetCoreWpfCurrent Condition="'$(CurrentNetVersion)' != ''">$(NetCoreAppCurrent)-windows$(WindowsSdkVersion)</NetCoreWpfCurrent>
+    <NetCoreWpfPrevious Condition="'$(PreviousNetVersion)' != ''">$(NetCoreAppPrevious)-windows$(WindowsSdkVersion)</NetCoreWpfPrevious>
+    <NetCoreWpfMinimum Condition="'$(MinimumNetVersion)' != ''">$(NetCoreAppMinimum)-windows$(WindowsSdkVersion)</NetCoreWpfMinimum>
+
+    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Set WPF properties">
+    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum);$(NetFrameworkMinimum)</TargetFrameworks>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+
   <PropertyGroup Label="NuGet settings">
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
-    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
-    <!-- Duplicate 'PackageVersion' items found -->
     <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors>
     <!-- Duplicate 'PackageReference' items found -->
+    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
+    <!-- Duplicate 'PackageVersion' items found -->
+    <!--<WarningsAsErrors>$(WarningsAsErrors);NU1507</WarningsAsErrors> -->
+    <!-- Multiple package source defined in config file -->
+
+    <!-- A package restored for your project has a known vulnerability. -->
+    <WarningsAsErrors>$(WarningsAsErrors);<!--low-->NU1901;<!--moderate-->NU1902;<!--high-->NU1903;<!--citical-->NU1904</WarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.5.107</NerdbankGitVersioningVersion>
-    <!--Testing -->
-    <MoqVersion>4.18.4</MoqVersion>
-    <NUnitVersion>3.13.3</NUnitVersion>
-    <NUnit3TestAdapter>4.4.2</NUnit3TestAdapter>
-    <MicrosoftNETTestSdkVersion>17.5.0</MicrosoftNETTestSdkVersion>
-    <CoverletCollectorVersion>3.2.0</CoverletCollectorVersion>
-    <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
-  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'" Version="$(NerdbankGitVersioningVersion)" />
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
-    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" Condition="'$(IsPackable)' == 'true'"/>
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" Condition="'$(IsPackable)' == 'true'"/>
   </ItemGroup>
   
   <ItemGroup>
-    <PackageVersion Include="JetBrains.Annotations" Version="2022.3.1" />
+    <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
     <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageVersion Include="NUnit.Analyzers" Version="$(NUnitAnalyzers)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
     <PackageVersion Include="NUnit3TestAdapter" Version="$(NUnit3TestAdapter)" />
-    <PackageVersion Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageVersion Include="System.Drawing.Common" Version="8.0.2" />
     <PackageVersion Include="coverlet.collector" Version="$(CoverletCollectorVersion)" />
   </ItemGroup>
 </Project>

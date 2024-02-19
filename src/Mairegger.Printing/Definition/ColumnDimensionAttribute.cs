@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+
 namespace Mairegger.Printing.Definition
 {
     using System;
@@ -50,7 +52,11 @@ namespace Mairegger.Printing.Definition
 
         public ColumnDimensionAttribute(string value)
         {
-            if (value.EndsWith("*"))
+            #if NETFRAMEWORK
+            if (value.EndsWith("*", StringComparison.Ordinal))
+            #else
+            if (value.EndsWith('*'))
+            #endif
             {
                 DimensionType = ColumnDimensionType.Star;
 
@@ -65,7 +71,7 @@ namespace Mairegger.Printing.Definition
                     #endif
                 }
             }
-            else if (value.EndsWith("px"))
+            else if (value.EndsWith("px", StringComparison.Ordinal))
             {
                 DimensionType = ColumnDimensionType.Pixels;
                 #if NET7_0_OR_GREATER
@@ -76,12 +82,16 @@ namespace Mairegger.Printing.Definition
             }
             else
             {
-                throw new ArgumentException(string.Format(l10n.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
+                #if NET8_0_OR_GREATER
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, l10nComposite.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
+                #else
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, l10n.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
+                #endif
             }
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Mairegger.Printing.Definition.ColumnDimensionAttribute" /> class  defining the column width width
+        ///     Initializes a new instance of the <see cref="ColumnDimensionAttribute" /> class  defining the column width width
         ///     the passed value. The column width is either Relative or Absolute.
         /// </summary>
         /// <param name="columnWidth"> The width of the column. </param>

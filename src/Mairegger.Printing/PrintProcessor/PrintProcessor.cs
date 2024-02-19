@@ -84,6 +84,8 @@ namespace Mairegger.Printing.PrintProcessor
             set => _printDimension = value ?? throw new ArgumentNullException(nameof(value));
         }
 
+        private static readonly char[] AdditionalInvalidCharacters = ['.'];
+
         /// <summary>
         ///     Sets the global configuration of the <see cref="IPrintDialog" />. This action is applied before each print.
         /// </summary>
@@ -165,7 +167,7 @@ namespace Mairegger.Printing.PrintProcessor
 
         public bool PrintDocument(string printQueueName)
         {
-            if (printQueueName.StartsWith(@"\\"))
+            if (printQueueName.StartsWith(@"\\", StringComparison.Ordinal))
             {
                 var printServerName = new string(printQueueName.Substring(2).TakeWhile(c => c != '\\').ToArray());
 
@@ -214,10 +216,7 @@ namespace Mairegger.Printing.PrintProcessor
 
         internal static string ReplaceInvalidCharsFromFilename(string path)
         {
-            var invalidFileNameChars = Path.GetInvalidFileNameChars().Union(new[]
-                                                                            {
-                                                                                '.'
-                                                                            }).ToList();
+            var invalidFileNameChars = Path.GetInvalidFileNameChars().Union(AdditionalInvalidCharacters).ToList();
             return path.Aggregate(
                 new StringBuilder(),
                 (sb, c) =>

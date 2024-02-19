@@ -23,15 +23,15 @@ namespace Mairegger.Printing.Tests.Content
     using Moq;
 
     [PrintOnAllPages(PrintAppendixes.Footer)]
-    public class PrintProcessorWithPrintOnAttribute : TestPrintProcessor
+    public class PrintProcessorWithPrintOnAllPages : TestPrintProcessor
     {
         private readonly IList<IPrintContent>? _retrievedContent;
 
-        public PrintProcessorWithPrintOnAttribute()
+        public PrintProcessorWithPrintOnAllPages()
         {
         }
 
-        public PrintProcessorWithPrintOnAttribute(IList<IPrintContent> retrievedContent)
+        public PrintProcessorWithPrintOnAllPages(IList<IPrintContent> retrievedContent)
         {
             _retrievedContent = retrievedContent;
         }

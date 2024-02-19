@@ -31,9 +31,9 @@
   </PropertyGroup>
   <!-- region sourcelink-->
   <PropertyGroup Label="Source Linking">
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <Deterministic>true</Deterministic>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   
   <!--endregion-->

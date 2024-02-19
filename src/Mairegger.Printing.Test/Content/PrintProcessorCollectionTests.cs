@@ -38,7 +38,7 @@ namespace Mairegger.Printing.Tests.Content
                 new Mock<Printing.PrintProcessor.PrintProcessor>()
             };
             PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
-            CollectionAssert.AreEqual(m1.Select(i => i.Object), pp);
+            Assert.That(pp, Is.EqualTo(m1.Select(i => i.Object)).AsCollection);
 
             Assert.That(pp.FileName, Is.EqualTo("FileName"));
         }
@@ -49,11 +49,12 @@ namespace Mairegger.Printing.Tests.Content
             var p = new Mock<Printing.PrintProcessor.PrintProcessor>();
             PrintProcessorCollection pp = new PrintProcessorCollection(p.Object);
 
-            Assert.That(pp.FileName, Is.EqualTo(p.Object.FileName));
-
-            CollectionAssert.Contains(pp, p.Object);
-
-            Assert.That(pp.Count, Is.EqualTo(1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(pp.FileName, Is.EqualTo(p.Object.FileName));
+                Assert.That(pp, Has.Member(p.Object));
+                Assert.That(pp, Has.Count.EqualTo(1));
+            });
         }
 
         [Test]
@@ -72,7 +73,7 @@ namespace Mairegger.Printing.Tests.Content
             Assert.That(ppcoll.FileName, Is.Empty);
 
             ppcoll.FileName = formattableString;
-            CollectionAssert.DoesNotContain(ppcoll.FileName, Path.GetInvalidFileNameChars());
+            Assert.That(ppcoll.FileName, Has.No.Member(Path.GetInvalidFileNameChars()));
         }
 
         [Test]
@@ -117,8 +118,11 @@ namespace Mairegger.Printing.Tests.Content
         public void PrintDocument_NoPrintProcessor_DoesNotPrint()
         {
             var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
-            Assert.That(ppcoll.PrintDocument(), Is.False);
-            Assert.That(ppcoll.PrintDocument(string.Empty), Is.False);
+            Assert.Multiple(() =>
+            {
+                Assert.That(ppcoll.PrintDocument(), Is.False);
+                Assert.That(ppcoll.PrintDocument(string.Empty), Is.False);
+            });
         }
 
         [Test]
@@ -149,9 +153,12 @@ namespace Mairegger.Printing.Tests.Content
 
             testPrintProcessor.PrintDialog = printDialog.Object;
 
-            Assert.That(printProcessor.PrintDocument(), Is.True);
-            Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()), Is.True);
-            Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(printProcessor.PrintDocument(), Is.True);
+                Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()), Is.True);
+                Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.True);
+            });
         }
     }
 }

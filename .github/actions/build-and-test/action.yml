@@ -1,28 +1,33 @@
 name: 'Compile, test'
+description: 'Compiles and tests the project'
 inputs:
   buildConfiguration:
+    description: Defines the build configuration like Debug or Release
     required: true
   workingDirectory:
+    description: Defines the base working directory containing the solution file
     required: true
 
 outputs:
   nuget-package-version:
+    description: Returns the nuget package version
     value: ${{ steps.nbgv.outputs.NuGetPackageVersion }}
 
 runs:
   using: "composite"
   steps:
-  - uses: actions/setup-dotnet@v2
+  - uses: actions/setup-dotnet@v3
     with:
       dotnet-version: |
         6.0.x
         7.0.x
+        8.0.x
       
   - uses: dotnet/nbgv@master
     id: nbgv
 
   - name: Cache SonarCloud packages
-    uses: actions/cache@v1
+    uses: actions/cache@v3
     with:
       path: ~\sonar\cache
       key: ${{ runner.os }}-sonar
@@ -31,6 +36,7 @@ runs:
   - name: Install SonarCloud scanner
     shell: pwsh
     run: dotnet tool update dotnet-sonarscanner -g
+    if: github.ref == 'refs/heads/master'
 
   - name: Install reportgenerator
     shell: pwsh
@@ -43,8 +49,9 @@ runs:
 
   - name: Sonarscanner begin
     shell: pwsh
-    run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /v:"${{ steps.nbgv.outputs.NuGetPackageVersion }}" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
+    run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /v:"${{ steps.nbgv.outputs.NuGetPackageVersion }}" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_HOST }}" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
     working-directory: ${{ inputs.workingDirectory }}
+    if: github.ref == 'refs/heads/master'
 
   - name: Build
     shell: pwsh
@@ -56,10 +63,11 @@ runs:
     run: dotnet test --configuration ${{ inputs.buildConfiguration }} --no-build --collect:"XPlat Code Coverage"
     working-directory: ${{ inputs.workingDirectory }}
 
-  - name: Set up JDK 11
-    uses: actions/setup-java@v1
+  - name: Set up JDK 17
+    uses: actions/setup-java@v3
     with:
-      java-version: 1.11
+      java-version: '17'
+    if: github.ref == 'refs/heads/master'
       
   - name: Sonarscanner end
     shell: pwsh
@@ -67,3 +75,4 @@ runs:
       reportgenerator "-reports:*\TestResults\*\coverage.cobertura.xml" "-targetdir:sonarqubecoverage" "-reporttypes:SonarQube"
       dotnet sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
     working-directory: ${{ inputs.workingDirectory }}
+    if: github.ref == 'refs/heads/master'

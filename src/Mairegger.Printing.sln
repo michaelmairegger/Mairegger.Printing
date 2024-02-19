@@ -17,6 +17,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.targets = Directory.Build.targets
 		Directory.Packages.props = Directory.Packages.props
 		..\README.md = ..\README.md
+		Versions.props = Versions.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{B6545556-5FF3-42A6-92F4-6B609468AE80}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\dependabot.yml = ..\.github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "actions", "actions", "{94032B2D-96F4-4A31-A30C-D0FD6449980B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build-and-test", "build-and-test", "{F5EE117F-3999-4F59-847E-64B9A98AE589}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\actions\build-and-test\action.yml = ..\.github\actions\build-and-test\action.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{1882D2FB-1D59-4E61-9B75-31DAF505CDE5}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\publish.yml = ..\.github\workflows\publish.yml
 	EndProjectSection
 EndProject
 Global
@@ -43,5 +62,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {598A1AB2-360A-415C-A7DA-E0325C6D2E2B}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B6545556-5FF3-42A6-92F4-6B609468AE80} = {FD2A69EE-3F3D-42F2-AFCE-C641D715F9DF}
+		{94032B2D-96F4-4A31-A30C-D0FD6449980B} = {B6545556-5FF3-42A6-92F4-6B609468AE80}
+		{F5EE117F-3999-4F59-847E-64B9A98AE589} = {94032B2D-96F4-4A31-A30C-D0FD6449980B}
+		{1882D2FB-1D59-4E61-9B75-31DAF505CDE5} = {B6545556-5FF3-42A6-92F4-6B609468AE80}
 	EndGlobalSection
 EndGlobal

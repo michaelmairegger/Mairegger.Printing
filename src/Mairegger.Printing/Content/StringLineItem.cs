@@ -111,7 +111,7 @@ namespace Mairegger.Printing.Content
             }
         }
 
-        private UIElement ConstructContent(string text)
+        private Grid ConstructContent(string text)
         {
             var g = new Grid();
             if (Background != null)

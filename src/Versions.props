@@ -1,0 +1,28 @@
+<Project>
+  <PropertyGroup>
+    <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
+    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
+    <CurrentNetVersion>8.0.0</CurrentNetVersion>
+    <PreviousNetVersion>7.0.14</PreviousNetVersion>
+    <MinimumNetVersion>6.0.25</MinimumNetVersion>
+    <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
+    <NetFrameworkMinimum>net462</NetFrameworkMinimum>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NerdbankGitVersioningVersion>3.6.133</NerdbankGitVersioningVersion>
+    <!--Testing -->
+    <MoqVersion>4.20.70</MoqVersion>
+    <NUnitVersion>4.0.1</NUnitVersion>
+    <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
+    <NUnitAnalyzers>4.0.1</NUnitAnalyzers>
+    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
+    <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
+    <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Allow to overwrite versions from base Versions.props">
+    <ParentDirectoryVersionsPropsPath>$([MSBuild]::GetPathOfFileAbove('Versions.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryVersionsPropsPath>
+  </PropertyGroup>
+  <Import Project="$(ParentDirectoryVersionsPropsPath)" Condition="'$(ParentDirectoryVersionsPropsPath)' != '' and Exists($(ParentDirectoryVersionsPropsPath))" />
+</Project>

@@ -35,7 +35,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void CheckPrintDimensions_HasPrintDimensionsSet()
         {
-            var print = new PrintProcessorWithPrintOnAttribute();
+            var print = new PrintProcessorWithPrintOnAllPages();
 
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(true);
@@ -60,15 +60,18 @@ namespace Mairegger.Printing.Tests.Content
         {
             var printProcessor = new Mock<Printing.PrintProcessor.PrintProcessor>();
 
-            Assert.That(printProcessor.Object.PrintDialog, Is.Not.Null);
-            Assert.That(printProcessor.Object.PageOrientation, Is.EqualTo(PageOrientation.Portrait));
+            Assert.Multiple(() =>
+            {
+                Assert.That(printProcessor.Object.PrintDialog, Is.Not.Null);
+                Assert.That(printProcessor.Object.PageOrientation, Is.EqualTo(PageOrientation.Portrait));
+            });
         }
 
         [Test]
         public void CustomAlternatingRowColors([Random(10, 20, 1)] int itemCount, [Random(3, 7, 1)] int differentColors)
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+            var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = itemCount,
                          IsAlternatingRowColor = true
@@ -109,7 +112,7 @@ namespace Mairegger.Printing.Tests.Content
 
             mock.Object.FileName = formattableString;
 
-            CollectionAssert.DoesNotContain(mock.Object.FileName, Path.GetInvalidFileNameChars());
+            Assert.That(mock.Object.FileName, Has.No.Member(Path.GetInvalidFileNameChars()));
         }
 
         [Test]
@@ -146,7 +149,7 @@ namespace Mairegger.Printing.Tests.Content
         public void IsAlternatingRowColor_False_NotColoring()
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+            var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = 3,
                          IsAlternatingRowColor = false
@@ -158,16 +161,19 @@ namespace Mairegger.Printing.Tests.Content
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
 
-            Assert.That(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
-            Assert.That(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
-            Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+            Assert.Multiple(() =>
+            {
+                Assert.That(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+                Assert.That(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+                Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty), Is.EqualTo(null));
+            });
         }
 
         [Test]
         public void IsAlternatingRowColor_True_Coloring()
         {
             IList<IPrintContent> retrievedContent = new List<IPrintContent>();
-            var pp = new PrintProcessorWithPrintOnAttribute(retrievedContent)
+            var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = 10,
                          IsAlternatingRowColor = true
@@ -221,7 +227,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void PrintDimension()
         {
-            var pp = new PrintProcessorWithPrintOnAttribute();
+            var pp = new PrintProcessorWithPrintOnAllPages();
             var pd = new PrintDimension();
             pp.PrintDimension = pd;
             Assert.That(pp.PrintDimension, Is.EqualTo(pd));
@@ -263,8 +269,11 @@ namespace Mairegger.Printing.Tests.Content
 
             printProcessor.PrintDialog = printDialog.Object;
 
-            Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()), Is.True);
-            Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()), Is.True);
+                Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]), Is.True);
+            });
         }
 
         [Test]
