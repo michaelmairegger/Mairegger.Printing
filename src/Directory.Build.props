@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- https://github.com/dotnet/Nerdbank.GitVersioning/blob/master/doc/msbuild.md#reducing-getbuildversion-invocations -->
+    <!-- https://github.com/dotnet/Nerdbank.GitVersioning/blob/main/doc/msbuild.md#reducing-getbuildversion-invocations -->
     <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)..\</GitVersionBaseDirectory>
   </PropertyGroup>
 
