@@ -16,7 +16,7 @@
     <NUnitVersion>4.0.1</NUnitVersion>
     <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
     <NUnitAnalyzers>4.0.1</NUnitAnalyzers>
-    <MicrosoftNETTestSdkVersion>17.8.0</MicrosoftNETTestSdkVersion>
+    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
     <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
   </PropertyGroup>
