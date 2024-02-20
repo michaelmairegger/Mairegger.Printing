@@ -63,8 +63,9 @@ runs:
     uses: actions/setup-java@v3
     with:
       java-version: '17'
+      distribution: 'temurin'
     if: github.ref == 'refs/heads/main'
-      
+
   - name: Sonarscanner end
     shell: pwsh
     run: |
