@@ -36,26 +36,22 @@ runs:
   - name: Install SonarCloud scanner
     shell: pwsh
     run: dotnet tool update dotnet-sonarscanner -g
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
 
   - name: Install reportgenerator
     shell: pwsh
     run: dotnet tool update dotnet-reportgenerator-globaltool -g
-
-  - name: Restore dependencies
-    shell: pwsh
-    run: dotnet restore
-    working-directory: ${{ inputs.workingDirectory }}
+    if: github.ref == 'refs/heads/main'
 
   - name: Sonarscanner begin
     shell: pwsh
     run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /v:"${{ steps.nbgv.outputs.NuGetPackageVersion }}" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_HOST }}" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
     working-directory: ${{ inputs.workingDirectory }}
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
 
   - name: Build
     shell: pwsh
-    run: dotnet build --configuration ${{ inputs.buildConfiguration }} --no-restore
+    run: dotnet build --configuration ${{ inputs.buildConfiguration }}
     working-directory: ${{ inputs.workingDirectory }}
 
   - name: Test
@@ -67,12 +63,13 @@ runs:
     uses: actions/setup-java@v3
     with:
       java-version: '17'
-    if: github.ref == 'refs/heads/master'
-      
+      distribution: 'temurin'
+    if: github.ref == 'refs/heads/main'
+
   - name: Sonarscanner end
     shell: pwsh
     run: |
       reportgenerator "-reports:*\TestResults\*\coverage.cobertura.xml" "-targetdir:sonarqubecoverage" "-reporttypes:SonarQube"
       dotnet sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
     working-directory: ${{ inputs.workingDirectory }}
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'

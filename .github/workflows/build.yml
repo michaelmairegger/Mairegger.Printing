@@ -24,6 +24,9 @@ jobs:
       with:
         buildConfiguration: ${{ env.buildConfiguration }}
         workingDirectory: ${{ env.workingDirectory }}
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST: ${{ secrets.SONAR_HOST }}
 
   build-ci:
     if: github.ref != 'refs/heads/main'
