@@ -13,7 +13,7 @@
     <NerdbankGitVersioningVersion>3.6.133</NerdbankGitVersioningVersion>
     <!--Testing -->
     <MoqVersion>4.20.70</MoqVersion>
-    <NUnitVersion>4.0.1</NUnitVersion>
+    <NUnitVersion>4.1.0</NUnitVersion>
     <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
     <NUnitAnalyzers>4.0.1</NUnitAnalyzers>
     <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
