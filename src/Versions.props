@@ -15,7 +15,7 @@
     <MoqVersion>4.20.70</MoqVersion>
     <NUnitVersion>4.1.0</NUnitVersion>
     <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
-    <NUnitAnalyzers>4.0.1</NUnitAnalyzers>
+    <NUnitAnalyzers>4.2.0</NUnitAnalyzers>
     <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
     <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
