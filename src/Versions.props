@@ -3,7 +3,7 @@
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
     <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
     <CurrentNetVersion>8.0.5</CurrentNetVersion>
-    <PreviousNetVersion>7.0.14</PreviousNetVersion>
+    <PreviousNetVersion /> <!-- net 7 is out of support -->
     <MinimumNetVersion>6.0.30</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
     <NetFrameworkMinimum>net462</NetFrameworkMinimum>
