@@ -10,9 +10,9 @@
     <NetCoreWpfPrevious Condition="'$(PreviousNetVersion)' != ''">$(NetCoreAppPrevious)-windows$(WindowsSdkVersion)</NetCoreWpfPrevious>
     <NetCoreWpfMinimum Condition="'$(MinimumNetVersion)' != ''">$(NetCoreAppMinimum)-windows$(WindowsSdkVersion)</NetCoreWpfMinimum>
 
-    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</AspNetCoreVersion>
-    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</AspNetCoreVersion>
-    <AspNetCoreVersion Condition="$(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="'$(CurrentNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="'$(PreviousNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</AspNetCoreVersion>
+    <AspNetCoreVersion Condition="'$(MinimumNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Set WPF properties">
