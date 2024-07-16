@@ -38,7 +38,6 @@
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'" Version="$(NerdbankGitVersioningVersion)" />
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
-    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" Condition="'$(IsPackable)' == 'true'"/>
   </ItemGroup>
 
   <ItemGroup>
