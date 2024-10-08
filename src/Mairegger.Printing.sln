@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mairegger.Printing", "Mairegger.Printing\Mairegger.Printing.csproj", "{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mairegger.Printing", "Mairegger.Printing\Mairegger.Printing.csproj", "{0A7F0FD0-F7F4-415E-8494-E1CA351EF82F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleProject", "SampleProject\SampleProject.csproj", "{D5374955-B77F-4C54-B3DA-616723DDC5D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleProject", "SampleProject\SampleProject.csproj", "{D5374955-B77F-4C54-B3DA-616723DDC5D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mairegger.Printing.Tests", "Mairegger.Printing.Test\Mairegger.Printing.Tests.csproj", "{5C6303B0-8F86-495B-A4FF-EAFB52849CE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mairegger.Printing.Tests", "Mairegger.Printing.Test\Mairegger.Printing.Tests.csproj", "{5C6303B0-8F86-495B-A4FF-EAFB52849CE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FD2A69EE-3F3D-42F2-AFCE-C641D715F9DF}"
 	ProjectSection(SolutionItems) = preProject
