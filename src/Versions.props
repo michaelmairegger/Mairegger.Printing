@@ -5,7 +5,7 @@
     <CurrentNetVersion>8.0.8</CurrentNetVersion>
     <PreviousNetVersion /> <!-- net 7 is out of support -->
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>6.0.30</MinimumNetVersion>
+    <MinimumNetVersion>6.0.35</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
     <NetFrameworkMinimum>net462</NetFrameworkMinimum>
   </PropertyGroup>
