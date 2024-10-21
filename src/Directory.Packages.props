@@ -34,9 +34,15 @@
     <WarningsAsErrors>$(WarningsAsErrors);<!--low-->NU1901;<!--moderate-->NU1902;<!--high-->NU1903;<!--citical-->NU1904</WarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Label="Source commit tagging" Condition="'$(Configuration)' != 'Release'">
+    <!-- Note: This prevents rebuilding all projects because of a commit, since build steps injects version information into projects. -->
+    <NBGV_GitEngine>Disabled</NBGV_GitEngine>
+    <EnableSourceLink>false</EnableSourceLink> <!-- prevents generation of $(ProjectName).sourcelink.json -->
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
-    <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Condition="'$(Configuration)' == 'Release'" Version="$(NerdbankGitVersioningVersion)" />
+    <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Version="$(NerdbankGitVersioningVersion)" />
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
   </ItemGroup>
 
