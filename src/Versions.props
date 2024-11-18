@@ -1,11 +1,11 @@
 <Project>
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>8.0.8</CurrentNetVersion>
-    <PreviousNetVersion /> <!-- net 7 is out of support -->
+    <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
+    <CurrentNetVersion>9.0.0</CurrentNetVersion>
+    <PreviousNetVersion/>
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>6.0.35</MinimumNetVersion>
+    <MinimumNetVersion>8.0.11</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
     <NetFrameworkMinimum>net462</NetFrameworkMinimum>
   </PropertyGroup>
