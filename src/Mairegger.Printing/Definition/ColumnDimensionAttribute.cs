@@ -98,10 +98,14 @@ namespace Mairegger.Printing.Definition
         /// <param name="dimensionType"> The type of the width (Relative or Absolute). </param>
         public ColumnDimensionAttribute(double columnWidth, ColumnDimensionType dimensionType)
         {
+            #if NETFRAMEWORK
             if (columnWidth <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(columnWidth));
             }
+            #else
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(columnWidth);
+            #endif
 
             ColumnWidth = columnWidth;
             DimensionType = dimensionType;

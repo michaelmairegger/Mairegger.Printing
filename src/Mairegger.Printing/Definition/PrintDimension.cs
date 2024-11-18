@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Globalization;
+using EnumsNET;
 
 namespace Mairegger.Printing.Definition
 {
@@ -56,7 +57,7 @@ namespace Mairegger.Printing.Definition
         {
             Margin = margin;
 
-            var printAppendixes = Enum.GetValues(typeof(PrintAppendixes)).Cast<PrintAppendixes>();
+            var printAppendixes = Enums.GetValues<PrintAppendixes>();
 
             foreach (var item in printAppendixes)
             {
@@ -125,10 +126,14 @@ namespace Mairegger.Printing.Definition
         /// <exception cref="ArgumentNullException"><paramref name="condition"/> is null.</exception>
         public void RecalculateHeightValueWhen(Func<bool> condition, PrintAppendixes printAppendix)
         {
+            #if NETFRAMEWORK
             if (condition == null)
             {
                 throw new ArgumentNullException(nameof(condition));
             }
+            #else
+            ArgumentNullException.ThrowIfNull(condition);
+            #endif
             if (condition())
             {
                 SetHeightValue(printAppendix, null);

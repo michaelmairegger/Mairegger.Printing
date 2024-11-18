@@ -127,10 +127,15 @@ namespace Mairegger.Printing.Definition
         /// </example>
         public static PageRange Parse(string input)
         {
+            #if NETFRAMEWORK
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
+            #else
+            ArgumentNullException.ThrowIfNull(input);
+            #endif
+
 #if NETFRAMEWORK
             if (input.Contains(','))
 #else

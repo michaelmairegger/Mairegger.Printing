@@ -7,6 +7,8 @@
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
     <MinimumNetVersion>8.0.11</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
+
+    <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->
     <NetFrameworkMinimum>net462</NetFrameworkMinimum>
   </PropertyGroup>
 
