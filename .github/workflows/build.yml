@@ -2,9 +2,7 @@ name: Build
 on:
   push:
     branches:
-    - main
-    - dev
-    - migrate/net8
+    - '*'
 
 env:
   buildConfiguration: 'Release'
