@@ -16,39 +16,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-  - uses: actions/setup-dotnet@v3
-    with:
-      dotnet-version: |
-        6.0.x
-        7.0.x
-        8.0.x
-      
-  - uses: dotnet/nbgv@master
-    id: nbgv
-
-  - name: Cache SonarCloud packages
-    uses: actions/cache@v3
-    with:
-      path: ~\sonar\cache
-      key: ${{ runner.os }}-sonar
-      restore-keys: ${{ runner.os }}-sonar
-
-  - name: Install SonarCloud scanner
-    shell: pwsh
-    run: dotnet tool update dotnet-sonarscanner -g
-    if: github.ref == 'refs/heads/main'
-
-  - name: Install reportgenerator
-    shell: pwsh
-    run: dotnet tool update dotnet-reportgenerator-globaltool -g
-    if: github.ref == 'refs/heads/main'
-
-  - name: Sonarscanner begin
-    shell: pwsh
-    run: dotnet sonarscanner begin /k:"mairegger.printing" /o:"mairegger" /v:"${{ steps.nbgv.outputs.NuGetPackageVersion }}" /d:sonar.login="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_HOST }}" /d:sonar.coverageReportPaths="sonarqubecoverage\SonarQube.xml"
-    working-directory: ${{ inputs.workingDirectory }}
-    if: github.ref == 'refs/heads/main'
-
   - name: Build
     shell: pwsh
     run: dotnet build --configuration ${{ inputs.buildConfiguration }}
@@ -58,18 +25,3 @@ runs:
     shell: pwsh
     run: dotnet test --configuration ${{ inputs.buildConfiguration }} --no-build --collect:"XPlat Code Coverage"
     working-directory: ${{ inputs.workingDirectory }}
-
-  - name: Set up JDK 17
-    uses: actions/setup-java@v3
-    with:
-      java-version: '17'
-      distribution: 'temurin'
-    if: github.ref == 'refs/heads/main'
-
-  - name: Sonarscanner end
-    shell: pwsh
-    run: |
-      reportgenerator "-reports:*\TestResults\*\coverage.cobertura.xml" "-targetdir:sonarqubecoverage" "-reporttypes:SonarQube"
-      dotnet sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
-    working-directory: ${{ inputs.workingDirectory }}
-    if: github.ref == 'refs/heads/main'
