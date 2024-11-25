@@ -1,11 +1,11 @@
 // Copyright 2016 Michael Mairegger
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -64,28 +64,28 @@ namespace Mairegger.Printing.Definition
 
                 if (value.Length > 1)
                 {
-                    #if NET7_0_OR_GREATER
-                    ColumnWidth = double.Parse(value.AsSpan(0, value.Length - 1), CultureInfo.InvariantCulture);
-                    #else
+                    #if NETFRAMEWORK
                     ColumnWidth = double.Parse(value.Substring(0, value.Length - 1), CultureInfo.InvariantCulture);
+                    #else
+                    ColumnWidth = double.Parse(value.AsSpan(0, value.Length - 1), CultureInfo.InvariantCulture);
                     #endif
                 }
             }
             else if (value.EndsWith("px", StringComparison.Ordinal))
             {
                 DimensionType = ColumnDimensionType.Pixels;
-                #if NET7_0_OR_GREATER
-                ColumnWidth = double.Parse(value.AsSpan(0, value.Length - 2), CultureInfo.InvariantCulture);
-                #else
+                #if NETFRAMEWORK
                 ColumnWidth = double.Parse(value.Substring(0, value.Length - 2), CultureInfo.InvariantCulture);
+                #else
+                ColumnWidth = double.Parse(value.AsSpan(0, value.Length - 2), CultureInfo.InvariantCulture);
                 #endif
             }
             else
             {
-                #if NET8_0_OR_GREATER
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, l10nComposite.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
-                #else
+                #if NETFRAMEWORK
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, l10n.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
+                #else
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, l10nComposite.ColumnDimensionAttribute_ColumnDimensionAttribute__0__is_no_valid_column_dimension, value), nameof(value));
                 #endif
             }
         }
@@ -98,10 +98,14 @@ namespace Mairegger.Printing.Definition
         /// <param name="dimensionType"> The type of the width (Relative or Absolute). </param>
         public ColumnDimensionAttribute(double columnWidth, ColumnDimensionType dimensionType)
         {
+            #if NETFRAMEWORK
             if (columnWidth <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(columnWidth));
             }
+            #else
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(columnWidth);
+            #endif
 
             ColumnWidth = columnWidth;
             DimensionType = dimensionType;
