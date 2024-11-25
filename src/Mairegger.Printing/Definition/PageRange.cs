@@ -35,10 +35,10 @@ namespace Mairegger.Printing.Definition
         {
             if (fromValue.CompareTo(toValue) > 0)
             {
-                #if NET8_0_OR_GREATER
-                throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(CultureInfo.CurrentCulture, l10nComposite.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
-                #else
+                #if NETFRAMEWORK
                 throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(CultureInfo.CurrentCulture, l10n.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
+                #else
+                throw new ArgumentOutOfRangeException(nameof(fromValue), string.Format(CultureInfo.CurrentCulture, l10nComposite.PageRange_PageRange__0__must_be_lower_or_equal_than__1_, nameof(fromValue), nameof(toValue)));
                 #endif
             }
 
@@ -127,10 +127,15 @@ namespace Mairegger.Printing.Definition
         /// </example>
         public static PageRange Parse(string input)
         {
+            #if NETFRAMEWORK
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
+            #else
+            ArgumentNullException.ThrowIfNull(input);
+            #endif
+
 #if NETFRAMEWORK
             if (input.Contains(','))
 #else

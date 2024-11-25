@@ -1,11 +1,11 @@
 // Copyright 2016 Michael Mairegger
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -70,7 +70,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void CustomAlternatingRowColors([Random(10, 20, 1)] int itemCount, [Random(3, 7, 1)] int differentColors)
         {
-            IList<IPrintContent> retrievedContent = new List<IPrintContent>();
+            var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = itemCount,
@@ -148,7 +148,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void IsAlternatingRowColor_False_NotColoring()
         {
-            IList<IPrintContent> retrievedContent = new List<IPrintContent>();
+            var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = 3,
@@ -172,7 +172,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void IsAlternatingRowColor_True_Coloring()
         {
-            IList<IPrintContent> retrievedContent = new List<IPrintContent>();
+            var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
                      {
                          ItemCount = 10,
@@ -201,7 +201,7 @@ namespace Mairegger.Printing.Tests.Content
                                  {
                                      PrintDialog = printDialog.Object
                                  };
-            
+
             Assert.That(printProcessor.PrintDocument(), Is.True);
         }
 
