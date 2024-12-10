@@ -361,13 +361,7 @@ namespace Mairegger.Printing.Internal
                                              {
                                                  new Rectangle
                                                  {
-                                                     StrokeDashArray = new DoubleCollection(
-                                                         new double[]
-                                                         {
-                                                             20,
-                                                             20
-                                                         }
-                                                     ),
+                                                     StrokeDashArray = new DoubleCollection([20, 20]),
                                                      Stroke = Brushes.Black,
                                                      StrokeThickness = 2d
                                                  },

@@ -22,7 +22,7 @@ namespace Mairegger.Printing.Internal
 
     internal class PrintOnAttributeHelper
     {
-        private readonly List<IPrintPartDefinition> _printOnAttributes = new List<IPrintPartDefinition>();
+        private readonly List<IPrintPartDefinition> _printOnAttributes = [];
 
         public void AddAttribute(IPrintPartDefinition printPartDefinition)
         {

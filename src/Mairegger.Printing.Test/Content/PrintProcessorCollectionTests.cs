@@ -1,11 +1,11 @@
 // Copyright 2016 Michael Mairegger
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,13 +30,7 @@ namespace Mairegger.Printing.Tests.Content
         [Test]
         public void Ctor()
         {
-            Mock<Printing.PrintProcessor.PrintProcessor>[] m1 =
-            {
-                new Mock<Printing.PrintProcessor.PrintProcessor>(),
-                new Mock<Printing.PrintProcessor.PrintProcessor>(),
-                new Mock<Printing.PrintProcessor.PrintProcessor>(),
-                new Mock<Printing.PrintProcessor.PrintProcessor>()
-            };
+            Mock<Printing.PrintProcessor.PrintProcessor>[] m1 = [new(), new(), new(), new()];
             PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
             Assert.That(pp, Is.EqualTo(m1.Select(i => i.Object)).AsCollection);
 
@@ -86,18 +80,18 @@ namespace Mairegger.Printing.Tests.Content
 
             windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Never);
         }
-        
+
         [Test]
         [Apartment(ApartmentState.STA)]
         public void PrintEverything()
         {
             var printDialog = new Mock<IPrintDialog>();
             var printProcessor = new PrintEverything() { PrintDialog = printDialog.Object };
-            
+
             var windowProvider = new Mock<IWindowProvider>();
             Assert.That(printProcessor.PrintDocument(), Is.True);
             printProcessor.PreviewDocument(windowProvider.Object);
-            
+
             windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Once);
         }
 
