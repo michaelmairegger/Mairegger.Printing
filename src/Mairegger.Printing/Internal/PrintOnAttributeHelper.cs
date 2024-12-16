@@ -1,11 +1,11 @@
 // Copyright 2016 Michael Mairegger
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,14 +22,18 @@ namespace Mairegger.Printing.Internal
 
     internal class PrintOnAttributeHelper
     {
-        private readonly List<IPrintPartDefinition> _printOnAttributes = new List<IPrintPartDefinition>();
+        private readonly List<IPrintPartDefinition> _printOnAttributes = [];
 
         public void AddAttribute(IPrintPartDefinition printPartDefinition)
         {
+            #if NETFRAMEWORK
             if (printPartDefinition == null)
             {
                 throw new ArgumentNullException(nameof(printPartDefinition));
             }
+            #else
+            ArgumentNullException.ThrowIfNull(printPartDefinition);
+            #endif
             Debug.WriteLine("PRINTING: Found {0} for {1}", printPartDefinition.GetType().Name, printPartDefinition.PrintAppendixes);
             _printOnAttributes.Add(printPartDefinition);
         }
@@ -41,10 +45,14 @@ namespace Mairegger.Printing.Internal
 
         public PrintPartStatus IsPrintOnPage(PrintAppendixes printA, int page)
         {
+            #if NETFRAMEWORK
             if (page <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(page));
             }
+            #else
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(page);
+            #endif
 
             var printOnPageAttributes = GetPossiblePrintDefinitionAttributes(printA).ToList();
             if (printOnPageAttributes.Count == 0)
