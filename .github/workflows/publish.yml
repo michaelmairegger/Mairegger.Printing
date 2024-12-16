@@ -22,9 +22,6 @@ jobs:
         with:
           buildConfiguration: ${{ env.buildConfiguration }}
           workingDirectory: ${{ env.workingDirectory }}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST: ${{ secrets.SONAR_HOST }}
 
       - name: Pack
         run: dotnet pack --configuration Release --no-build --output artifacts

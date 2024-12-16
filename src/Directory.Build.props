@@ -11,10 +11,11 @@
 
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
 
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>

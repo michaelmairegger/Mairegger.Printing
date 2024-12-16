@@ -10,7 +10,7 @@
     <Reference Include="ReachFramework" />
     <Reference Include="System.Printing" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Properties\l10n.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -26,15 +26,11 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Enums.NET" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'" Label="Deterministic Builds">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
-  <!-- region sourcelink-->
-  <PropertyGroup Label="Source Linking">
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-  
-  <!--endregion-->
 </Project>

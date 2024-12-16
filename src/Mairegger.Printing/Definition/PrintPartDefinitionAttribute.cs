@@ -1,11 +1,11 @@
 // Copyright 2016 Michael Mairegger
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ namespace Mairegger.Printing.Definition
         public const int LastPage = int.MaxValue;
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        private readonly List<PageRange> _validPrintRanges = new List<PageRange>();
+        private readonly List<PageRange> _validPrintRanges = [];
 
         protected PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, PageRange pages)
             : this(printAppendixes)
@@ -48,7 +48,7 @@ namespace Mairegger.Printing.Definition
         protected PrintPartDefinitionAttribute(PrintAppendixes printAppendixes, params int[] definedPages)
         {
             PrintAppendixes = printAppendixes;
-            
+
             var ranges = definedPages.Select(e => PageRange.FromPoint(e)).ToArray();
             AddRange(ranges);
         }

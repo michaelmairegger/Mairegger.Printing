@@ -1,23 +1,26 @@
 <Project>
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
-    <!-- .NET Support Dates https://docs.microsoft.com/de-de/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>8.0.0</CurrentNetVersion>
-    <PreviousNetVersion>7.0.14</PreviousNetVersion>
-    <MinimumNetVersion>6.0.25</MinimumNetVersion>
+    <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
+    <CurrentNetVersion>9.0.0</CurrentNetVersion>
+    <PreviousNetVersion/>
+    <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
+    <MinimumNetVersion>8.0.11</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
+
+    <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->
     <NetFrameworkMinimum>net462</NetFrameworkMinimum>
   </PropertyGroup>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.6.133</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.6.146</NerdbankGitVersioningVersion>
     <!--Testing -->
-    <MoqVersion>4.20.70</MoqVersion>
-    <NUnitVersion>4.0.1</NUnitVersion>
-    <NUnit3TestAdapter>4.5.0</NUnit3TestAdapter>
-    <NUnitAnalyzers>4.0.1</NUnitAnalyzers>
-    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
-    <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
+    <MoqVersion>4.20.72</MoqVersion>
+    <NUnitVersion>4.2.2</NUnitVersion>
+    <NUnit3TestAdapter>4.6.0</NUnit3TestAdapter>
+    <NUnitAnalyzers>4.4.0</NUnitAnalyzers>
+    <MicrosoftNETTestSdkVersion>17.12.0</MicrosoftNETTestSdkVersion>
+    <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
   </PropertyGroup>
 
