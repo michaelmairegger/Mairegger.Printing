@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.6.146</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.7.112</NerdbankGitVersioningVersion>
     <!--Testing -->
     <MoqVersion>4.20.72</MoqVersion>
     <NUnitVersion>4.2.2</NUnitVersion>
