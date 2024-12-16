@@ -1,0 +1,5 @@
+[bugtraq "CVE"]
+    url = https://nvd.nist.gov/vuln/detail/%BUGID%
+    logfilterregex = "CVE-\\d{4}-\\d+"
+    loglinkregex = "CVE-\\d{4}-\\d+"
+    logregex = "CVE-\\d{4}-\\d+"

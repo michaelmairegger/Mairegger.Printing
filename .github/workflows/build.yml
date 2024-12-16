@@ -2,34 +2,14 @@ name: Build
 on:
   push:
     branches:
-    - main
-    - dev
-    - migrate/net8
+    - '**'
 
 env:
   buildConfiguration: 'Release'
   workingDirectory: 'src'
 
 jobs:
-  build-production:
-    if: github.ref == 'refs/heads/main'
-    runs-on: windows-latest
-    environment: production
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-    - uses: ./.github/actions/build-and-test
-      with:
-        buildConfiguration: ${{ env.buildConfiguration }}
-        workingDirectory: ${{ env.workingDirectory }}
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST: ${{ secrets.SONAR_HOST }}
-
   build-ci:
-    if: github.ref != 'refs/heads/main'
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
