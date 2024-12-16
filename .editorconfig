@@ -284,3 +284,5 @@ dotnet_diagnostic.CA1708.severity = error
 
 #CA1707: Identifiers should not contain underscores
 dotnet_diagnostic.CA1707.severity = error
+
+resharper_redundant_name_qualifier_highlighting = none
