@@ -16,6 +16,7 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseArtifactsOutput>true</UseArtifactsOutput>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)..\artifacts</ArtifactsPath>
 
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
