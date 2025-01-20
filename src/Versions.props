@@ -20,7 +20,7 @@
     <NUnit3TestAdapter>4.6.0</NUnit3TestAdapter>
     <NUnitAnalyzers>4.4.0</NUnitAnalyzers>
     <MicrosoftNETTestSdkVersion>17.12.0</MicrosoftNETTestSdkVersion>
-    <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
+    <CoverletCollectorVersion>6.0.4</CoverletCollectorVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
   </PropertyGroup>
 
