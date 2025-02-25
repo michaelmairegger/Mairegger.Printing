@@ -1,25 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+
+    <!-- see: https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-platform-integration-dotnet-test -->
+    <EnableNUnitRunner>true</EnableNUnitRunner>
+    <OutputType>Exe</OutputType>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+
+    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Testing.Platform" />
     <PackageReference Include="Moq" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" />
+    <!--
+      Coverlet collector isn't compatible with NUnit runner, you can
+      either switch to Microsoft CodeCoverage (as shown below),
+      or switch to be using coverlet global tool
+      https://github.com/coverlet-coverage/coverlet#net-global-tool-guide-suffers-from-possible-known-issue
+    -->
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+
+
     <Reference Include="System.Printing" Condition="$(TargetFramework.StartsWith('net4'))" />
     <Reference Include="ReachFramework" Condition="$(TargetFramework.StartsWith('net4'))" />
     <PackageReference Include="System.Drawing.Common" Condition="!$(TargetFramework.StartsWith('net4'))" />
-    <PackageReference Include="coverlet.collector">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
-  
+
   <PropertyGroup>
     <!--otherwise no code coverage files are generated -->
     <PreserveCompilationContext>true</PreserveCompilationContext>

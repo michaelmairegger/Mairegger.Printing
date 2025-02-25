@@ -23,5 +23,5 @@ runs:
 
   - name: Test
     shell: pwsh
-    run: dotnet test --configuration ${{ inputs.buildConfiguration }} --no-build --collect:"XPlat Code Coverage"
+    run: dotnet test --configuration ${{ inputs.buildConfiguration }} -- --coverage --coverage-output-format cobertura
     working-directory: ${{ inputs.workingDirectory }}
