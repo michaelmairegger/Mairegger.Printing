@@ -9,6 +9,10 @@
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
 
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+
+    <!-- this is only because of NetCoreAppMinimum is needed below in references -->
+    <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppPrevious)</NetCoreAppMinimum>
+    <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppCurrent)</NetCoreAppMinimum>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +32,6 @@
       https://github.com/coverlet-coverage/coverlet#net-global-tool-guide-suffers-from-possible-known-issue
     -->
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
-
 
     <Reference Include="System.Printing" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
     <Reference Include="ReachFramework" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
