@@ -30,9 +30,9 @@
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
 
 
-    <Reference Include="System.Printing" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <Reference Include="ReachFramework" Condition="$(TargetFramework.StartsWith('net4'))" />
-    <PackageReference Include="System.Drawing.Common" Condition="!$(TargetFramework.StartsWith('net4'))" />
+    <Reference Include="System.Printing" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
+    <Reference Include="ReachFramework" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
+    <PackageReference Include="System.Drawing.Common" Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
   </ItemGroup>
 
   <PropertyGroup>
