@@ -2,10 +2,10 @@
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
     <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>9.0.2</CurrentNetVersion>
+    <CurrentNetVersion>9.0.3</CurrentNetVersion>
     <PreviousNetVersion/>
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>8.0.13</MinimumNetVersion>
+    <MinimumNetVersion>8.0.14</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
 
     <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->

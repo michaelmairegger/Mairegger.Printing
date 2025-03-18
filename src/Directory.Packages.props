@@ -49,8 +49,8 @@
 
   <ItemGroup Label="Testing">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.1" />
-    <PackageVersion Include="Microsoft.Testing.Platform" Version="1.6.2" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.2" />
+    <PackageVersion Include="Microsoft.Testing.Platform" Version="1.6.3" />
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
     <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
     <PackageVersion Include="NUnit.Analyzers" Version="$(NUnitAnalyzers)" />
