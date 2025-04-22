@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Bogus;
+
 namespace Mairegger.Printing.Tests.Content
 {
     using System;
@@ -28,6 +30,8 @@ namespace Mairegger.Printing.Tests.Content
 
     public class PrintProcessorTests
     {
+        private static readonly Faker faker = new Faker();
+
         [StaFact]
         public void CheckPrintDimensions_HasPrintDimensionsSet()
         {
@@ -75,10 +79,9 @@ namespace Mairegger.Printing.Tests.Content
                      };
 
             var colorList = new List<SolidColorBrush>();
-            var r = new Random();
             for (int i = 0; i < differentColors; i++)
             {
-                colorList.Add(new SolidColorBrush(Color.FromRgb((byte)r.Next(0, 255), (byte)r.Next(0, 255), (byte)r.Next(0, 255))));
+                colorList.Add(new SolidColorBrush(Color.FromRgb(faker.Random.Byte(), faker.Random.Byte(), faker.Random.Byte())));
             }
             pp.AlternatingRowColors = colorList;
 
