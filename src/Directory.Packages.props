@@ -37,23 +37,22 @@
     <!-- prevents generation of $(ProjectName).sourcelink.json -->
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" PrivateAssets="all" />
     <GlobalPackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" Version="$(NerdbankGitVersioningVersion)" />
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Enums.NET" Version="5.0.0" />
-    <PackageVersion Include="JetBrains.Annotations" Version="2024.3.0" />
     <PackageVersion Include="System.Drawing.Common" Version="$(AspNetCoreVersion)" />
   </ItemGroup>
-
   <ItemGroup Label="Testing">
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="1.1.2" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="1.1.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.14.1" />
     <PackageVersion Include="Microsoft.Testing.Platform" Version="1.6.2" />
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
-    <PackageVersion Include="NUnit" Version="$(NUnitVersion)" />
-    <PackageVersion Include="NUnit.Analyzers" Version="$(NUnitAnalyzers)" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="$(NUnit3TestAdapter)" />
+    <PackageVersion Include="xunit.v3" Version="$(XUnitV3Version)" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
+    <PackageVersion Include="Xunit.StaFact" Version="2.1.7" />
   </ItemGroup>
 </Project>
