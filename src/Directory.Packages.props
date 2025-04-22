@@ -41,6 +41,7 @@
     <GlobalPackageReference Include="WpfAnalyzers" Condition="'$(UseWpf)' == 'true'" Version="$(WpfAnalyzersVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="Bogus" Version="35.6.3" />
     <PackageVersion Include="Enums.NET" Version="5.0.0" />
     <PackageVersion Include="System.Drawing.Common" Version="$(AspNetCoreVersion)" />
   </ItemGroup>

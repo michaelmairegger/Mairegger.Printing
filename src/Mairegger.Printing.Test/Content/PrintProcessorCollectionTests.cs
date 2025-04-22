@@ -44,7 +44,7 @@ namespace Mairegger.Printing.Tests.Content
             {
                 Assert.Equal(p.Object.FileName, pp.FileName);
                 Assert.Contains(p.Object, pp);
-                Assert.Equal(1, pp.Count);
+                Assert.Single(pp);
             });
         }
 

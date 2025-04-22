@@ -1,14 +1,16 @@
+using Bogus;
+
 namespace Mairegger.Printing.Tests.Content;
 
 internal class RandomTest
 {
-    private static readonly Random s_random = new();
+    private static readonly Faker s_faker = new();
 
     public static IEnumerable<TheoryDataRow<int>> NumberList(int min, int max, int testCount)
     {
         for(int i = 1; i <= testCount; i++)
         {
-            yield return new TheoryDataRow<int>(s_random.Next(min, max));
+            yield return new TheoryDataRow<int>(s_faker.Random.Int(min, max));
         }
     }
 
@@ -16,7 +18,7 @@ internal class RandomTest
     {
         for(int i = 1; i <= testCount; i++)
         {
-            yield return new TheoryDataRow<int, int>(s_random.Next(min1, max1), s_random.Next(min2, max2));
+            yield return new TheoryDataRow<int, int>(s_faker.Random.Int(min1, max1), s_faker.Random.Int(min2, max2));
         }
     }
 
@@ -24,12 +26,7 @@ internal class RandomTest
     {
         for(int i = 1; i <= testCount; i++)
         {
-            yield return new TheoryDataRow<double, double>(NextDouble(min1, max1), NextDouble(min2, max2));
+            yield return new TheoryDataRow<double, double>(s_faker.Random.Double(min1, max1),s_faker.Random.Double(min2, max2));
         }
-    }
-
-    private static double NextDouble(double min, double max)
-    {
-        return min + (max - min) * s_random.NextDouble();
     }
 }
