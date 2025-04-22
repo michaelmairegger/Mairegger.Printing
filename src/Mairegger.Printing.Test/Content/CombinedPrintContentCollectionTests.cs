@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+using Moq;
+
 namespace Mairegger.Printing.Tests.Content
 {
     using System.Linq;
-    using System.Threading;
     using System.Windows;
     using Mairegger.Printing.Content;
-    using Moq;
-    using NUnit.Framework;
 
-    [TestFixture]
     public class CombinedPrintContentCollectionTests
     {
-        [Test]
-        [Apartment(ApartmentState.STA)]
+        [WpfFact]
         public void Content()
         {
             Mock<IPrintContent>[] m1 = [new (), new (), new (), new ()];
@@ -39,8 +37,8 @@ namespace Mairegger.Printing.Tests.Content
 
             Assert.Multiple(() =>
             {
-                Assert.That(collection.Content, Is.Not.Null);
-                Assert.That(collection, Is.EqualTo(m1.Select(i => i.Object)).AsCollection);
+                Assert.NotNull(collection.Content);
+                Assert.Equal(m1.Select(i => i.Object), collection);
             });
 
             foreach (var mock in m1)

@@ -18,7 +18,6 @@ namespace Mairegger.Printing.Definition
 {
     using System;
     using System.Globalization;
-    using JetBrains.Annotations;
     using Mairegger.Printing.PrintProcessor;
     using Mairegger.Printing.Properties;
 
@@ -26,7 +25,6 @@ namespace Mairegger.Printing.Definition
     ///     Provides an attribute to define the columns in the Table of the <see cref="PrintProcessor" />
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     public sealed class ColumnDimensionAttribute : Attribute
     {
         /// <summary>

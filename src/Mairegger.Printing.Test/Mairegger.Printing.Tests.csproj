@@ -3,12 +3,10 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
 
-    <!-- see: https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-platform-integration-dotnet-test -->
-    <EnableNUnitRunner>true</EnableNUnitRunner>
-    <OutputType>Exe</OutputType>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
 
     <!-- this is only because of NetCoreAppMinimum is needed below in references -->
     <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppPrevious)</NetCoreAppMinimum>
@@ -19,19 +17,13 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Microsoft.Testing.Platform" />
     <PackageReference Include="Moq" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit.Analyzers">
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter" />
-    <!--
-      Coverlet collector isn't compatible with NUnit runner, you can
-      either switch to Microsoft CodeCoverage (as shown below),
-      or switch to be using coverlet global tool
-      https://github.com/coverlet-coverage/coverlet#net-global-tool-guide-suffers-from-possible-known-issue
-    -->
-    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="Xunit.StaFact" />
+    <PackageReference Include="xunit.v3" />
 
     <Reference Include="System.Printing" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
     <Reference Include="ReachFramework" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
@@ -45,9 +37,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mairegger.Printing\Mairegger.Printing.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>
