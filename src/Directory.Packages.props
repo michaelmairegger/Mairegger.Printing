@@ -12,7 +12,8 @@
     <AspNetCoreVersion Condition="'$(MinimumNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
   </PropertyGroup>
   <PropertyGroup Label="Set WPF properties">
-    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum);$(NetFrameworkMinimum)</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum)</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsTestProject)' == '' or '$(IsTestProject)' == 'false'">$(TargetFrameworks);$(NetFrameworkMinimum)</TargetFrameworks>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Label="NuGet settings">
