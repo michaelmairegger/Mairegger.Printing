@@ -60,11 +60,9 @@ namespace Mairegger.Printing.Tests.Content
         {
             var printProcessor = new Mock<Printing.PrintProcessor.PrintProcessor>();
 
-            Assert.Multiple(() =>
-            {
-                Assert.NotNull(printProcessor.Object.PrintDialog);
-                Assert.Equal(PageOrientation.Portrait, printProcessor.Object.PageOrientation);
-            });
+            Assert.Multiple(
+                ()=> Assert.NotNull(printProcessor.Object.PrintDialog),
+                ()=> Assert.Equal(PageOrientation.Portrait, printProcessor.Object.PageOrientation));
         }
 
         [StaTheory]
@@ -161,12 +159,10 @@ namespace Mairegger.Printing.Tests.Content
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
 
-            Assert.Multiple(() =>
-            {
-                Assert.Null(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty));
-                Assert.Null(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty));
-                Assert.Null(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty));
-            });
+            Assert.Multiple(
+                ()=> Assert.Null(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty)),
+                ()=> Assert.Null(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty)),
+                ()=> Assert.Null(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty)));
         }
 
         [StaFact]
@@ -269,11 +265,9 @@ namespace Mairegger.Printing.Tests.Content
 
             printProcessor.PrintDialog = printDialog.Object;
 
-            Assert.Multiple(() =>
-            {
-                Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()));
-                Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]));
-            });
+            Assert.Multiple(
+                ()=> Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())),
+                ()=> Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])));
         }
 
         [StaFact]
