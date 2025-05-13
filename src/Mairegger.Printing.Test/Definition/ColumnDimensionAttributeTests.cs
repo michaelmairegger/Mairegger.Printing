@@ -29,33 +29,27 @@ namespace Mairegger.Printing.Tests.Definition
         {
             double width = param * 100;
             var v = new ColumnDimensionAttribute(width, ColumnDimensionType.Pixels);
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(width, v.ColumnWidth);
-                Assert.Equal(ColumnDimensionType.Pixels, v.DimensionType);
-            });
+            Assert.Multiple(
+                ()=> Assert.Equal(width, v.ColumnWidth),
+                ()=> Assert.Equal(ColumnDimensionType.Pixels, v.DimensionType));
         }
 
         [Fact]
         public void RelativeWidth_Px()
         {
             var v = new ColumnDimensionAttribute("2px");
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(2, v.ColumnWidth);
-                Assert.Equal(ColumnDimensionType.Pixels, v.DimensionType);
-            });
+            Assert.Multiple(
+                ()=> Assert.Equal(2, v.ColumnWidth),
+                ()=> Assert.Equal(ColumnDimensionType.Pixels, v.DimensionType));
         }
 
         [Fact]
         public void RelativeWidth_Start()
         {
             var v = new ColumnDimensionAttribute("3*");
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(3, v.ColumnWidth);
-                Assert.Equal(ColumnDimensionType.Star, v.DimensionType);
-            });
+            Assert.Multiple(
+                ()=> Assert.Equal(3, v.ColumnWidth),
+                ()=> Assert.Equal(ColumnDimensionType.Star, v.DimensionType));
         }
 
         [Fact]
@@ -84,11 +78,9 @@ namespace Mairegger.Printing.Tests.Definition
         {
             double width = 1 / param;
             var v = new ColumnDimensionAttribute(width);
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(width, v.ColumnWidth);
-                Assert.Equal(ColumnDimensionType.Star, v.DimensionType);
-            });
+            Assert.Multiple(
+                ()=> Assert.Equal(width, v.ColumnWidth),
+                ()=> Assert.Equal(ColumnDimensionType.Star, v.DimensionType));
         }
     }
 }

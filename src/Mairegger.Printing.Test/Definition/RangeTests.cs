@@ -104,11 +104,9 @@ namespace Mairegger.Printing.Tests.Definition
         public void Parse_ValidRange()
         {
             var r = PageRange.Parse("4-6");
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(4, r.From);
-                Assert.Equal(6, r.To);
-            });
+            Assert.Multiple(
+                ()=> Assert.Equal(4, r.From),
+                ()=> Assert.Equal(6, r.To));
         }
 
         [Fact]

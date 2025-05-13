@@ -85,17 +85,15 @@ namespace Mairegger.Printing.Tests.Content
 
             var grid = (Grid)icontent.Content;
             var uiElement = (TextBlock)grid.Children[0];
-            Assert.Multiple(() =>
-            {
-                Assert.Equal("Test", uiElement.Text);
+            Assert.Multiple(
+                ()=> Assert.Equal("Test", uiElement.Text),
 
-                Assert.Equal(32, uiElement.FontSize);
-                Assert.Equal(Brushes.Bisque, grid.Background);
-                Assert.Equal(FontWeights.ExtraBold, uiElement.FontWeight);
-                Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment);
-                Assert.Equal(new Thickness(12), uiElement.Padding);
-                Assert.Equal(new Thickness(24), grid.Margin);
-            });
+                ()=> Assert.Equal(32, uiElement.FontSize),
+                ()=> Assert.Equal(Brushes.Bisque, grid.Background),
+                ()=> Assert.Equal(FontWeights.ExtraBold, uiElement.FontWeight),
+                ()=> Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment),
+                ()=> Assert.Equal(new Thickness(12), uiElement.Padding),
+                ()=> Assert.Equal(new Thickness(24), grid.Margin));
         }
 
         [StaFact]
@@ -115,12 +113,10 @@ namespace Mairegger.Printing.Tests.Content
             var grid = (Grid)icontent.Content;
             var uiElement = (TextBlock)grid.Children[0];
 
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(10, uiElement.FontSize);
-                Assert.Equal(new FontFamily("Verdana"), uiElement.FontFamily);
-                Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment);
-            });
+            Assert.Multiple(
+                ()=> Assert.Equal(10, uiElement.FontSize),
+                ()=> Assert.Equal(new FontFamily("Verdana"), uiElement.FontFamily),
+                ()=> Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment));
 
         }
 

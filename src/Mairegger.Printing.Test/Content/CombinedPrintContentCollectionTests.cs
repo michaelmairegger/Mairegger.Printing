@@ -35,11 +35,9 @@ namespace Mairegger.Printing.Tests.Content
 
             var collection = new CombinedPrintContentCollection(m1.Select(i => i.Object).ToArray());
 
-            Assert.Multiple(() =>
-            {
-                Assert.NotNull(collection.Content);
-                Assert.Equal(m1.Select(i => i.Object), collection);
-            });
+            Assert.Multiple(
+                ()=> Assert.NotNull(collection.Content),
+                ()=> Assert.Equal(m1.Select(i => i.Object), collection));
 
             foreach (var mock in m1)
             {

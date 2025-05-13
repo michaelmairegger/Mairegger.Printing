@@ -43,41 +43,34 @@ namespace Mairegger.Printing.Tests.Definition
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, PrintPartDefinitionAttribute.LastPage));
 
-            Assert.Multiple(() =>
-            {
+            Assert.Multiple(
                 // do not print on page #1
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false));
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
 
                 // but print on last page
-                Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 1, true));
-            });
+                () => Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 1, true))
+                );
         }
 
         [Fact]
         public void IsToPrint_ExcludeIsStrongerThanInclude()
         {
             var pd = new PrintDefinition();
-            Assert.Multiple(() =>
-            {
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false));
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
-            });
+            Assert.Multiple(
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.Multiple(() =>
-            {
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false));
-                Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
-            });
+            Assert.Multiple(
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
+                () => Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
 
             pd.SetPrintAttribute(new ExcludeFromPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.Multiple(() =>
-            {
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false));
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
-            });
+            Assert.Multiple(
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
         }
 
         [Fact]
@@ -103,11 +96,9 @@ namespace Mairegger.Printing.Tests.Definition
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.Multiple(() =>
-            {
-                Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false));
-                Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
-            });
+            Assert.Multiple(
+                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
+                () => Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
         }
 
         [Fact]

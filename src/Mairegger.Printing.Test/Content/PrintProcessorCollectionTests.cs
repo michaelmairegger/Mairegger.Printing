@@ -40,12 +40,10 @@ namespace Mairegger.Printing.Tests.Content
             var p = new Mock<Printing.PrintProcessor.PrintProcessor>();
             PrintProcessorCollection pp = new PrintProcessorCollection(p.Object);
 
-            Assert.Multiple(() =>
-            {
-                Assert.Equal(p.Object.FileName, pp.FileName);
-                Assert.Contains(p.Object, pp);
-                Assert.Single(pp);
-            });
+            Assert.Multiple(
+                () => Assert.Equal(p.Object.FileName, pp.FileName),
+                () => Assert.Contains(p.Object, pp),
+                () => Assert.Single(pp));
         }
 
         [Fact]
@@ -107,11 +105,10 @@ namespace Mairegger.Printing.Tests.Content
         public void PrintDocument_NoPrintProcessor_DoesNotPrint()
         {
             var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
-            Assert.Multiple(() =>
-            {
-                Assert.False(ppcoll.PrintDocument());
-                Assert.False(ppcoll.PrintDocument(string.Empty));
-            });
+            Assert.Multiple(
+                () => Assert.False(ppcoll.PrintDocument()),
+                () => Assert.False(ppcoll.PrintDocument(string.Empty))
+                );
         }
 
         [Fact]
@@ -141,12 +138,10 @@ namespace Mairegger.Printing.Tests.Content
 
             testPrintProcessor.PrintDialog = printDialog.Object;
 
-            Assert.Multiple(() =>
-            {
-                Assert.True(printProcessor.PrintDocument());
-                Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer()));
-                Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0]));
-            });
+            Assert.Multiple(
+                () => Assert.True(printProcessor.PrintDocument()),
+                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())),
+                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])));
         }
     }
 }
