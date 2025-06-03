@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Diagnostics;
-
     /// <summary>
     ///     Defines that the specific <see cref="PrintAppendixes" /> should be printed on no page.
     /// </summary>

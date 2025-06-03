@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-
     public abstract class PrintPartDefinitionAttribute : Attribute, IPrintPartDefinition
     {
         /// <summary>

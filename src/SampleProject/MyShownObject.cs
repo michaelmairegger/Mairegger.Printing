@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.ComponentModel;
+
 namespace Mairegger.Printing.Sample
 {
-    using System.ComponentModel;
-
     public class MyShownObject : INotifyPropertyChanged
     {
         private int _lenghtOfText;

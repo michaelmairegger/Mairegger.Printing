@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing.Printing;
+using System.IO;
+using System.Printing;
+using System.Windows.Controls;
+using Mairegger.Printing.PrintProcessor;
+
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Drawing.Printing;
-    using System.IO;
-    using System.Linq;
-    using System.Printing;
-    using System.Windows.Controls;
-    using Mairegger.Printing.PrintProcessor;
-    using Moq;
-
     public class PrintProcessorCollectionTests
     {
         [Fact]
         public void Ctor()
         {
-            Mock<Printing.PrintProcessor.PrintProcessor>[] m1 = [new(), new(), new(), new()];
+            Mock<PrintProcessor.PrintProcessor>[] m1 = [new(), new(), new(), new()];
             PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
             Assert.Equal(m1.Select(i => i.Object), pp);
 
@@ -37,7 +35,7 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void Ctor_SingleElement()
         {
-            var p = new Mock<Printing.PrintProcessor.PrintProcessor>();
+            var p = new Mock<PrintProcessor.PrintProcessor>();
             PrintProcessorCollection pp = new PrintProcessorCollection(p.Object);
 
             Assert.Multiple(
@@ -49,14 +47,14 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void FileName_Default_IsStringEmpty()
         {
-            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
+            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
             Assert.Empty(ppcoll.FileName);
         }
 
         [Fact]
         public void FileName_InvalidCharacters_GetsRemoved()
         {
-            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
+            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
             var formattableString = $"Hello{Path.GetInvalidFileNameChars()[0]}Hello{Path.GetInvalidFileNameChars()[1]}";
 
             Assert.Empty(ppcoll.FileName);
@@ -68,7 +66,7 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void PreviewDocument()
         {
-            var printProcessor = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
+            var printProcessor = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
             var windowProvider = new Mock<IWindowProvider>();
 
             printProcessor.PreviewDocument(windowProvider.Object);
@@ -104,7 +102,7 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void PrintDocument_NoPrintProcessor_DoesNotPrint()
         {
-            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<Printing.PrintProcessor.PrintProcessor>());
+            var ppcoll = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
             Assert.Multiple(
                 () => Assert.False(ppcoll.PrintDocument()),
                 () => Assert.False(ppcoll.PrintDocument(string.Empty))

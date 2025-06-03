@@ -8,14 +8,10 @@
 // -----------------------------------------------------------------------
 
 using System.Globalization;
+using Mairegger.Printing.Properties;
 
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Mairegger.Printing.Properties;
-
     /// <summary>
     ///     Represents a contiguous area between two numeric
     /// </summary>

@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-
     [PrintOnAllPages(PrintAppendixes.All)]
-    public class PrintEverything : PrintProcessor
+    public class PrintEverything : PrintProcessor.PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {
@@ -70,7 +68,7 @@ namespace Mairegger.Printing.Tests.Content
     }
 
     [PrintOnPage(PrintAppendixes.PageNumbers, 2)]
-    public class TestPrintProcessor : PrintProcessor
+    public class TestPrintProcessor : PrintProcessor.PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {
@@ -102,7 +100,7 @@ namespace Mairegger.Printing.Tests.Content
         }
     }
 
-    public class NoLineItemsTestPrintProcessor : PrintProcessor
+    public class NoLineItemsTestPrintProcessor : PrintProcessor.PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {

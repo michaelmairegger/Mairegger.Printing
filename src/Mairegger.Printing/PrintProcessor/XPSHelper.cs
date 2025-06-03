@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+using System.IO.Packaging;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
+using System.Windows.Xps.Packaging;
+using Mairegger.Printing.Internal;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.IO;
-    using System.IO.Packaging;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Markup;
-    using System.Windows.Xps.Packaging;
-    using Mairegger.Printing.Internal;
-
     /// <summary>
     ///     Represents a helper class for displaying a <see cref="FixedDocument" /> in a <see cref="DocumentViewer" />.
     /// </summary>

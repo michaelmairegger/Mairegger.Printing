@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+
 namespace Mairegger.Printing.Content
 {
-    using System.Windows;
-
     /// <summary>
     ///     Interface that provides the line-data for the <see cref="PrintProcessor" />
     /// </summary>

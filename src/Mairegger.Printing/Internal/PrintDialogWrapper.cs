@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Printing;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+using Mairegger.Printing.PrintProcessor;
+
 namespace Mairegger.Printing.Internal
 {
-    using System.Diagnostics.CodeAnalysis;
-    using System.Printing;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Media;
-    using Mairegger.Printing.PrintProcessor;
-
     [ExcludeFromCodeCoverage]
     internal class PrintDialogWrapper : IPrintDialog
     {

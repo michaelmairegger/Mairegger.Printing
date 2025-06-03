@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using EnumsNET;
+using Mairegger.Printing.Internal;
 
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using Mairegger.Printing.Internal;
-
     public class PrintDefinition
     {
         private readonly PrintOnAttributeHelper _printOnAttributeHelper = new PrintOnAttributeHelper();

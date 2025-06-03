@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+
 namespace Mairegger.Printing.Content
 {
-    using System;
-    using System.Windows;
-
     internal sealed class PageBreak : IPrintContent
     {
         private static readonly Lazy<PageBreak> LazyInstance = new Lazy<PageBreak>(() => new PageBreak());

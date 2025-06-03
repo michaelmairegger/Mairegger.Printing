@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Media;
+
 namespace Mairegger.Printing.Content
 {
-    using System.Windows;
-    using System.Windows.Media;
-
     public sealed class StringLineItemConfiguration
     {
         public FontFamily? FontFamily { get; set; }

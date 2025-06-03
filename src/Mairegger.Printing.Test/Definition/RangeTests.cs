@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+using Mairegger.Printing.Definition;
 using Mairegger.Printing.Tests.Content;
 
 namespace Mairegger.Printing.Tests.Definition
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using Mairegger.Printing.Definition;
-
     public class RangeTests
     {
         [Fact]

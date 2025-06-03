@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+using System.Printing;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+using Mairegger.Printing.Internal;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Printing;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.Internal;
-
     /// <summary>
     ///     Provides a class that processes a printing
     /// </summary>

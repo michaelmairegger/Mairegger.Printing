@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text;
+using System.Globalization;
+using Mairegger.Printing.PrintProcessor;
+using Mairegger.Printing.Properties;
 
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Globalization;
-    using Mairegger.Printing.PrintProcessor;
-    using Mairegger.Printing.Properties;
-
     /// <summary>
     ///     Provides an attribute to define the columns in the Table of the <see cref="PrintProcessor" />
     /// </summary>

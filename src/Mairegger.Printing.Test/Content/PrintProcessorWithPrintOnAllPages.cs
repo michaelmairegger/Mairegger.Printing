@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Moq;
-
     [PrintOnAllPages(PrintAppendixes.Footer)]
     public class PrintProcessorWithPrintOnAllPages : TestPrintProcessor
     {

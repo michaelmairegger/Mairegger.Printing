@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+
 namespace Mairegger.Printing.Content
 {
-    using System.Collections.Generic;
-    using System.Windows;
-
     public interface IPageBreakAware : IPrintContent
     {
         /// <summary>

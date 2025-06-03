@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Internal
 {
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Media;
-    using Mairegger.Printing.Definition;
-
     internal class PageHelper
     {
         private const double Threshold = 0;

@@ -12,25 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using EnumsNET;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+using Mairegger.Printing.PrintProcessor;
 
 namespace Mairegger.Printing.Internal
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Markup;
-    using System.Windows.Media;
-    using System.Windows.Shapes;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-
     internal class InternalPrintProcessor
     {
         private const string Description = "Current line is higher than the";
@@ -457,7 +453,7 @@ namespace Mairegger.Printing.Internal
         /// <summary>
         ///     Creates the whole documents
         /// </summary>
-        public static FixedDocument CreateFixedDocument(PrintProcessor pp)
+        public static FixedDocument CreateFixedDocument(PrintProcessor.PrintProcessor pp)
         {
             return CreateFixedDocument(new PrintProcessorCollection(pp));
         }

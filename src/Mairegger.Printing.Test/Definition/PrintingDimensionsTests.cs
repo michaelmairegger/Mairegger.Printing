@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using Mairegger.Printing.Definition;
+using Mairegger.Printing.PrintProcessor;
 using Mairegger.Printing.Tests.Content;
+using PageRange = Mairegger.Printing.Definition.PageRange;
 
 namespace Mairegger.Printing.Tests.Definition
 {
-    using System;
-    using System.Windows;
-    using System.Windows.Controls;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-    using Moq;
-
     public class PrintingDimensionsTests
     {
         [StaFact]
@@ -111,12 +109,12 @@ namespace Mairegger.Printing.Tests.Definition
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             Assert.Multiple(
-                ()=> Assert.Equal(new Printing.Definition.PageRange(10, 20), pd.GetRangeFor(PrintAppendixes.Header, 1, false)),
-                ()=> Assert.Equal(new Printing.Definition.PageRange(20, 50), pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false)),
-                ()=> Assert.Equal(new Printing.Definition.PageRange(50, 905), pd.GetRangeForBodyGrid(1, false)),
-                ()=> Assert.Equal(new Printing.Definition.PageRange(905, 945), pd.GetRangeFor(PrintAppendixes.Summary, 1, false)),
-                ()=> Assert.Equal(new Printing.Definition.PageRange(945, 965), pd.GetRangeFor(PrintAppendixes.Footer, 1, false)),
-                ()=> Assert.Equal(new Printing.Definition.PageRange(965, 990), pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false)));
+                ()=> Assert.Equal(new PageRange(10, 20), pd.GetRangeFor(PrintAppendixes.Header, 1, false)),
+                ()=> Assert.Equal(new PageRange(20, 50), pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false)),
+                ()=> Assert.Equal(new PageRange(50, 905), pd.GetRangeForBodyGrid(1, false)),
+                ()=> Assert.Equal(new PageRange(905, 945), pd.GetRangeFor(PrintAppendixes.Summary, 1, false)),
+                ()=> Assert.Equal(new PageRange(945, 965), pd.GetRangeFor(PrintAppendixes.Footer, 1, false)),
+                ()=> Assert.Equal(new PageRange(965, 990), pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false)));
         }
 
         [Fact]

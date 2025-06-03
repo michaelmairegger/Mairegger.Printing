@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Tests.Definition
 {
-    using System;
-    using Mairegger.Printing.Definition;
-
     public class PrintDefinitionTest
     {
         [Fact]
