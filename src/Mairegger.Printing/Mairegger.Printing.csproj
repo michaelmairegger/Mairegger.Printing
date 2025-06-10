@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum);$(NetFrameworkMinimum)</TargetFrameworks>
+
     <Description>Printing library for WPF</Description>
 
     <PackageReleaseNotes>Internal project structure changes</PackageReleaseNotes>
