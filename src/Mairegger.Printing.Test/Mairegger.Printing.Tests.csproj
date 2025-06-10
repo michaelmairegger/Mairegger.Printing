@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum);net472</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum)</TargetFrameworks>
 
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>

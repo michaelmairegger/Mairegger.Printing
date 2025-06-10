@@ -106,7 +106,12 @@ namespace Mairegger.Printing.Tests.Content
 
             mock.Object.FileName = formattableString;
 
-            Assert.DoesNotContain(Path.GetInvalidFileNameChars(), mock.Object.FileName, StringComparison.InvariantCultureIgnoreCase);
+            char[] invalid = Path.GetInvalidFileNameChars();
+            #if NETFRAMEWORK
+            Assert.DoesNotContain(mock.Object.FileName, v => invalid.Contains(v));
+            #else
+            Assert.DoesNotContain(mock.Object.FileName, Path.GetInvalidFileNameChars(), StringComparison.InvariantCultureIgnoreCase);
+            #endif
         }
 
         [Fact]

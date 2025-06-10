@@ -60,7 +60,13 @@ namespace Mairegger.Printing.Tests.Content
             Assert.Empty(ppcoll.FileName);
 
             ppcoll.FileName = formattableString;
+
+            char[] invalid = Path.GetInvalidFileNameChars();
+            #if NETFRAMEWORK
+            Assert.DoesNotContain(ppcoll.FileName, v => invalid.Contains(v));
+            #else
             Assert.DoesNotContain(ppcoll.FileName, Path.GetInvalidFileNameChars(), StringComparison.InvariantCultureIgnoreCase);
+            #endif
         }
 
         [Fact]
