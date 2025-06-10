@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Internal
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using Mairegger.Printing.Definition;
-
     internal class PrintOnAttributeHelper
     {
         private readonly List<IPrintPartDefinition> _printOnAttributes = [];

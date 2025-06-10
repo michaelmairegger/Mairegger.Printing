@@ -12,15 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Printing;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Sample
 {
-    using System.Collections.Generic;
-    using System.Printing;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Definition;
-
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>

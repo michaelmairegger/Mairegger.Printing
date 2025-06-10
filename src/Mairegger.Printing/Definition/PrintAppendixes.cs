@@ -14,8 +14,6 @@
 
 namespace Mairegger.Printing.Definition
 {
-    using System;
-
     /// <summary>
     ///     A Enumeration that contains the field that are printed
     /// </summary>

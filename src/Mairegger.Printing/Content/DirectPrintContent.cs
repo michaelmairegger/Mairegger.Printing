@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+
 namespace Mairegger.Printing.Content
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows;
-
     /// <inheritdoc />
     /// <summary>
     ///     A print content that can be positioned freely on the page.

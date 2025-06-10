@@ -12,22 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Drawing.Printing;
+using System.IO;
+using System.Printing;
+using System.Windows.Controls;
+using System.Windows.Media;
 using Bogus;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+using Mairegger.Printing.PrintProcessor;
 
 namespace Mairegger.Printing.Tests.Content
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing.Printing;
-    using System.IO;
-    using System.Printing;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-    using Moq;
-
     public class PrintProcessorTests
     {
         private static readonly Faker faker = new Faker();
@@ -49,7 +45,7 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void ColorPrintPartsForDebug_IsDefault_False()
         {
-            Printing.PrintProcessor.PrintProcessor tp = new TestPrintProcessor();
+            PrintProcessor.PrintProcessor tp = new TestPrintProcessor();
             Assert.False(tp.ColorPrintPartsForDebug);
             tp.ColorPrintPartsForDebug = true;
             Assert.True(tp.ColorPrintPartsForDebug);
@@ -58,7 +54,7 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void Ctor()
         {
-            var printProcessor = new Mock<Printing.PrintProcessor.PrintProcessor>();
+            var printProcessor = new Mock<PrintProcessor.PrintProcessor>();
 
             Assert.Multiple(
                 ()=> Assert.NotNull(printProcessor.Object.PrintDialog),
@@ -98,14 +94,14 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void FileName_Default_IsStringEmpty()
         {
-            Mock<Printing.PrintProcessor.PrintProcessor> mock = new Mock<Printing.PrintProcessor.PrintProcessor>();
+            Mock<PrintProcessor.PrintProcessor> mock = new Mock<PrintProcessor.PrintProcessor>();
             Assert.Empty(mock.Object.FileName);
         }
 
         [Fact]
         public void FileName_InvalidCharacters_GetsRemoved()
         {
-            Mock<Printing.PrintProcessor.PrintProcessor> mock = new Mock<Printing.PrintProcessor.PrintProcessor>();
+            Mock<PrintProcessor.PrintProcessor> mock = new Mock<PrintProcessor.PrintProcessor>();
             var formattableString = $"Hello{Path.GetInvalidFileNameChars()[0]}Hello{Path.GetInvalidFileNameChars()[1]}";
 
             mock.Object.FileName = formattableString;

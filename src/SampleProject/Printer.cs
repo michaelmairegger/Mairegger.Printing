@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Sample
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-
-    public class Printer : PrintProcessor
+    public class Printer : PrintProcessor.PrintProcessor
     {
         private readonly IEnumerable<MyShownObject> _collToPrint;
         private readonly CustomPrintDimension _printDimensions = new CustomPrintDimension();

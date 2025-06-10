@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.ObjectModel;
+using System.Printing;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Printing;
-
     public class PrintProcessorCollection : Collection<PrintProcessor>, IPrintProcessorPrinter
     {
         private string _fileName = string.Empty;

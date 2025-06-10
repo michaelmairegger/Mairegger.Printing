@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using Mairegger.Printing.Content;
+
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Windows;
-    using System.Windows.Controls;
-    using Mairegger.Printing.Content;
-
     public class PrintDocumentBackgroundTest
     {
         [StaFact]

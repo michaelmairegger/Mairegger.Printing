@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Mairegger.Printing.PrintProcessor;
+using Mairegger.Printing.Properties;
+
 namespace Mairegger.Printing.Internal
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Input;
-    using Mairegger.Printing.PrintProcessor;
-    using Mairegger.Printing.Properties;
-
     [ExcludeFromCodeCoverage]
     internal class WindowsProvider : IWindowProvider
     {

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Sample
 {
-    using System.Collections.Generic;
-    using Mairegger.Printing.Definition;
-
     [ExcludeFromPage(PrintAppendixes.Header, 1)]
     public class ExludeHeaderOnPageTwo : Printer
     {

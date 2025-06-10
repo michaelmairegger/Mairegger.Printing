@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+
 namespace Mairegger.Printing.Content
 {
-    using System.Collections.Generic;
-    using System.Windows;
-    using System.Windows.Controls;
-
     internal sealed class CombinedPrintContentCollection : List<IPrintContent>, IPrintContent
     {
         public CombinedPrintContentCollection(params IPrintContent[] collection)

@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Printing;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System.Printing;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Media;
-
     public interface IPrintDialog
     {
         bool CurrentPageEnabled { get; set; }

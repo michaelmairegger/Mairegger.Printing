@@ -13,14 +13,11 @@
 // limitations under the License.
 
 
-using Moq;
+using System.Windows;
+using Mairegger.Printing.Content;
 
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Linq;
-    using System.Windows;
-    using Mairegger.Printing.Content;
-
     public class CombinedPrintContentCollectionTests
     {
         [WpfFact]

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows.Controls;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.Windows.Controls;
-
     public interface IWindowProvider
     {
         event EventHandler Closed;
