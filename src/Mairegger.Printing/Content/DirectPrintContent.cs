@@ -23,8 +23,8 @@ namespace Mairegger.Printing.Content
     /// </summary>
     /// <remarks>
     ///     By returning an instance of this class from a
-    ///     <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.ItemCollection" />
-    ///     or <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.GetCustomPageContent(System.Int32)" /> following
+    ///     <see cref="Mairegger.Printing.PrintProcessor.IPrintProcessor.ItemCollection" />
+    ///     or <see cref="Mairegger.Printing.PrintProcessor.IPrintProcessor.GetCustomPageContent(System.Int32)" /> following
     ///     behaviors apply:
     ///     <list type="bullets">
     ///         <listheader>
@@ -33,13 +33,13 @@ namespace Mairegger.Printing.Content
     ///         </listheader>
     ///         <item>
     ///             <term>
-    ///                 <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.ItemCollection" />
+    ///                 <see cref="Mairegger.Printing.PrintProcessor.IPrintProcessor.ItemCollection" />
     ///             </term>
     ///             <description>The object is printed on the current page.</description>
     ///         </item>
     ///         <item>
     ///             <term>
-    ///                 <see cref="M:Mairegger.Printing.PrintProcessor.IPrintProcessor.GetCustomPageContent(System.Int32)" />
+    ///                 <see cref="Mairegger.Printing.PrintProcessor.IPrintProcessor.GetCustomPageContent(System.Int32)" />
     ///             </term>
     ///             <description>The item can be printed on any page that is desired.</description>
     ///         </item>

@@ -65,7 +65,7 @@ namespace Mairegger.Printing.Tests.Content
             #if NETFRAMEWORK
             Assert.DoesNotContain(ppcoll.FileName, v => invalid.Contains(v));
             #else
-            Assert.DoesNotContain(ppcoll.FileName, Path.GetInvalidFileNameChars(), StringComparison.InvariantCultureIgnoreCase);
+            Assert.DoesNotContain(ppcoll.FileName, invalid, StringComparison.InvariantCultureIgnoreCase);
             #endif
         }
 

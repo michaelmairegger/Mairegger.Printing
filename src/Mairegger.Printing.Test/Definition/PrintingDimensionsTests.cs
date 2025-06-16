@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using Mairegger.Printing.Definition;
@@ -274,6 +275,7 @@ namespace Mairegger.Printing.Tests.Definition
             public double Column1 { get; } = 1;
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class TestPrintDimension : PrintDimension
         {
             public TestPrintDimension(Thickness margin)
