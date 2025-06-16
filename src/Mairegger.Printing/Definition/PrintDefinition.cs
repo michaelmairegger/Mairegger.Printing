@@ -49,7 +49,7 @@ namespace Mairegger.Printing.Definition
         /// </returns>
         private PrintPartStatus GetPrintPrintDefinitionForPage(PrintAppendixes pa, int pageNumber)
         {
-            if (!Enums.IsDefined(pa))
+            if (!pa.IsDefined())
             {
                 throw new ArgumentException($"Enum value {pa} is not defined on enum {typeof(PrintAppendixes).FullName}", nameof(pa));
             }

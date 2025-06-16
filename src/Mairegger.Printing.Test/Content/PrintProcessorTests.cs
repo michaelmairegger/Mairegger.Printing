@@ -110,7 +110,7 @@ namespace Mairegger.Printing.Tests.Content
             #if NETFRAMEWORK
             Assert.DoesNotContain(mock.Object.FileName, v => invalid.Contains(v));
             #else
-            Assert.DoesNotContain(mock.Object.FileName, Path.GetInvalidFileNameChars(), StringComparison.InvariantCultureIgnoreCase);
+            Assert.DoesNotContain(mock.Object.FileName, invalid, StringComparison.InvariantCultureIgnoreCase);
             #endif
         }
 
