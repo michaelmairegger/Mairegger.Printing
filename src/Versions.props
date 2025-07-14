@@ -2,10 +2,10 @@
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
     <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>9.0.6</CurrentNetVersion>
+    <CurrentNetVersion>9.0.7</CurrentNetVersion>
     <PreviousNetVersion/>
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>8.0.17</MinimumNetVersion>
+    <MinimumNetVersion>8.0.18</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
 
     <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->
@@ -17,11 +17,11 @@
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
     <!--Testing -->
     <MoqVersion>4.20.72</MoqVersion>
-    <XUnitV3Version>2.0.3</XUnitV3Version>
-    <XUnitRunnerVisualstudio>3.1.1</XUnitRunnerVisualstudio>
+    <XUnitV3Version>3.0.0</XUnitV3Version>
+    <XUnitRunnerVisualstudio>3.1.2</XUnitRunnerVisualstudio>
     <MicrosoftNETTestSdkVersion>17.14.1</MicrosoftNETTestSdkVersion>
     <MicrosoftTestingExtensionsCodeCoverage>17.14.2</MicrosoftTestingExtensionsCodeCoverage>
-    <MicrosoftTestingPlatformVersion>1.7.2</MicrosoftTestingPlatformVersion>
+    <MicrosoftTestingPlatformVersion>1.7.3</MicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Allow to overwrite versions from base Versions.props">
