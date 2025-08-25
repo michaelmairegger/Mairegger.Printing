@@ -52,6 +52,6 @@
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
     <PackageVersion Include="xunit.v3" Version="$(XUnitV3Version)" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualstudio)" />
-    <PackageVersion Include="Xunit.StaFact" Version="2.1.7" />
+    <PackageVersion Include="Xunit.StaFact" Version="3.0.13" />
   </ItemGroup>
 </Project>
