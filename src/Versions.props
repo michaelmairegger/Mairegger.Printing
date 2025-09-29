@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.7.115</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.8.118</NerdbankGitVersioningVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
     <!--Testing -->
     <MoqVersion>4.20.72</MoqVersion>
