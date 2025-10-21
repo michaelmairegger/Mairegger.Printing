@@ -31,7 +31,6 @@
 
     <Reference Include="System.Printing" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
     <Reference Include="ReachFramework" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
-    <PackageReference Include="System.Drawing.Common" Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
   </ItemGroup>
 
   <PropertyGroup>
