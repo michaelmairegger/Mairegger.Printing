@@ -90,13 +90,13 @@ namespace Mairegger.Printing.PrintProcessor
         {
             var xpsDocument = new XpsDocument(fileName, FileAccess.Read);
 
-            var documentViewer = new DocumentViewer { Document = xpsDocument.GetFixedDocumentSequence() };
-
-            if (windowProvider == null)
+            var documentViewer = new CustomDocumentViewer
             {
-                windowProvider = new WindowsProvider();
-            }
+                JobTitle = title,
+                Document = xpsDocument.GetFixedDocumentSequence()
+            };
 
+            windowProvider ??= new WindowsProvider();
             windowProvider.Closed += PreviewWindowOnClosed(fileName, xpsDocument, deleteFileOnClose);
             windowProvider.Show(title, documentViewer);
         }
