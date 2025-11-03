@@ -50,7 +50,7 @@
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="$(MicrosoftTestingExtensionsCodeCoverageVersion)" />
     <PackageVersion Include="Microsoft.Testing.Platform" Version="$(MicrosoftTestingPlatformVersion)" />
     <PackageVersion Include="Moq" Version="$(MoqVersion)" />
-    <PackageVersion Include="xunit.v3" Version="$(XUnitV3Version)" />
+    <PackageVersion Include="xunit.v3.mtp-v2" Version="$(XUnitV3Version)" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualStudioVersion)" />
     <PackageVersion Include="Xunit.StaFact" Version="3.0.13" />
   </ItemGroup>
