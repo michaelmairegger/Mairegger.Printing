@@ -193,6 +193,7 @@ indent_size=2
 # CUSTOM #
 ##########
 
+# Mairegger Custom
 [*.{cs,vb}]
 
 # IDE0073: File header
@@ -230,3 +231,4 @@ dotnet_diagnostic.CA1708.severity = error
 dotnet_diagnostic.CA1707.severity = error
 
 resharper_redundant_name_qualifier_highlighting = none
+resharper_optional_parameter_hierarchy_mismatch_highlighting = error
