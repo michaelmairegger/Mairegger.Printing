@@ -193,13 +193,11 @@ indent_size=2
 # CUSTOM #
 ##########
 
+[*.{cs,vb}]
+
 # IDE0073: File header
 dotnet_diagnostic.IDE0073.severity = warning
 file_header_template = Copyright 2017-2025 Michael Mairegger\n\nLicensed under the Apache License, Version 2.0 (the "License")\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an "AS IS" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.
-
-
-# Mairegger Custom
-[*.{cs,vb}]
 
 #CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = error
