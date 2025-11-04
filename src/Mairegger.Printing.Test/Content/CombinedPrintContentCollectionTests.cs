@@ -1,6 +1,6 @@
-﻿// Copyright 2016 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -23,7 +23,7 @@ namespace Mairegger.Printing.Tests.Content
         [WpfFact]
         public void Content()
         {
-            Mock<IPrintContent>[] m1 = [new (), new (), new (), new ()];
+            Mock<IPrintContent>[] m1 = [new(), new(), new(), new()];
 
             foreach (var mock in m1)
             {
@@ -33,8 +33,8 @@ namespace Mairegger.Printing.Tests.Content
             var collection = new CombinedPrintContentCollection(m1.Select(i => i.Object).ToArray());
 
             Assert.Multiple(
-                ()=> Assert.NotNull(collection.Content),
-                ()=> Assert.Equal(m1.Select(i => i.Object), collection));
+                () => Assert.NotNull(collection.Content),
+                () => Assert.Equal(m1.Select(i => i.Object), collection));
 
             foreach (var mock in m1)
             {

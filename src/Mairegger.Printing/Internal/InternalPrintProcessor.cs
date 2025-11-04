@@ -1,6 +1,6 @@
-// Copyright 2017-2022 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -273,11 +273,11 @@ namespace Mairegger.Printing.Internal
         private PageContent GetNewDocumentPage()
         {
             var fixedPage = new FixedPage
-                            {
-                                Width = _printProcessor.PrintDimension.PageSize.Width,
-                                Height = _printProcessor.PrintDimension.PageSize.Height,
-                                Margin = _pageMargin
-                            };
+            {
+                Width = _printProcessor.PrintDimension.PageSize.Width,
+                Height = _printProcessor.PrintDimension.PageSize.Height,
+                Margin = _pageMargin
+            };
 
             if (_printProcessor.ColorPrintPartsForDebug)
             {
@@ -351,9 +351,9 @@ namespace Mairegger.Printing.Internal
             if (_printProcessor.ColorPrintPartsForDebug)
             {
                 contentControl.Content = new Grid
-                                         {
-                                             Background = ComputeBackGround(printAppendix),
-                                             Children =
+                {
+                    Background = ComputeBackGround(printAppendix),
+                    Children =
                                              {
                                                  new Rectangle
                                                  {
@@ -371,7 +371,7 @@ namespace Mairegger.Printing.Internal
                                                  },
                                                  panel
                                              }
-                                         };
+                };
             }
             else
             {
@@ -400,10 +400,10 @@ namespace Mairegger.Printing.Internal
             grid.Children.Add(_pageHelper.BodyGrid);
 
             var rectangle = new Rectangle
-                            {
-                                Stroke = _pageHelper.BorderBrush,
-                                StrokeThickness = .5d
-                            };
+            {
+                Stroke = _pageHelper.BorderBrush,
+                StrokeThickness = .5d
+            };
 
             grid.Children.Add(rectangle);
             grid.Height = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLastPage).Length;

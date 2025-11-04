@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -62,11 +62,11 @@ namespace Mairegger.Printing.Tests.Content
             ppcoll.FileName = formattableString;
 
             char[] invalid = Path.GetInvalidFileNameChars();
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             Assert.DoesNotContain(ppcoll.FileName, v => invalid.Contains(v));
-            #else
+#else
             Assert.DoesNotContain(ppcoll.FileName, invalid, StringComparison.InvariantCultureIgnoreCase);
-            #endif
+#endif
         }
 
         [Fact]
@@ -122,9 +122,9 @@ namespace Mairegger.Printing.Tests.Content
             printDialog.Setup(i => i.ShowDialog()).Returns(false);
 
             var testPrintProcessor = new TestPrintProcessor
-                                     {
-                                         PrintDialog = printDialog.Object
-                                     };
+            {
+                PrintDialog = printDialog.Object
+            };
 
             var printProcessor = new PrintProcessorCollection(testPrintProcessor);
 

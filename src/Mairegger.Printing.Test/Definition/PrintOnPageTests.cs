@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -24,12 +24,12 @@ namespace Mairegger.Printing.Tests.Definition
             var attribute = new PrintOnPageAttribute(PrintAppendixes.All, new PageRange(2, 5));
 
             Assert.Multiple(
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(1)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(2)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(3)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(4)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(5)),
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(6)));
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(1)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(2)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(3)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(4)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(5)),
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(6)));
         }
 
         [Fact]
@@ -38,11 +38,11 @@ namespace Mairegger.Printing.Tests.Definition
             var attribute = new PrintOnPageAttribute(PrintAppendixes.All, 1, 3, 5);
 
             Assert.Multiple(
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(1)),
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(2)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(3)),
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(4)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(5))
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(1)),
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(2)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(3)),
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(4)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(5))
                 );
         }
 
@@ -52,11 +52,11 @@ namespace Mairegger.Printing.Tests.Definition
             var attribute = new PrintOnPageAttribute(PrintAppendixes.All, 3);
 
             Assert.Multiple(
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(1)),
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(2)),
-                ()=> Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(3)),
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(4)),
-                ()=> Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(5)));
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(1)),
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(2)),
+                () => Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(3)),
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(4)),
+                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(5)));
         }
     }
 }

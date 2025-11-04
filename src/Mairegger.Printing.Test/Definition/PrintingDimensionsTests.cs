@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -33,19 +33,19 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 3 });
 
             PrintDimension pd = new PrintDimension
-                                {
-                                    PrintProcessor = mock.Object,
-                                    InternalPrintDefinition = new PrintDefinition()
-                                };
+            {
+                PrintProcessor = mock.Object,
+                InternalPrintDefinition = new PrintDefinition()
+            };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header | PrintAppendixes.Footer | PrintAppendixes.Summary));
 
             Assert.Multiple(
-                ()=> Assert.Equal(1, pd.GetHeightFor(PrintAppendixes.Header, 1, false)),
-                ()=> Assert.Equal(2, pd.GetHeightFor(PrintAppendixes.Footer, 1, false)),
+                () => Assert.Equal(1, pd.GetHeightFor(PrintAppendixes.Header, 1, false)),
+                () => Assert.Equal(2, pd.GetHeightFor(PrintAppendixes.Footer, 1, false)),
 
-                ()=> Assert.Equal(0, pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false)),
+                () => Assert.Equal(0, pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false)),
 
-                ()=> Assert.Throws<ArgumentNullException>(() => pd.GetHeightFor(PrintAppendixes.Summary, 1, false)));
+                () => Assert.Throws<ArgumentNullException>(() => pd.GetHeightFor(PrintAppendixes.Summary, 1, false)));
 
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.HeaderDescription));
             Assert.Equal(3, pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false));
@@ -78,10 +78,10 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetPageNumbers(It.IsAny<int>(), It.IsAny<int>())).Returns(new Grid { Height = 25 });
 
             PrintDimension pd = new PrintDimension
-                                {
-                                    PrintProcessor = mock.Object,
-                                    InternalPrintDefinition = new PrintDefinition()
-                                };
+            {
+                PrintProcessor = mock.Object,
+                InternalPrintDefinition = new PrintDefinition()
+            };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             pd.PageSize = new Size(100, 300);
@@ -101,21 +101,21 @@ namespace Mairegger.Printing.Tests.Definition
             mock.Setup(i => i.GetPageNumbers(It.IsAny<int>(), It.IsAny<int>())).Returns(new Grid { Height = 25 });
 
             PrintDimension pd = new PrintDimension
-                                {
-                                    PrintProcessor = mock.Object,
-                                    Margin = new Thickness(10),
-                                    PageSize = new Size(100, 1000),
-                                    InternalPrintDefinition = new PrintDefinition()
-                                };
+            {
+                PrintProcessor = mock.Object,
+                Margin = new Thickness(10),
+                PageSize = new Size(100, 1000),
+                InternalPrintDefinition = new PrintDefinition()
+            };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             Assert.Multiple(
-                ()=> Assert.Equal(new PageRange(10, 20), pd.GetRangeFor(PrintAppendixes.Header, 1, false)),
-                ()=> Assert.Equal(new PageRange(20, 50), pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false)),
-                ()=> Assert.Equal(new PageRange(50, 905), pd.GetRangeForBodyGrid(1, false)),
-                ()=> Assert.Equal(new PageRange(905, 945), pd.GetRangeFor(PrintAppendixes.Summary, 1, false)),
-                ()=> Assert.Equal(new PageRange(945, 965), pd.GetRangeFor(PrintAppendixes.Footer, 1, false)),
-                ()=> Assert.Equal(new PageRange(965, 990), pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false)));
+                () => Assert.Equal(new PageRange(10, 20), pd.GetRangeFor(PrintAppendixes.Header, 1, false)),
+                () => Assert.Equal(new PageRange(20, 50), pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false)),
+                () => Assert.Equal(new PageRange(50, 905), pd.GetRangeForBodyGrid(1, false)),
+                () => Assert.Equal(new PageRange(905, 945), pd.GetRangeFor(PrintAppendixes.Summary, 1, false)),
+                () => Assert.Equal(new PageRange(945, 965), pd.GetRangeFor(PrintAppendixes.Footer, 1, false)),
+                () => Assert.Equal(new PageRange(965, 990), pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false)));
         }
 
         [Fact]
@@ -138,8 +138,8 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Theory]
-        [InlineData(1,4,7,10)]
-        [InlineData(2,5,8,11)]
+        [InlineData(1, 4, 7, 10)]
+        [InlineData(2, 5, 8, 11)]
         public void PrintablePageSize_Test(double left, double top, double right, double bottom)
         {
             Thickness margin = new Thickness(left, top, right, bottom);
@@ -170,10 +170,10 @@ namespace Mairegger.Printing.Tests.Definition
             double widthPerPiece = (totalWidth - 100) / pieces;
 
             Assert.Multiple(
-                ()=> Assert.Equal(1 * widthPerPiece, tpd.Column1),
-                ()=> Assert.Equal(3 * widthPerPiece, tpd.Column2),
-                ()=> Assert.Equal(100, tpd.Column3),
-                ()=> Assert.Equal(1 * widthPerPiece, tpd.Column4));
+                () => Assert.Equal(1 * widthPerPiece, tpd.Column1),
+                () => Assert.Equal(3 * widthPerPiece, tpd.Column2),
+                () => Assert.Equal(100, tpd.Column3),
+                () => Assert.Equal(1 * widthPerPiece, tpd.Column4));
         }
 
         [Fact]
@@ -200,9 +200,9 @@ namespace Mairegger.Printing.Tests.Definition
         public void SetHeightValue()
         {
             PrintDimension pd = new PrintDimension
-                                {
-                                    InternalPrintDefinition = new PrintDefinition()
-                                };
+            {
+                InternalPrintDefinition = new PrintDefinition()
+            };
 
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
@@ -211,7 +211,7 @@ namespace Mairegger.Printing.Tests.Definition
             pd.SetHeightValue(PrintAppendixes.Summary, 6);
             Assert.Equal(6, pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
 
-            Assert.Throws<ArgumentOutOfRangeException>(()=> pd.SetHeightValue(PrintAppendixes.Summary, -1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => pd.SetHeightValue(PrintAppendixes.Summary, -1));
         }
 
         [StaTheory]
@@ -219,9 +219,9 @@ namespace Mairegger.Printing.Tests.Definition
         public void RecalculateHeightValueWhen(int initialHeight)
         {
             PrintDimension pd = new PrintDimension
-                                {
-                                    InternalPrintDefinition = new PrintDefinition()
-                                };
+            {
+                InternalPrintDefinition = new PrintDefinition()
+            };
 
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
@@ -244,7 +244,7 @@ namespace Mairegger.Printing.Tests.Definition
         [Fact]
         public void RecalculateHeightValueWhen1()
         {
-            Assert.Throws<ArgumentNullException>(()=> new PrintDimension().RecalculateHeightValueWhen(null!, PrintAppendixes.None));
+            Assert.Throws<ArgumentNullException>(() => new PrintDimension().RecalculateHeightValueWhen(null!, PrintAppendixes.None));
         }
 
         private static void SetPageSizeToPrintDimension(PrintDimension printingDimension, Size pageSize)

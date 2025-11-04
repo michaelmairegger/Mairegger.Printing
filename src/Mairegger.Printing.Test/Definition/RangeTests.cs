@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -102,8 +102,8 @@ namespace Mairegger.Printing.Tests.Definition
         {
             var r = PageRange.Parse("4-6");
             Assert.Multiple(
-                ()=> Assert.Equal(4, r.From),
-                ()=> Assert.Equal(6, r.To));
+                () => Assert.Equal(4, r.From),
+                () => Assert.Equal(6, r.To));
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList2Double), 10d, 20d, 0d, 10d,5, MemberType = typeof(RandomTest))]
+        [MemberData(nameof(RandomTest.NumberList2Double), 10d, 20d, 0d, 10d, 5, MemberType = typeof(RandomTest))]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
         public void Range_MinGreatherMax_Valie(double min, double max)
         {
@@ -155,7 +155,7 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList2Double), 0d, 10d, 10d, 20d,5, MemberType = typeof(RandomTest))]
+        [MemberData(nameof(RandomTest.NumberList2Double), 0d, 10d, 10d, 20d, 5, MemberType = typeof(RandomTest))]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
         public void Range_MinLessMax_Valie(double min, double max)
         {

@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -57,20 +57,20 @@ namespace Mairegger.Printing.Tests.Content
             var printProcessor = new Mock<PrintProcessor.PrintProcessor>();
 
             Assert.Multiple(
-                ()=> Assert.NotNull(printProcessor.Object.PrintDialog),
-                ()=> Assert.Equal(PageOrientation.Portrait, printProcessor.Object.PageOrientation));
+                () => Assert.NotNull(printProcessor.Object.PrintDialog),
+                () => Assert.Equal(PageOrientation.Portrait, printProcessor.Object.PageOrientation));
         }
 
         [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList2), 10, 20, 3, 7,1, MemberType = typeof(RandomTest))]
+        [MemberData(nameof(RandomTest.NumberList2), 10, 20, 3, 7, 1, MemberType = typeof(RandomTest))]
         public void CustomAlternatingRowColors(int itemCount, int differentColors)
         {
             var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
-                     {
-                         ItemCount = itemCount,
-                         IsAlternatingRowColor = true
-                     };
+            {
+                ItemCount = itemCount,
+                IsAlternatingRowColor = true
+            };
 
             var colorList = new List<SolidColorBrush>();
             for (int i = 0; i < differentColors; i++)
@@ -107,11 +107,11 @@ namespace Mairegger.Printing.Tests.Content
             mock.Object.FileName = formattableString;
 
             char[] invalid = Path.GetInvalidFileNameChars();
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             Assert.DoesNotContain(mock.Object.FileName, v => invalid.Contains(v));
-            #else
+#else
             Assert.DoesNotContain(mock.Object.FileName, invalid, StringComparison.InvariantCultureIgnoreCase);
-            #endif
+#endif
         }
 
         [Fact]
@@ -135,7 +135,7 @@ namespace Mairegger.Printing.Tests.Content
         [Fact]
         public void GetHeaderDescription_Throws_IfNotImplemented()
         {
-            Assert.Throws<NotImplementedException>(()=> new TestPrintProcessor().GetHeaderDescription());
+            Assert.Throws<NotImplementedException>(() => new TestPrintProcessor().GetHeaderDescription());
         }
 
         [Fact]
@@ -149,10 +149,10 @@ namespace Mairegger.Printing.Tests.Content
         {
             var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
-                     {
-                         ItemCount = 3,
-                         IsAlternatingRowColor = false
-                     };
+            {
+                ItemCount = 3,
+                IsAlternatingRowColor = false
+            };
 
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(true);
@@ -161,9 +161,9 @@ namespace Mairegger.Printing.Tests.Content
             pp.PrintDocument();
 
             Assert.Multiple(
-                ()=> Assert.Null(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty)),
-                ()=> Assert.Null(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty)),
-                ()=> Assert.Null(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty)));
+                () => Assert.Null(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty)),
+                () => Assert.Null(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty)),
+                () => Assert.Null(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty)));
         }
 
         [StaFact]
@@ -171,10 +171,10 @@ namespace Mairegger.Printing.Tests.Content
         {
             var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
-                     {
-                         ItemCount = 10,
-                         IsAlternatingRowColor = true
-                     };
+            {
+                ItemCount = 10,
+                IsAlternatingRowColor = true
+            };
 
             var printDialog = new Mock<IPrintDialog>();
             printDialog.Setup(i => i.ShowDialog()).Returns(true);
@@ -194,9 +194,9 @@ namespace Mairegger.Printing.Tests.Content
         {
             var printDialog = new Mock<IPrintDialog>();
             var printProcessor = new NoLineItemsTestPrintProcessor
-                                 {
-                                     PrintDialog = printDialog.Object
-                                 };
+            {
+                PrintDialog = printDialog.Object
+            };
 
             Assert.True(printProcessor.PrintDocument());
         }
@@ -208,9 +208,9 @@ namespace Mairegger.Printing.Tests.Content
         {
             var printDialog = new Mock<IPrintDialog>();
             var printProcessor = new TestPrintProcessor
-                                 {
-                                     PrintDialog = printDialog.Object,
-                                     ColorPrintPartsForDebug = colorPrintPartsForDebug
+            {
+                PrintDialog = printDialog.Object,
+                ColorPrintPartsForDebug = colorPrintPartsForDebug
             };
 
             var windowProvider = new Mock<IWindowProvider>();
@@ -267,8 +267,8 @@ namespace Mairegger.Printing.Tests.Content
             printProcessor.PrintDialog = printDialog.Object;
 
             Assert.Multiple(
-                ()=> Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())),
-                ()=> Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])));
+                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())),
+                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])));
         }
 
         [StaFact]

@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -85,25 +85,25 @@ namespace Mairegger.Printing.Tests.Content
             var grid = (Grid)icontent.Content;
             var uiElement = (TextBlock)grid.Children[0];
             Assert.Multiple(
-                ()=> Assert.Equal("Test", uiElement.Text),
+                () => Assert.Equal("Test", uiElement.Text),
 
-                ()=> Assert.Equal(32, uiElement.FontSize),
-                ()=> Assert.Equal(Brushes.Bisque, grid.Background),
-                ()=> Assert.Equal(FontWeights.ExtraBold, uiElement.FontWeight),
-                ()=> Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment),
-                ()=> Assert.Equal(new Thickness(12), uiElement.Padding),
-                ()=> Assert.Equal(new Thickness(24), grid.Margin));
+                () => Assert.Equal(32, uiElement.FontSize),
+                () => Assert.Equal(Brushes.Bisque, grid.Background),
+                () => Assert.Equal(FontWeights.ExtraBold, uiElement.FontWeight),
+                () => Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment),
+                () => Assert.Equal(new Thickness(12), uiElement.Padding),
+                () => Assert.Equal(new Thickness(24), grid.Margin));
         }
 
         [StaFact]
         public void TextLine_Configuration()
         {
             StringLineItemConfiguration configuration = new StringLineItemConfiguration()
-                                                        {
-                                                            FontFamily = new FontFamily("Verdana"),
-                                                            FontSize = 10,
-                                                            HorizontalAlignment = HorizontalAlignment.Right
-                                                        };
+            {
+                FontFamily = new FontFamily("Verdana"),
+                FontSize = 10,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
 
             var content = PrintContent.TextLine("Test", configuration);
 
@@ -113,9 +113,9 @@ namespace Mairegger.Printing.Tests.Content
             var uiElement = (TextBlock)grid.Children[0];
 
             Assert.Multiple(
-                ()=> Assert.Equal(10, uiElement.FontSize),
-                ()=> Assert.Equal(new FontFamily("Verdana"), uiElement.FontFamily),
-                ()=> Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment));
+                () => Assert.Equal(10, uiElement.FontSize),
+                () => Assert.Equal(new FontFamily("Verdana"), uiElement.FontFamily),
+                () => Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment));
 
         }
 
