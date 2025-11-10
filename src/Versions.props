@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.8.118</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.9.50</NerdbankGitVersioningVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
     <!--Testing -->
     <BogusVersion>35.6.4</BogusVersion>
