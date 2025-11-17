@@ -2,10 +2,10 @@
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
     <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>9.0.9</CurrentNetVersion>
-    <PreviousNetVersion/>
+    <CurrentNetVersion>10.0.0</CurrentNetVersion>
+    <PreviousNetVersion>9.0.11</PreviousNetVersion>
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>8.0.19</MinimumNetVersion>
+    <MinimumNetVersion>8.0.22</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
 
     <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->
@@ -16,13 +16,13 @@
     <NerdbankGitVersioningVersion>3.9.50</NerdbankGitVersioningVersion>
     <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
     <!--Testing -->
-    <BogusVersion>35.6.4</BogusVersion>
+    <BogusVersion>35.6.5</BogusVersion>
     <MoqVersion>4.20.72</MoqVersion>
     <XUnitV3Version>3.2.0</XUnitV3Version>
     <XUnitRunnerVisualStudioVersion>3.1.5</XUnitRunnerVisualStudioVersion>
-    <MicrosoftNETTestSdkVersion>18.0.0</MicrosoftNETTestSdkVersion>
+    <MicrosoftNETTestSdkVersion>18.0.1</MicrosoftNETTestSdkVersion>
     <MicrosoftTestingExtensionsCodeCoverageVersion>18.1.0</MicrosoftTestingExtensionsCodeCoverageVersion>
-    <MicrosoftTestingPlatformVersion>2.0.1</MicrosoftTestingPlatformVersion>
+    <MicrosoftTestingPlatformVersion>2.0.2</MicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Allow to overwrite versions from base Versions.props">
