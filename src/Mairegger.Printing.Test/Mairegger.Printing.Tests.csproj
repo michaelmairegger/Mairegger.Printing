@@ -6,11 +6,6 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
 
-    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-
-    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
-
     <!-- this is only because of NetCoreAppMinimum is needed below in references -->
     <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppPrevious)</NetCoreAppMinimum>
     <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppCurrent)</NetCoreAppMinimum>
