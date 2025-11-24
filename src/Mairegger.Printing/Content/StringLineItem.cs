@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,42 @@ using System.Windows.Media;
 
 namespace Mairegger.Printing.Content
 {
+    file static class TextBlockAccessors
+    {
+        private static readonly Type TextBlockType = typeof(TextBlock);
+        private const string TextBlock_GetLine = "GetLine";
+        private const string LineMetrics = "MS.Internal.Text.LineMetrics, PresentationFramework";
+        private const string LineMetrics_Lenght = "Length";
+        private const string TextBlock_getLineCount = "get_LineCount";
+
+        private static readonly MethodInfo _reflectionGetLine = TextBlockType.GetMethod(TextBlock_GetLine, BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"BLABLA {TextBlock_GetLine}\" on type {TextBlockType}");
+        private static readonly PropertyInfo _reflectionLineLength = Type.GetType(LineMetrics, true)!.GetProperty(LineMetrics_Lenght, BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"Exception in reflecting property \"{LineMetrics_Lenght}\" on type \"{LineMetrics}\"");
+
+        #if NET11_0_OR_GREATER
+        #error Check if GetCurrentLineLength can be used with UnsafeAccessor. Up to now this is not possible since LineMetrics is a struct and UnsafeAccessor does not support structs.
+        #endif
+        public static int GetCurrentLineLength(TextBlock textBlock, int currentLine)
+        {
+            object line = _reflectionGetLine.Invoke(textBlock, [currentLine]) ?? throw new InvalidOperationException("Reflection exception");
+            return _reflectionLineLength.GetValue(line) as int? ?? 0;
+        }
+
+        #if NETFRAMEWORK
+
+        private static readonly MethodInfo _lineCountProperty = typeof(TextBlock).GetMethod(TextBlock_getLineCount, BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting LineCount on object of type TextBlock");
+        public static int GetTextBoxLineCount(TextBlock textBlock)
+        {
+            return _lineCountProperty.Invoke(textBlock, null) as int? ?? 0;
+        }
+
+        #else
+
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = TextBlock_getLineCount)]
+        public static extern int GetTextBoxLineCount(TextBlock textBlock);
+
+        #endif
+    }
+
     public class StringLineItem : IPageBreakAware
     {
         internal StringLineItem(string text, StringLineItemConfiguration configuration)
@@ -58,18 +95,13 @@ namespace Mairegger.Printing.Content
 
         public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
         {
-            var reflectionLineCount = typeof(TextBlock).GetProperty("LineCount", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting LineCount on object of type TextBlock");
-            var reflectionGetLine = typeof(TextBlock).GetMethod("GetLine", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException("Exception in reflecting GetLine on object of type TextBlock");
-
-            PropertyInfo? reflectionLineLength = null;
-
             var lineHeight = GetLineHeight();
             var printablePageHeight = currentPageHeight;
 
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
 
-            var totalLines = (reflectionLineCount.GetValue(textBlock) as int?) ?? 0;
+            var totalLines = TextBlockAccessors.GetTextBoxLineCount(textBlock);
 
             var currentLine = 0;
             var currentLineOnPage = 0;
@@ -80,20 +112,12 @@ namespace Mairegger.Printing.Content
             while (currentLine < totalLines)
             {
                 var linesThatHaveSpace = (int)(printablePageHeight / lineHeight * .95); // remove 5% of the page height
+                var currentLineLength = TextBlockAccessors.GetCurrentLineLength(textBlock, currentLine);
 
-                var line = reflectionGetLine.Invoke(textBlock, [currentLine]) ?? throw new InvalidOperationException("Reception exception");
-
-                if (reflectionLineLength == null)
-                {
-                    reflectionLineLength = line.GetType().GetProperty("Length", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"Exception in reflecting Length type {line.GetType()}");
-                }
-
-                var length = (reflectionLineLength.GetValue(line) as int?) ?? 0;
-
-                var substring = Text.Substring(currentPosition, length);
+                var substring = Text.Substring(currentPosition, currentLineLength);
                 stringBuilder.Append(substring);
 
-                currentPosition += length;
+                currentPosition += currentLineLength;
                 currentLineOnPage++;
                 currentLine++;
 
