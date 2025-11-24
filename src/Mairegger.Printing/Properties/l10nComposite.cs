@@ -1,4 +1,4 @@
-﻿// Copyright 2017-2022 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
 // Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !NETFRAMEWORK
+
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-
-#if !NETFRAMEWORK
 
 namespace Mairegger.Printing.Properties;
 

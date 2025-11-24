@@ -1,6 +1,6 @@
-﻿// Copyright 2016 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,20 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
+using System.Windows;
 using EnumsNET;
+using Mairegger.Printing.PrintProcessor;
+using Mairegger.Printing.Properties;
 
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Reflection;
-    using System.Windows;
-    using Mairegger.Printing.PrintProcessor;
-    using Mairegger.Printing.Properties;
-
     /// <summary>
     ///     Provides a class that contains several Printing Dimensions
     /// </summary>
@@ -126,14 +122,14 @@ namespace Mairegger.Printing.Definition
         /// <exception cref="ArgumentNullException"><paramref name="condition"/> is null.</exception>
         public void RecalculateHeightValueWhen(Func<bool> condition, PrintAppendixes printAppendix)
         {
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             if (condition == null)
             {
                 throw new ArgumentNullException(nameof(condition));
             }
-            #else
+#else
             ArgumentNullException.ThrowIfNull(condition);
-            #endif
+#endif
             if (condition())
             {
                 SetHeightValue(printAppendix, null);
@@ -150,11 +146,11 @@ namespace Mairegger.Printing.Definition
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
                     if (uiElement == null)
                     {
-                        #if NETFRAMEWORK
-                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10n.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
-                        #else
-                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10nComposite.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor), printAppendix, printAppendix));
-                        #endif
+#if NETFRAMEWORK
+                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10n.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor.PrintProcessor), printAppendix, printAppendix));
+#else
+                        throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10nComposite.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor.PrintProcessor), printAppendix, printAppendix));
+#endif
                     }
                     uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
                     value = uiElement.DesiredSize.Height;

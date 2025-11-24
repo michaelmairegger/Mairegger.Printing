@@ -1,6 +1,6 @@
-﻿// Copyright 2017 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,22 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+using System.Printing;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+using Mairegger.Printing.Internal;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Printing;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.Internal;
-
     /// <summary>
     ///     Provides a class that processes a printing
     /// </summary>
@@ -130,10 +127,10 @@ namespace Mairegger.Printing.PrintProcessor
         public virtual UIElement GetPageNumbers(int currentPage, int totalPages)
         {
             return new TextBlock
-                   {
-                       Text = $"{currentPage} | {totalPages}",
-                       TextAlignment = TextAlignment.Center
-                   };
+            {
+                Text = $"{currentPage} | {totalPages}",
+                TextAlignment = TextAlignment.Center
+            };
         }
 
         public virtual UIElement GetSummary()

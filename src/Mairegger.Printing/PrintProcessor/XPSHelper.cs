@@ -1,6 +1,6 @@
-﻿// Copyright 2016 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,17 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+using System.IO.Packaging;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
+using System.Windows.Xps.Packaging;
+using Mairegger.Printing.Internal;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.IO;
-    using System.IO.Packaging;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
-    using System.Windows.Markup;
-    using System.Windows.Xps.Packaging;
-    using Mairegger.Printing.Internal;
-
     /// <summary>
     ///     Represents a helper class for displaying a <see cref="FixedDocument" /> in a <see cref="DocumentViewer" />.
     /// </summary>
@@ -91,13 +90,13 @@ namespace Mairegger.Printing.PrintProcessor
         {
             var xpsDocument = new XpsDocument(fileName, FileAccess.Read);
 
-            var documentViewer = new DocumentViewer { Document = xpsDocument.GetFixedDocumentSequence() };
-
-            if (windowProvider == null)
+            var documentViewer = new CustomDocumentViewer
             {
-                windowProvider = new WindowsProvider();
-            }
+                JobTitle = title,
+                Document = xpsDocument.GetFixedDocumentSequence()
+            };
 
+            windowProvider ??= new WindowsProvider();
             windowProvider.Closed += PreviewWindowOnClosed(fileName, xpsDocument, deleteFileOnClose);
             windowProvider.Show(title, documentViewer);
         }
@@ -112,9 +111,9 @@ namespace Mairegger.Printing.PrintProcessor
                     foreach (var dr in sourceSequence.References)
                     {
                         var newDocumentReference = new DocumentReference
-                                                   {
-                                                       Source = dr.Source
-                                                   };
+                        {
+                            Source = dr.Source
+                        };
                         var baseUri = ((IUriContext)dr).BaseUri;
                         ((IUriContext)newDocumentReference).BaseUri = baseUri;
                         var fd = newDocumentReference.GetDocument(true);

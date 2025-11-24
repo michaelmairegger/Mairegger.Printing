@@ -16,6 +16,9 @@ outputs:
 runs:
   using: "composite"
   steps:
+  - uses: actions/setup-dotnet@v5
+    with:
+      dotnet-version: '10.0.x'
   - name: Build
     shell: pwsh
     run: dotnet build --configuration ${{ inputs.buildConfiguration }}
@@ -23,5 +26,5 @@ runs:
 
   - name: Test
     shell: pwsh
-    run: dotnet test --configuration ${{ inputs.buildConfiguration }} --no-build --collect:"XPlat Code Coverage"
+    run: dotnet test --configuration ${{ inputs.buildConfiguration }} --no-build --coverage --coverage-output-format cobertura
     working-directory: ${{ inputs.workingDirectory }}

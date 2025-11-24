@@ -1,6 +1,6 @@
-﻿// Copyright 2016 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using EnumsNET;
+using Mairegger.Printing.Internal;
 
 namespace Mairegger.Printing.Definition
 {
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using Mairegger.Printing.Internal;
-
     public class PrintDefinition
     {
         private readonly PrintOnAttributeHelper _printOnAttributeHelper = new PrintOnAttributeHelper();
@@ -51,7 +49,7 @@ namespace Mairegger.Printing.Definition
         /// </returns>
         private PrintPartStatus GetPrintPrintDefinitionForPage(PrintAppendixes pa, int pageNumber)
         {
-            if (!Enums.IsDefined(pa))
+            if (!pa.IsDefined())
             {
                 throw new ArgumentException($"Enum value {pa} is not defined on enum {typeof(PrintAppendixes).FullName}", nameof(pa));
             }

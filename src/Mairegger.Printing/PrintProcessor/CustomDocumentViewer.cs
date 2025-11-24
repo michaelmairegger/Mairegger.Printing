@@ -15,28 +15,23 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Mairegger.Printing.Content
+namespace Mairegger.Printing.PrintProcessor;
+
+public class CustomDocumentViewer : DocumentViewer
 {
-    internal sealed class CombinedPrintContentCollection : List<IPrintContent>, IPrintContent
+    static CustomDocumentViewer()
     {
-        public CombinedPrintContentCollection(params IPrintContent[] collection)
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomDocumentViewer), new FrameworkPropertyMetadata(typeof(CustomDocumentViewer)));
+    }
+
+    public string? JobTitle { get; set; }
+
+    protected override void OnPrintCommand()
+    {
+        var dialog = new PrintDialog();
+        if (dialog.ShowDialog() == true)
         {
-            AddRange(collection);
-        }
-
-        public UIElement Content
-        {
-            get
-            {
-                var contentPanel = new StackPanel();
-
-                foreach (var lineItem in this)
-                {
-                    contentPanel.Children.Add(lineItem.Content);
-                }
-
-                return contentPanel;
-            }
+            dialog.PrintDocument(Document.DocumentPaginator, JobTitle);
         }
     }
 }

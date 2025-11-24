@@ -1,31 +1,27 @@
-﻿// Copyright 2015 Michael Mairegger
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
+﻿// Copyright 2017-2025 Michael Mairegger
+//
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Sample
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-
-    public class Printer : PrintProcessor
+    public class Printer : PrintProcessor.PrintProcessor
     {
         private readonly IEnumerable<MyShownObject> _collToPrint;
         private readonly CustomPrintDimension _printDimensions = new CustomPrintDimension();
@@ -64,11 +60,11 @@ namespace Mairegger.Printing.Sample
             sb.Append("No of total lines: " + _collToPrint.Sum(o => o.NumberOfLines));
 
             Label l = new Label
-                      {
-                          Content = sb.ToString(),
-                          Width = 600,
-                          HorizontalContentAlignment = HorizontalAlignment.Right
-                      };
+            {
+                Content = sb.ToString(),
+                Width = 600,
+                HorizontalContentAlignment = HorizontalAlignment.Right
+            };
 
             return l;
         }

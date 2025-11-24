@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,28 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Internal
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using Mairegger.Printing.Definition;
-
     internal class PrintOnAttributeHelper
     {
         private readonly List<IPrintPartDefinition> _printOnAttributes = [];
 
         public void AddAttribute(IPrintPartDefinition printPartDefinition)
         {
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             if (printPartDefinition == null)
             {
                 throw new ArgumentNullException(nameof(printPartDefinition));
             }
-            #else
+#else
             ArgumentNullException.ThrowIfNull(printPartDefinition);
-            #endif
+#endif
             Debug.WriteLine("PRINTING: Found {0} for {1}", printPartDefinition.GetType().Name, printPartDefinition.PrintAppendixes);
             _printOnAttributes.Add(printPartDefinition);
         }
@@ -45,14 +42,14 @@ namespace Mairegger.Printing.Internal
 
         public PrintPartStatus IsPrintOnPage(PrintAppendixes printA, int page)
         {
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             if (page <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(page));
             }
-            #else
+#else
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(page);
-            #endif
+#endif
 
             var printOnPageAttributes = GetPossiblePrintDefinitionAttributes(printA).ToList();
             if (printOnPageAttributes.Count == 0)

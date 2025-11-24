@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum);$(NetFrameworkMinimum)</TargetFrameworks>
+
     <OutputType>WinExe</OutputType>
     <RootNamespace>Mairegger.Printing.Sample</RootNamespace>
     <IsPackable>false</IsPackable>
@@ -8,7 +10,7 @@
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <Reference Include="ReachFramework" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Mairegger.Printing\Mairegger.Printing.csproj" />
   </ItemGroup>

@@ -1,6 +1,6 @@
-﻿// Copyright 2016 Michael Mairegger
+﻿// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.ObjectModel;
+using System.Printing;
+
 namespace Mairegger.Printing.PrintProcessor
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Printing;
-
     public class PrintProcessorCollection : Collection<PrintProcessor>, IPrintProcessorPrinter
     {
         private string _fileName = string.Empty;
@@ -27,14 +24,14 @@ namespace Mairegger.Printing.PrintProcessor
         public PrintProcessorCollection(PrintProcessor printProcessor)
             : this(new List<PrintProcessor> { printProcessor })
         {
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             if (printProcessor == null)
             {
                 throw new ArgumentNullException(nameof(printProcessor));
             }
-            #else
+#else
             ArgumentNullException.ThrowIfNull(printProcessor);
-            #endif
+#endif
 
             _fileName = printProcessor.FileName;
         }
@@ -46,14 +43,14 @@ namespace Mairegger.Printing.PrintProcessor
 
         public PrintProcessorCollection(IList<PrintProcessor> coll, string fileName = "")
         {
-            #if NETFRAMEWORK
+#if NETFRAMEWORK
             if (coll == null)
             {
                 throw new ArgumentNullException(nameof(coll));
             }
-            #else
+#else
             ArgumentNullException.ThrowIfNull(coll);
-            #endif
+#endif
 
             FileName = fileName;
             foreach (var printProcessor in coll)

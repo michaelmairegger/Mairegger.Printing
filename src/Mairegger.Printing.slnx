@@ -1,0 +1,26 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../.editorconfig" />
+    <File Path="../global.json" />
+    <File Path="../README.md" />
+    <File Path="../version.json" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="Versions.props" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/">
+    <File Path="../.github/dependabot.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/actions/" />
+  <Folder Name="/Solution Items/.github/actions/build-and-test/">
+    <File Path="../.github/actions/build-and-test/action.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path="../.github/workflows/build.yml" />
+    <File Path="../.github/workflows/publish.yml" />
+  </Folder>
+  <Project Path="Mairegger.Printing.Test/Mairegger.Printing.Tests.csproj" />
+  <Project Path="Mairegger.Printing/Mairegger.Printing.csproj" />
+  <Project Path="SampleProject/SampleProject.csproj" />
+</Solution>

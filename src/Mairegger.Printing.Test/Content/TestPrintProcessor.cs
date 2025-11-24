@@ -1,6 +1,6 @@
-// Copyright 2016 Michael Mairegger
+// Copyright 2017-2025 Michael Mairegger
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+using Mairegger.Printing.Definition;
+
 namespace Mairegger.Printing.Tests.Content
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using Mairegger.Printing.Definition;
-    using Mairegger.Printing.PrintProcessor;
-
     [PrintOnAllPages(PrintAppendixes.All)]
-    public class PrintEverything : PrintProcessor
+    public class PrintEverything : PrintProcessor.PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {
@@ -71,7 +68,7 @@ namespace Mairegger.Printing.Tests.Content
     }
 
     [PrintOnPage(PrintAppendixes.PageNumbers, 2)]
-    public class TestPrintProcessor : PrintProcessor
+    public class TestPrintProcessor : PrintProcessor.PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {
@@ -103,7 +100,7 @@ namespace Mairegger.Printing.Tests.Content
         }
     }
 
-    public class NoLineItemsTestPrintProcessor : PrintProcessor
+    public class NoLineItemsTestPrintProcessor : PrintProcessor.PrintProcessor
     {
         public override UIElement GetTable(out double reserveHeightOf, out Brush borderBrush)
         {

@@ -1,49 +1,45 @@
-// Copyright 2016 Michael Mairegger
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
+// Copyright 2017-2025 Michael Mairegger
+//
+// Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Mairegger.Printing.Content;
+
 namespace Mairegger.Printing.Tests.Content
 {
-    using System;
-    using System.Threading;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using Mairegger.Printing.Content;
-    using NUnit.Framework;
-
-    [TestFixture]
     public class PrintContentTests
     {
-        [Test]
+
+        [Fact]
         public void BlankLine_HeightNegative_ThrowsArgumentOutOfRangeException()
         {
-            Assert.That(() => PrintContent.BlankLine(0), Throws.InstanceOf<ArgumentOutOfRangeException>());
-            Assert.That(() => PrintContent.BlankLine(-1), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.Throws<ArgumentOutOfRangeException>(() => PrintContent.BlankLine(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => PrintContent.BlankLine(-1));
         }
 
-        [Test]
-        [Apartment(ApartmentState.STA)]
-        public void BlankLine_HeightValid([Random(1, 100, 1)] int height)
+        [StaTheory]
+        [MemberData(nameof(RandomTest.NumberList), 1, 100, 1, MemberType = typeof(RandomTest))]
+        public void BlankLine_HeightValid(int height)
         {
             var content = PrintContent.BlankLine(height).Content;
             content.Measure(new Size(double.MaxValue, double.MaxValue));
 
-            Assert.That(content.DesiredSize.Height, Is.EqualTo(height));
+            Assert.Equal(height, content.DesiredSize.Height);
         }
 
-        [Test]
-        [Apartment(ApartmentState.STA)]
+        [StaFact]
         public void Combine()
         {
             var content1 = PrintContent.BlankLine(10);
@@ -52,27 +48,26 @@ namespace Mairegger.Printing.Tests.Content
             var combined = PrintContent.Combine(content1, content2).Content;
             combined.Measure(new Size(double.MaxValue, double.MaxValue));
 
-            Assert.That(combined.DesiredSize.Height, Is.EqualTo(20));
+            Assert.Equal(20, combined.DesiredSize.Height);
         }
 
-        [Test]
-        [Apartment(ApartmentState.STA)]
-        public void HorizontalLine_Height([Random(1, 100, 1)] int height)
+        [StaTheory]
+        [MemberData(nameof(RandomTest.NumberList), 1, 100, 1, MemberType = typeof(RandomTest))]
+        public void HorizontalLine_Height(int height)
         {
             var horizontalLine = PrintContent.HorizontalLine(height).Content;
             horizontalLine.Measure(new Size(double.MaxValue, double.MaxValue));
 
-            Assert.That(horizontalLine.DesiredSize.Height, Is.EqualTo(height));
+            Assert.Equal(height, horizontalLine.DesiredSize.Height);
         }
 
-        [Test]
+        [Fact]
         public void PageBreak_AccessContent_ThrowsInvalidOperationException()
         {
-            Assert.That(() => PrintContent.PageBreak().Content, Throws.InvalidOperationException);
+            Assert.Throws<InvalidOperationException>(() => PrintContent.PageBreak().Content);
         }
 
-        [Test]
-        [Apartment(ApartmentState.STA)]
+        [StaFact]
         public void TextLine()
         {
             var content = PrintContent.TextLine("Test");
@@ -83,35 +78,32 @@ namespace Mairegger.Printing.Tests.Content
             content.Padding = new Thickness(12);
             content.Margin = new Thickness(24);
 
-            Assert.That(content.Text, Is.EqualTo("Test"));
+            Assert.Equal("Test", content.Text);
 
             var icontent = (IPrintContent)content;
 
             var grid = (Grid)icontent.Content;
             var uiElement = (TextBlock)grid.Children[0];
-            Assert.Multiple(() =>
-            {
-                Assert.That(uiElement.Text, Is.EqualTo("Test"));
+            Assert.Multiple(
+                () => Assert.Equal("Test", uiElement.Text),
 
-                Assert.That(uiElement.FontSize, Is.EqualTo(32));
-                Assert.That(grid.Background, Is.EqualTo(Brushes.Bisque));
-                Assert.That(uiElement.FontWeight, Is.EqualTo(FontWeights.ExtraBold));
-                Assert.That(uiElement.HorizontalAlignment, Is.EqualTo(HorizontalAlignment.Right));
-                Assert.That(uiElement.Padding, Is.EqualTo(new Thickness(12)));
-                Assert.That(grid.Margin, Is.EqualTo(new Thickness(24)));
-            });
+                () => Assert.Equal(32, uiElement.FontSize),
+                () => Assert.Equal(Brushes.Bisque, grid.Background),
+                () => Assert.Equal(FontWeights.ExtraBold, uiElement.FontWeight),
+                () => Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment),
+                () => Assert.Equal(new Thickness(12), uiElement.Padding),
+                () => Assert.Equal(new Thickness(24), grid.Margin));
         }
 
-        [Test]
-        [Apartment(ApartmentState.STA)]
+        [StaFact]
         public void TextLine_Configuration()
         {
             StringLineItemConfiguration configuration = new StringLineItemConfiguration()
-                                                        {
-                                                            FontFamily = new FontFamily("Verdana"),
-                                                            FontSize = 10,
-                                                            HorizontalAlignment = HorizontalAlignment.Right
-                                                        };
+            {
+                FontFamily = new FontFamily("Verdana"),
+                FontSize = 10,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
 
             var content = PrintContent.TextLine("Test", configuration);
 
@@ -120,24 +112,21 @@ namespace Mairegger.Printing.Tests.Content
             var grid = (Grid)icontent.Content;
             var uiElement = (TextBlock)grid.Children[0];
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(uiElement.FontSize, Is.EqualTo(10));
-                Assert.That(uiElement.FontFamily, Is.EqualTo(new FontFamily("Verdana")));
-                Assert.That(uiElement.HorizontalAlignment, Is.EqualTo(HorizontalAlignment.Right));
-            });
+            Assert.Multiple(
+                () => Assert.Equal(10, uiElement.FontSize),
+                () => Assert.Equal(new FontFamily("Verdana"), uiElement.FontFamily),
+                () => Assert.Equal(HorizontalAlignment.Right, uiElement.HorizontalAlignment));
 
         }
 
-        [Test]
-        [Apartment(ApartmentState.STA)]
+        [StaFact]
         public void ToPrintContent()
         {
             var content = new TextBlock { Text = "Test" };
 
             var icontent = content.ToPrintContent();
 
-            Assert.That(icontent.Content, Is.EqualTo(content));
+            Assert.Equal(content, icontent.Content);
         }
     }
 }
