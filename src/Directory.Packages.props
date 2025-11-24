@@ -1,9 +1,9 @@
 <Project>
   <Import Project="Versions.props" />
   <PropertyGroup Label="Target Frameworks">
-    <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,4))</NetCoreAppCurrent>
-    <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,3))</NetCoreAppPrevious>
-    <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,3))</NetCoreAppMinimum>
+    <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,$(CurrentNetVersion.LastIndexOf('.'))))</NetCoreAppCurrent>
+    <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,$(PreviousNetVersion.LastIndexOf('.'))))</NetCoreAppPrevious>
+    <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,$(MinimumNetVersion.LastIndexOf('.'))))</NetCoreAppMinimum>
     <NetCoreWpfCurrent Condition="'$(CurrentNetVersion)' != ''">$(NetCoreAppCurrent)-windows$(WindowsSdkVersion)</NetCoreWpfCurrent>
     <NetCoreWpfPrevious Condition="'$(PreviousNetVersion)' != ''">$(NetCoreAppPrevious)-windows$(WindowsSdkVersion)</NetCoreWpfPrevious>
     <NetCoreWpfMinimum Condition="'$(MinimumNetVersion)' != ''">$(NetCoreAppMinimum)-windows$(WindowsSdkVersion)</NetCoreWpfMinimum>
