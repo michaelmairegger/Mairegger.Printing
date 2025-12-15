@@ -118,16 +118,4 @@ namespace Mairegger.Printing.Sample
             }
         }
     }
-
-    public static class UIElementExtensions
-    {
-
-        private static readonly Size MaxSize = new Size(double.MaxValue, double.MaxValue);
-
-        public static Size ComputeDesiredSize(this UIElement uiElement)
-        {
-            uiElement.Measure(MaxSize);
-            return uiElement.DesiredSize;
-        }
-    }
 }
