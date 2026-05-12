@@ -156,7 +156,7 @@ namespace Mairegger.Printing.Tests.Definition
         {
             for (int i = 1; i <= 5; i++)
             {
-                yield return (s_faker.Random.Int(10, 20), s_faker.Random.Int(0,10));
+                yield return (s_faker.Random.Int(11, 20), s_faker.Random.Int(0,10));
             }
         }
 
