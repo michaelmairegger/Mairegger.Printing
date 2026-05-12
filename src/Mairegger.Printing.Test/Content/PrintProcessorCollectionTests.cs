@@ -23,15 +23,15 @@ namespace Mairegger.Printing.Tests.Content
 {
     public class PrintProcessorCollectionTests
     {
-        // [Test]
-        // public async Task Ctor()
-        // {
-        //     Mock<TestPrintProcessor>[] m1 = [TestPrintProcessor.Mock(), TestPrintProcessor.Mock(), TestPrintProcessor.Mock(), TestPrintProcessor.Mock()];
-        //     PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
-        //     await Assert.That(pp).IsEquivalentTo(m1.Select(i => i.Object));
-        //
-        //     await Assert.That(pp.FileName).IsEqualTo("FileName");
-        // }
+        [Test, Skip("Issue with assert")]
+        public async Task Ctor()
+        {
+            Mock<TestPrintProcessor>[] m1 = [TestPrintProcessor.Mock(), TestPrintProcessor.Mock(), TestPrintProcessor.Mock(), TestPrintProcessor.Mock()];
+            PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
+            await Assert.That(pp).IsEquivalentTo(m1.Select(i => i.Object));
+
+            await Assert.That(pp.FileName).IsEqualTo("FileName");
+        }
 
         [Test]
         public async Task Ctor_SingleElement()

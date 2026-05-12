@@ -21,28 +21,28 @@ namespace Mairegger.Printing.Tests.Content
 {
     public class CombinedPrintContentCollectionTests
     {
-        // [Test, STAThreadExecutor]
-        // public async Task Content()
-        // {
-        //     IPrintContentMock[] m1 = [IPrintContent.Mock(), IPrintContent.Mock(), IPrintContent.Mock(), IPrintContent.Mock()];
-        //
-        //     foreach (var mock in m1)
-        //     {
-        //         mock.Content.Returns(new UIElement());
-        //     }
-        //
-        //     var collection = new CombinedPrintContentCollection(m1.Select(i => i.Object).ToArray());
-        //
-        //     using (Assert.Multiple())
-        //     {
-        //         await Assert.That(collection.Content).IsNotNull();
-        //         await Assert.That(m1.Select(i => i.Object)).IsEquivalentTo(collection);
-        //     }
-        //
-        //     foreach (var mock in m1)
-        //     {
-        //         ((IMock)mock).VerifyAll();
-        //     }
-        // }
+        [Test, STAThreadExecutor, Skip("Issue with assert")]
+        public async Task Content()
+        {
+            IPrintContentMock[] m1 = [IPrintContent.Mock(), IPrintContent.Mock(), IPrintContent.Mock(), IPrintContent.Mock()];
+
+            foreach (var mock in m1)
+            {
+                mock.Content.Returns(new UIElement());
+            }
+
+            var collection = new CombinedPrintContentCollection(m1.Select(i => i.Object).ToArray());
+
+            using (Assert.Multiple())
+            {
+                await Assert.That(collection.Content).IsNotNull();
+                await Assert.That(m1.Select(i => i.Object)).IsEquivalentTo(collection);
+            }
+
+            foreach (var mock in m1)
+            {
+                ((IMock)mock).VerifyAll();
+            }
+        }
     }
 }
