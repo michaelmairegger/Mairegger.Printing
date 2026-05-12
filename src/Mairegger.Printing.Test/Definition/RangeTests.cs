@@ -15,74 +15,76 @@
 using System.Diagnostics.CodeAnalysis;
 using Mairegger.Printing.Definition;
 using Mairegger.Printing.Tests.Content;
+using System.Threading.Tasks;
+using Bogus;
 
 namespace Mairegger.Printing.Tests.Definition
 {
     public class RangeTests
     {
-        [Fact]
-        public void IsInRange_InRange_ReturnsTrue()
+        [Test]
+        public async Task IsInRange_InRange_ReturnsTrue()
         {
             var r1 = new PageRange(5, 10);
             var r2 = new PageRange(6, 10);
 
-            Assert.True(r1.IsInRange(r2));
+            await Assert.That(r1.IsInRange(r2)).IsTrue();
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        public void IsInRange_InRange_True(double value)
+        [Test]
+        [Arguments(1)]
+        [Arguments(2)]
+        [Arguments(3)]
+        [Arguments(4)]
+        [Arguments(5)]
+        public async Task IsInRange_InRange_True(double value)
         {
             var r = new PageRange(1, 100);
-            Assert.True(r.IsInRange(value));
+            await Assert.That(r.IsInRange(value)).IsTrue();
         }
 
-        [Fact]
-        public void IsInRange_NotInRange_ReturnsFalse()
+        [Test]
+        public async Task IsInRange_NotInRange_ReturnsFalse()
         {
             var r1 = new PageRange(5, 10);
             var r2 = new PageRange(6, 10);
 
-            Assert.False(r2.IsInRange(r1));
+            await Assert.That(r2.IsInRange(r1)).IsFalse();
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        public void IsInRange_OutOfRange_False(double value)
+        [Test]
+        [Arguments(1)]
+        [Arguments(2)]
+        [Arguments(3)]
+        [Arguments(4)]
+        [Arguments(5)]
+        public async Task IsInRange_OutOfRange_False(double value)
         {
             var r = new PageRange(6, 10);
-            Assert.False(r.IsInRange(value));
+            await Assert.That(r.IsInRange(value)).IsFalse();
         }
 
-        [Fact]
-        public void IsInRange_SameRange_ReturnsTrue()
+        [Test]
+        public async Task IsInRange_SameRange_ReturnsTrue()
         {
             var r1 = new PageRange(5, 10);
 
-            Assert.True(r1.IsInRange(r1));
+            await Assert.That(r1.IsInRange(r1)).IsTrue();
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
-        public void Length(double length)
+        [Test]
+        [Arguments(1)]
+        [Arguments(2)]
+        [Arguments(3)]
+        [Arguments(4)]
+        [Arguments(5)]
+        public async Task Length(double length)
         {
             var r = new PageRange(0, length);
-            Assert.Equal(r.Length, length);
+            await Assert.That(r.Length).EqualTo(length);
         }
 
-        [Fact]
+        [Test]
         public void Parse_Invalid()
         {
             var input = string.Empty;
@@ -97,94 +99,113 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.Throws<ArgumentException>(() => PageRange.Parse("4,6"));
         }
 
-        [Fact]
-        public void Parse_ValidRange()
+        [Test]
+        public async Task Parse_ValidRange()
         {
             var r = PageRange.Parse("4-6");
-            Assert.Multiple(
-                () => Assert.Equal(4, r.From),
-                () => Assert.Equal(6, r.To));
+
+            using (Assert.Multiple())
+            {
+                await Assert.That(r.From).EqualTo(4);
+                await Assert.That(r.To).EqualTo(6);
+            }
         }
 
-        [Fact]
-        public void ParseRanges()
+        [Test]
+        public async Task ParseRanges()
         {
             var ranges = PageRange.ParseRanges("1-2,5,10-11").ToList();
 
-            Assert.Contains(PageRange.Parse("1-2"), ranges);
-            Assert.Contains(PageRange.Parse("5"), ranges);
-            Assert.Contains(PageRange.Parse("10-11"), ranges);
+            await Assert.That(ranges).Contains(PageRange.Parse("1-2"));
+            await Assert.That(ranges).Contains(PageRange.Parse("5"));
+            await Assert.That(ranges).Contains(PageRange.Parse("10-11"));
         }
 
-        [Fact]
-        public void Range_Equals()
+        [Test]
+        public async Task Range_Equals()
         {
             var r1 = new PageRange(5, 10);
             var r2 = new PageRange(5, 10);
 
-            Assert.Equal(r2, r1);
-            Assert.Equal(r2.GetHashCode(), r1.GetHashCode());
+            await Assert.That(r2).EqualTo(r1);
+            await Assert.That(r2.GetHashCode()).EqualTo(r1.GetHashCode());
         }
 
-        [Fact]
-        public void Range_FromPoint_ToString()
+        [Test]
+        public async Task Range_FromPoint_ToString()
         {
             var r = PageRange.FromPoint(5);
-            Assert.Equal("5-5", r.ToString());
+            await Assert.That("5-5").EqualTo(r.ToString());
         }
 
-        [Theory]
-        [InlineData(1, 1)]
-        [InlineData(2, 2)]
-        [InlineData(3, 3)]
-        [InlineData(4, 4)]
-        [InlineData(5, 5)]
+        [Test]
+        [Arguments(1, 1)]
+        [Arguments(2, 2)]
+        [Arguments(3, 3)]
+        [Arguments(4, 4)]
+        [Arguments(5, 5)]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
-        public void Range_MinEqualsMax_Valie(double min, double max)
+        public async Task Range_MinEqualsMax_Valie(double min, double max)
         {
-            var exception = Record.Exception(() => new PageRange(min, max));
-            Assert.Null(exception);
+            await Assert.That(() => new PageRange(min, max)).ThrowsNothing();
         }
 
-        [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList2Double), 10d, 20d, 0d, 10d, 5, MemberType = typeof(RandomTest))]
+
+        private static readonly Faker s_faker = new();
+        public static IEnumerable<(int, int)> Range_MinGreatherMax_ValieRandomList()
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                yield return (s_faker.Random.Int(10, 20), s_faker.Random.Int(0,10));
+            }
+        }
+
+        public static IEnumerable<(int, int)> Range_MinLessMax_ValieRandomList()
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                yield return (s_faker.Random.Int(0, 10), s_faker.Random.Int(10,20));
+            }
+        }
+
+        [Test]
+        [MethodDataSource(nameof(Range_MinGreatherMax_ValieRandomList))]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
-        public void Range_MinGreatherMax_Valie(double min, double max)
+        public async Task Range_MinGreatherMax_Valie(double min, double max)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new PageRange(min, max));
+            await Assert.That(() => new PageRange(min, max)).Throws<ArgumentOutOfRangeException>();
         }
 
-        [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList2Double), 0d, 10d, 10d, 20d, 5, MemberType = typeof(RandomTest))]
+        [Test]
+        [MethodDataSource(nameof(Range_MinLessMax_ValieRandomList))]
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "OK for UnitTests")]
-        public void Range_MinLessMax_Valie(double min, double max)
+        public async Task Range_MinLessMax_Valie(double min, double max)
         {
-            var exception = Record.Exception(() => new PageRange(min, max));
-            Assert.Null(exception);
+            await Assert.That(() => new PageRange(min, max)).ThrowsNothing();
         }
 
-        [Fact]
-        public void Range_NotEquals()
+        [Test]
+        public async Task Range_NotEquals()
         {
             var r1 = new PageRange(5, 10);
             var r2 = new PageRange(6, 10);
 
-            Assert.NotEqual(r2.GetHashCode(), r1.GetHashCode());
+            await Assert.That(r2.GetHashCode()).IsNotEqualTo(r1.GetHashCode());
         }
 
-        [Fact]
-        public void Range_SinglePoint()
+        [Test]
+        public async Task Range_SinglePoint()
         {
             var r = PageRange.FromPoint(5);
 
-            Assert.Equal(r.To, r.From);
+            await Assert.That(r.To).EqualTo(r.From);
         }
 
-        [Fact]
-        public void Range_ToString()
+        [Test]
+        public async Task Range_ToString()
         {
             var r = new PageRange(7, 11);
-            Assert.Equal("7-11", r.ToString());
+            await Assert.That(r.ToString()).EqualTo("7-11");
         }
     }
 }

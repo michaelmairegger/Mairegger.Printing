@@ -19,18 +19,21 @@ using Mairegger.Printing.Definition;
 using Mairegger.Printing.PrintProcessor;
 using Mairegger.Printing.Tests.Content;
 using PageRange = Mairegger.Printing.Definition.PageRange;
+using System.Threading.Tasks;
+using Bogus;
+using TUnit.Core.Executors;
 
 namespace Mairegger.Printing.Tests.Definition
 {
     public class PrintingDimensionsTests
     {
-        [StaFact]
-        public void GetHeightFor()
+        [Test, STAThreadExecutor]
+        public async Task GetHeightFor()
         {
-            Mock<IPrintProcessor> mock = new Mock<IPrintProcessor>();
-            mock.Setup(i => i.GetHeader()).Returns(new Grid { Height = 1 });
-            mock.Setup(i => i.GetFooter()).Returns(new Grid { Height = 2 });
-            mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 3 });
+            Mock<IPrintProcessor> mock = IPrintProcessor.Mock();
+            mock.GetHeader().Returns(new Grid { Height = 1 });
+            mock.GetFooter().Returns(new Grid { Height = 2 });
+            mock.GetHeaderDescription().Returns(new Grid { Height = 3 });
 
             PrintDimension pd = new PrintDimension
             {
@@ -39,43 +42,43 @@ namespace Mairegger.Printing.Tests.Definition
             };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header | PrintAppendixes.Footer | PrintAppendixes.Summary));
 
-            Assert.Multiple(
-                () => Assert.Equal(1, pd.GetHeightFor(PrintAppendixes.Header, 1, false)),
-                () => Assert.Equal(2, pd.GetHeightFor(PrintAppendixes.Footer, 1, false)),
-
-                () => Assert.Equal(0, pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false)),
-
-                () => Assert.Throws<ArgumentNullException>(() => pd.GetHeightFor(PrintAppendixes.Summary, 1, false)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.GetHeightFor(PrintAppendixes.Header, 1, false)).IsEqualTo(1);
+                await Assert.That(pd.GetHeightFor(PrintAppendixes.Footer, 1, false)).IsEqualTo(2);
+                await Assert.That(pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false)).IsEqualTo(0);
+                Assert.Throws<ArgumentNullException>(() => pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
+            }
 
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.HeaderDescription));
-            Assert.Equal(3, pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false));
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false)).IsEqualTo(3);
         }
 
-        [Fact]
-        public void GetHeightForBody_IsTotalPageHeight_IfNoAdditionalPrintParts()
+        [Test]
+        public async Task GetHeightForBody_IsTotalPageHeight_IfNoAdditionalPrintParts()
         {
             PrintDimension pd = new PrintDimension { InternalPrintDefinition = new PrintDefinition() };
 
-            Assert.Equal(0, pd.GetHeightForBodyGrid(1, false));
+            await Assert.That(pd.GetHeightForBodyGrid(1, false)).IsEqualTo(0);
 
             pd.PageSize = new Size(100, 300);
 
-            Assert.Equal(300, pd.GetHeightForBodyGrid(1, false));
+            await Assert.That(pd.GetHeightForBodyGrid(1, false)).IsEqualTo(300);
 
             pd.Margin = new Thickness(10);
 
-            Assert.Equal(280, pd.GetHeightForBodyGrid(1, false));
+            await Assert.That(pd.GetHeightForBodyGrid(1, false)).IsEqualTo(280);
         }
 
-        [StaFact]
-        public void GetHeightForBody_IsTotalPageHeightMinusPrintParts()
+        [Test, STAThreadExecutor]
+        public async Task GetHeightForBody_IsTotalPageHeightMinusPrintParts()
         {
-            Mock<IPrintProcessor> mock = new Mock<IPrintProcessor>();
-            mock.Setup(i => i.GetHeader()).Returns(new Grid { Height = 10 });
-            mock.Setup(i => i.GetFooter()).Returns(new Grid { Height = 20 });
-            mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 30 });
-            mock.Setup(i => i.GetSummary()).Returns(new Grid { Height = 40 });
-            mock.Setup(i => i.GetPageNumbers(It.IsAny<int>(), It.IsAny<int>())).Returns(new Grid { Height = 25 });
+            Mock<IPrintProcessor> mock = IPrintProcessor.Mock();
+            mock.GetHeader().Returns(new Grid { Height = 10 });
+            mock.GetFooter().Returns(new Grid { Height = 20 });
+            mock.GetHeaderDescription().Returns(new Grid { Height = 30 });
+            mock.GetSummary().Returns(new Grid { Height = 40 });
+            mock.GetPageNumbers(Any<int>(), Any<int>()).Returns(new Grid { Height = 25 });
 
             PrintDimension pd = new PrintDimension
             {
@@ -87,18 +90,18 @@ namespace Mairegger.Printing.Tests.Definition
             pd.PageSize = new Size(100, 300);
 
             // 300 - Header - Footer - HeaderDescritpion - Summary - PageNumbers
-            Assert.Equal(175, pd.GetHeightForBodyGrid(1, false));
+            await Assert.That(pd.GetHeightForBodyGrid(1, false)).IsEqualTo(175);
         }
 
-        [StaFact]
-        public void GetRangeFor()
+        [Test, STAThreadExecutor]
+        public async Task GetRangeFor()
         {
-            Mock<IPrintProcessor> mock = new Mock<IPrintProcessor>();
-            mock.Setup(i => i.GetHeader()).Returns(new Grid { Height = 10 });
-            mock.Setup(i => i.GetFooter()).Returns(new Grid { Height = 20 });
-            mock.Setup(i => i.GetHeaderDescription()).Returns(new Grid { Height = 30 });
-            mock.Setup(i => i.GetSummary()).Returns(new Grid { Height = 40 });
-            mock.Setup(i => i.GetPageNumbers(It.IsAny<int>(), It.IsAny<int>())).Returns(new Grid { Height = 25 });
+            Mock<IPrintProcessor> mock = IPrintProcessor.Mock();
+            mock.GetHeader().Returns(new Grid { Height = 10 });
+            mock.GetFooter().Returns(new Grid { Height = 20 });
+            mock.GetHeaderDescription().Returns(new Grid { Height = 30 });
+            mock.GetSummary().Returns(new Grid { Height = 40 });
+            mock.GetPageNumbers(Any<int>(), Any<int>()).Returns(new Grid { Height = 25 });
 
             PrintDimension pd = new PrintDimension
             {
@@ -109,24 +112,26 @@ namespace Mairegger.Printing.Tests.Definition
             };
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
-            Assert.Multiple(
-                () => Assert.Equal(new PageRange(10, 20), pd.GetRangeFor(PrintAppendixes.Header, 1, false)),
-                () => Assert.Equal(new PageRange(20, 50), pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false)),
-                () => Assert.Equal(new PageRange(50, 905), pd.GetRangeForBodyGrid(1, false)),
-                () => Assert.Equal(new PageRange(905, 945), pd.GetRangeFor(PrintAppendixes.Summary, 1, false)),
-                () => Assert.Equal(new PageRange(945, 965), pd.GetRangeFor(PrintAppendixes.Footer, 1, false)),
-                () => Assert.Equal(new PageRange(965, 990), pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.GetRangeFor(PrintAppendixes.Header, 1, false)).IsEqualTo(new PageRange(10, 20));
+                await Assert.That(pd.GetRangeFor(PrintAppendixes.HeaderDescription, 1, false)).IsEqualTo(new PageRange(20, 50));
+                await Assert.That(pd.GetRangeForBodyGrid(1, false)).IsEqualTo(new PageRange(50, 905));
+                await Assert.That(pd.GetRangeFor(PrintAppendixes.Summary, 1, false)).IsEqualTo(new PageRange(905, 945));
+                await Assert.That(pd.GetRangeFor(PrintAppendixes.Footer, 1, false)).IsEqualTo(new PageRange(945, 965));
+                await Assert.That(pd.GetRangeFor(PrintAppendixes.PageNumbers, 1, false)).IsEqualTo(new PageRange(965, 990));
+            }
         }
 
-        [Fact]
+        [Test]
         public void GetRangeFor_InvalidPrintAppendix()
         {
             PrintDimension pd = new PrintDimension();
             Assert.Throws<ArgumentException>(() => pd.GetRangeFor(PrintAppendixes.All, 1, false));
         }
 
-        [Fact]
-        public void PageSize_Test()
+        [Test]
+        public async Task PageSize_Test()
         {
             Thickness margin = new Thickness(10, 20, 30, 40);
             var printingDimensions = new PrintDimension(margin);
@@ -134,13 +139,13 @@ namespace Mairegger.Printing.Tests.Definition
             Size pageSize = new Size(500, 1000);
             SetPageSizeToPrintDimension(printingDimensions, pageSize);
 
-            Assert.Equal(pageSize, printingDimensions.PageSize);
+            await Assert.That(printingDimensions.PageSize).IsEqualTo(pageSize);
         }
 
-        [Theory]
-        [InlineData(1, 4, 7, 10)]
-        [InlineData(2, 5, 8, 11)]
-        public void PrintablePageSize_Test(double left, double top, double right, double bottom)
+        [Test]
+        [Arguments(1, 4, 7, 10)]
+        [Arguments(2, 5, 8, 11)]
+        public async Task PrintablePageSize_Test(double left, double top, double right, double bottom)
         {
             Thickness margin = new Thickness(left, top, right, bottom);
             var printingDimensions = new PrintDimension(margin);
@@ -150,11 +155,11 @@ namespace Mairegger.Printing.Tests.Definition
 
             Size expected = new Size(pageSize.Width - margin.Left - margin.Right, pageSize.Height - margin.Top - margin.Bottom);
 
-            Assert.Equal(expected, printingDimensions.PrintablePageSize);
+            await Assert.That(printingDimensions.PrintablePageSize).IsEqualTo(expected);
         }
 
-        [Fact]
-        public void PrintDimensionTest()
+        [Test]
+        public async Task PrintDimensionTest()
         {
             var thickness = new Thickness(10, 10, 10, 10);
             TestPrintDimension tpd = new TestPrintDimension(thickness);
@@ -164,19 +169,21 @@ namespace Mairegger.Printing.Tests.Definition
 
             double totalWidth = pageSize.Width - thickness.Left - thickness.Right;
 
-            Assert.Equal(totalWidth, tpd.PrintablePageSize.Width);
+            await Assert.That(tpd.PrintablePageSize.Width).IsEqualTo(totalWidth);
 
             double pieces = 5; // sum of TestPrintDimensions
             double widthPerPiece = (totalWidth - 100) / pieces;
 
-            Assert.Multiple(
-                () => Assert.Equal(1 * widthPerPiece, tpd.Column1),
-                () => Assert.Equal(3 * widthPerPiece, tpd.Column2),
-                () => Assert.Equal(100, tpd.Column3),
-                () => Assert.Equal(1 * widthPerPiece, tpd.Column4));
+            using (Assert.Multiple())
+            {
+                await Assert.That(tpd.Column1).IsEqualTo(1 * widthPerPiece);
+                await Assert.That(tpd.Column2).IsEqualTo(3 * widthPerPiece);
+                await Assert.That(tpd.Column3).IsEqualTo(100);
+                await Assert.That(tpd.Column4).IsEqualTo(1 * widthPerPiece);
+            }
         }
 
-        [Fact]
+        [Test]
         public void SetColumnDimensionToPropertyWithWrongType_ThrowsException()
         {
             var invalidPrintDimension = new InvalidPrintDimension();
@@ -184,20 +191,20 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.Throws<InvalidOperationException>(() => SetPageSizeToPrintDimension(invalidPrintDimension, new Size(500, 1000)));
         }
 
-        [Fact]
-        public void SetColumnDimensionToReadOnlyProperty()
+        [Test, STAThreadExecutor]
+        public async Task SetColumnDimensionToReadOnlyProperty()
         {
             var cannotWritePrintDimension = new CannotWritePrintDimension();
 
-            Assert.Equal(1, cannotWritePrintDimension.Column1);
+            await Assert.That(cannotWritePrintDimension.Column1).IsEqualTo(1);
 
             SetPageSizeToPrintDimension(cannotWritePrintDimension, new Size(500, 1000));
 
-            Assert.Equal(500, cannotWritePrintDimension.Column1);
+            await Assert.That(cannotWritePrintDimension.Column1).IsEqualTo(500);
         }
 
-        [Fact]
-        public void SetHeightValue()
+        [Test]
+        public async Task SetHeightValue()
         {
             PrintDimension pd = new PrintDimension
             {
@@ -207,16 +214,25 @@ namespace Mairegger.Printing.Tests.Definition
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
             pd.SetHeightValue(PrintAppendixes.Summary, 5);
-            Assert.Equal(5, pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false)).IsEqualTo(5);
             pd.SetHeightValue(PrintAppendixes.Summary, 6);
-            Assert.Equal(6, pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false)).IsEqualTo(6);
 
             Assert.Throws<ArgumentOutOfRangeException>(() => pd.SetHeightValue(PrintAppendixes.Summary, -1));
         }
 
-        [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList), 1, 100, 1, MemberType = typeof(RandomTest))]
-        public void RecalculateHeightValueWhen(int initialHeight)
+        private static readonly Faker s_faker = new();
+        public static IEnumerable<int> GetRandomList()
+        {
+            for (int i = 1; i <= 1; i++)
+            {
+                yield return s_faker.Random.Int(100);
+            }
+        }
+
+        [Test, STAThreadExecutor]
+        [MethodDataSource(nameof(GetRandomList))]
+        public async Task RecalculateHeightValueWhen(int initialHeight)
         {
             PrintDimension pd = new PrintDimension
             {
@@ -225,23 +241,23 @@ namespace Mairegger.Printing.Tests.Definition
 
             pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.All));
 
-            Mock<IPrintProcessor> printProcessor = new Mock<IPrintProcessor>();
-            printProcessor.Setup(i => i.GetSummary()).Returns(() => new Grid() { Height = initialHeight });
+            Mock<IPrintProcessor> printProcessor = IPrintProcessor.Mock();
+            printProcessor.GetSummary().Returns(() => new Grid() { Height = initialHeight });
             pd.PrintProcessor = printProcessor.Object;
 
-            Assert.Equal(initialHeight, pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false)).IsEqualTo(initialHeight);
             pd.SetHeightValue(PrintAppendixes.Summary, 5);
 
             pd.RecalculateHeightValueWhen(() => false, PrintAppendixes.Summary);
 
-            Assert.Equal(5, pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false)).IsEqualTo(5);
 
             pd.RecalculateHeightValueWhen(() => true, PrintAppendixes.Summary);
 
-            Assert.Equal(initialHeight, pd.GetHeightFor(PrintAppendixes.Summary, 1, false));
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.Summary, 1, false)).IsEqualTo(initialHeight);
         }
 
-        [Fact]
+        [Test]
         public void RecalculateHeightValueWhen1()
         {
             Assert.Throws<ArgumentNullException>(() => new PrintDimension().RecalculateHeightValueWhen(null!, PrintAppendixes.None));

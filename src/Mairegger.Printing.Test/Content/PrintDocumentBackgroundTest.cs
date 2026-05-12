@@ -15,25 +15,26 @@
 using System.Windows;
 using System.Windows.Controls;
 using Mairegger.Printing.Content;
+using TUnit.Core.Executors;
 
 namespace Mairegger.Printing.Tests.Content
 {
     public class PrintDocumentBackgroundTest
     {
-        [StaFact]
-        public void Ctor_Element()
+        [Test, STAThreadExecutor]
+        public async Task Ctor_Element()
         {
             Panel p = new StackPanel();
             var printDocumentBackground = new PrintDocumentBackground(p, Rect.Empty);
-            Assert.Equal(p, printDocumentBackground.Element);
+            await Assert.That(printDocumentBackground.Element).IsEqualTo(p);
         }
 
-        [StaFact]
-        public void Ctor_Size()
+        [Test, STAThreadExecutor]
+        public async Task Ctor_Size()
         {
             var size = new Rect(new Point(4, 4), new Size(10, 10));
             var printDocumentBackground = new PrintDocumentBackground(new StackPanel(), size);
-            Assert.Equal(size, printDocumentBackground.Size);
+            await Assert.That(printDocumentBackground.Size).IsEqualTo(size);
         }
     }
 }

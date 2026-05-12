@@ -18,96 +18,107 @@ namespace Mairegger.Printing.Tests.Definition
 {
     public class PrintDefinitionTest
     {
-        [Fact]
-        public void IsToPrint_CheckLastPage()
+        [Test]
+        public async Task IsToPrint_CheckLastPage()
         {
             var pd = new PrintDefinition();
-            Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, true));
+            await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, true)).IsFalse();
 
-            pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, PrintPartDefinitionAttribute.LastPage));
+            pd.SetPrintAttribute(
+                new PrintOnPageAttribute(PrintAppendixes.Footer, PrintPartDefinitionAttribute.LastPage));
 
-            Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, true));
+            await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, true)).IsTrue();
         }
 
-        [Fact]
+        [Test]
         public void SetPrintAttributeNull()
         {
             Assert.Throws<ArgumentNullException>(() => new PrintDefinition().SetPrintAttribute(null!));
         }
 
-        [Fact]
-        public void IsToPrint_CheckSinglePage()
+        [Test]
+        public async Task IsToPrint_CheckSinglePage()
         {
             var pd = new PrintDefinition();
 
-            pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, PrintPartDefinitionAttribute.LastPage));
+            pd.SetPrintAttribute(
+                new PrintOnPageAttribute(PrintAppendixes.Footer, PrintPartDefinitionAttribute.LastPage));
 
-            Assert.Multiple(
+            using (Assert.Multiple())
+            {
                 // do not print on page #1
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, false)).IsFalse();
 
                 // but print on last page
-                () => Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 1, true))
-                );
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, true)).IsTrue();
+            }
         }
 
-        [Fact]
-        public void IsToPrint_ExcludeIsStrongerThanInclude()
+        [Test]
+        public async Task IsToPrint_ExcludeIsStrongerThanInclude()
         {
             var pd = new PrintDefinition();
-            Assert.Multiple(
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, false)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsFalse();
+            }
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.Multiple(
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
-                () => Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, false)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsTrue();
+            }
 
             pd.SetPrintAttribute(new ExcludeFromPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.Multiple(
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, false)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsFalse();
+            }
         }
 
-        [Fact]
-        public void IsToPrint_ExcludePage()
+        [Test]
+        public async Task IsToPrint_ExcludePage()
         {
             var pd = new PrintDefinition();
-            Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
+            await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsFalse();
 
             pd.SetPrintAttribute(new ExcludeFromPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
+            await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsFalse();
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 2, false));
+            await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsFalse();
         }
 
-        [Fact]
-        public void IsToPrint_IncludePage()
+        [Test]
+        public async Task IsToPrint_IncludePage()
         {
             var pd = new PrintDefinition();
-            Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false));
+            await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, false)).IsFalse();
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, 2));
 
-            Assert.Multiple(
-                () => Assert.False(pd.IsToPrint(PrintAppendixes.Footer, 1, false)),
-                () => Assert.True(pd.IsToPrint(PrintAppendixes.Footer, 2, false)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 1, false)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, false)).IsTrue();
+            }
         }
 
-        [Fact]
+        [Test]
         public void IsToPrint_InvalidArgumentException()
         {
             var pd = new PrintDefinition();
             Assert.Throws<ArgumentException>(() => pd.IsToPrint((PrintAppendixes)(-1), 1, false));
         }
 
-        [Fact]
+        [Test]
         public void IsToPrint_NegativePage_ThrowsException()
         {
             var pd = new PrintDefinition();
@@ -115,14 +126,14 @@ namespace Mairegger.Printing.Tests.Definition
             Assert.Throws<ArgumentOutOfRangeException>(() => pd.IsToPrint(PrintAppendixes.Footer, -1, false));
         }
 
-        [Fact]
-        public void SetPrintAttribute()
+        [Test]
+        public async Task SetPrintAttribute()
         {
             var pd = new PrintDefinition();
 
             pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, 1));
 
-            Assert.True(pd.IsDefined(PrintAppendixes.Footer));
+            await Assert.That(pd.IsDefined(PrintAppendixes.Footer)).IsTrue();
         }
     }
 }
