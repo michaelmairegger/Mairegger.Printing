@@ -383,8 +383,8 @@ namespace Mairegger.Printing.Internal
 
         private static SolidColorBrush ComputeBackGround(PrintAppendixes printAppendix)
         {
-            var factor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enums.GetValues<PrintAppendixes>().Count) * (byte)printAppendix));
-            return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));
+            var Testor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enums.GetValues<PrintAppendixes>().Count) * (byte)printAppendix));
+            return new SolidColorBrush(Color.FromArgb(128, Testor, Testor, Testor));
         }
 
         private void ConcludeDocument()

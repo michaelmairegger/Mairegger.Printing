@@ -18,44 +18,50 @@ namespace Mairegger.Printing.Tests.Definition
 {
     public class ExcludeFromPagesTests
     {
-        [Fact]
-        public void Ctor()
+        [Test]
+        public async Task Ctor()
         {
             var attribute = new ExcludeFromPageAttribute(PrintAppendixes.All, new PageRange(2, 5));
 
-            Assert.Multiple(
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(1)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(2)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(3)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(4)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(5)),
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(6)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(attribute.GetPrintDefinition(1)).IsEqualTo(PrintPartStatus.NotDefined);
+                await Assert.That(attribute.GetPrintDefinition(2)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(3)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(4)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(5)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(6)).IsEqualTo(PrintPartStatus.NotDefined);
+            }
         }
 
-        [Fact]
-        public void Ctor1()
+        [Test]
+        public async Task Ctor1()
         {
             var attribute = new ExcludeFromPageAttribute(PrintAppendixes.All, 1, 3, 5);
 
-            Assert.Multiple(
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(1)),
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(2)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(3)),
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(4)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(5)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(attribute.GetPrintDefinition(1)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(2)).IsEqualTo(PrintPartStatus.NotDefined);
+                await Assert.That(attribute.GetPrintDefinition(3)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(4)).IsEqualTo(PrintPartStatus.NotDefined);
+                await Assert.That(attribute.GetPrintDefinition(5)).IsEqualTo(PrintPartStatus.Exclude);
+            }
         }
 
-        [Fact]
-        public void Ctor2()
+        [Test]
+        public async Task Ctor2()
         {
             var attribute = new ExcludeFromPageAttribute(PrintAppendixes.All, 3);
 
-            Assert.Multiple(
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(1)),
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(2)),
-                () => Assert.Equal(PrintPartStatus.Exclude, attribute.GetPrintDefinition(3)),
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(4)),
-                () => Assert.Equal(PrintPartStatus.NotDefined, attribute.GetPrintDefinition(5)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(attribute.GetPrintDefinition(1)).IsEqualTo(PrintPartStatus.NotDefined);
+                await Assert.That(attribute.GetPrintDefinition(2)).IsEqualTo(PrintPartStatus.NotDefined);
+                await Assert.That(attribute.GetPrintDefinition(3)).IsEqualTo(PrintPartStatus.Exclude);
+                await Assert.That(attribute.GetPrintDefinition(4)).IsEqualTo(PrintPartStatus.NotDefined);
+                await Assert.That(attribute.GetPrintDefinition(5)).IsEqualTo(PrintPartStatus.NotDefined);
+            }
         }
     }
 }

@@ -28,7 +28,7 @@
     <WarningsAsErrors Label="Package X has a known moderate severity vulnerability">$(WarningsAsErrors);NU1902</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known high severity vulnerability">$(WarningsAsErrors);NU1903</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known critical severity vulnerability">$(WarningsAsErrors);NU1904</WarningsAsErrors>
-    <WarningsAsErrors Label="'PackageA' 4.0.0 depends on 'PackageB' (>= 4.0.0) but 4.0.0 was not found. An approximate best match of 5.0.0 was resolved.">$(WarningsAsErrors);NU1603</WarningsAsErrors>
+    <WarningsAsErrors Label="'PackageA' 4.0.0 depends on 'PackageB' (&gt;= 4.0.0) but 4.0.0 was not found. An approximate best match of 5.0.0 was resolved.">$(WarningsAsErrors);NU1603</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Label="Source commit tagging" Condition="'$(Configuration)' != 'Release'">
     <!-- Note: This prevents rebuilding all projects because of a commit, since build steps injects version information into projects. -->
@@ -43,16 +43,13 @@
   <ItemGroup>
     <PackageVersion Include="Bogus" Version="$(BogusVersion)" />
     <PackageVersion Include="Enums.NET" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net462" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup Label="Testing">
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="1.1.2" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="1.1.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="$(MicrosoftTestingExtensionsCodeCoverageVersion)" />
     <PackageVersion Include="Microsoft.Testing.Platform" Version="$(MicrosoftTestingPlatformVersion)" />
-    <PackageVersion Include="Moq" Version="$(MoqVersion)" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="$(XUnitV3Version)" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualStudioVersion)" />
-    <PackageVersion Include="Xunit.StaFact" Version="3.0.13" />
+    <PackageVersion Include="TUnit" Version="$(TUnitVersion)" />
+    <PackageVersion Include="TUnit.Mocks" Version="$(TUnitVersion)" />
   </ItemGroup>
 </Project>

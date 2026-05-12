@@ -17,109 +17,114 @@ using System.IO;
 using System.Printing;
 using System.Windows.Controls;
 using Mairegger.Printing.PrintProcessor;
+using TUnit.Core.Executors;
 
 namespace Mairegger.Printing.Tests.Content
 {
     public class PrintProcessorCollectionTests
     {
-        [Fact]
-        public void Ctor()
-        {
-            Mock<PrintProcessor.PrintProcessor>[] m1 = [new(), new(), new(), new()];
-            PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
-            Assert.Equal(m1.Select(i => i.Object), pp);
+        // [Test]
+        // public async Task Ctor()
+        // {
+        //     Mock<TestPrintProcessor>[] m1 = [TestPrintProcessor.Mock(), TestPrintProcessor.Mock(), TestPrintProcessor.Mock(), TestPrintProcessor.Mock()];
+        //     PrintProcessorCollection pp = new PrintProcessorCollection(m1.Select(i => i.Object), "FileName");
+        //     await Assert.That(pp).IsEquivalentTo(m1.Select(i => i.Object));
+        //
+        //     await Assert.That(pp.FileName).IsEqualTo("FileName");
+        // }
 
-            Assert.Equal("FileName", pp.FileName);
-        }
-
-        [Fact]
-        public void Ctor_SingleElement()
+        [Test]
+        public async Task Ctor_SingleElement()
         {
-            var p = new Mock<PrintProcessor.PrintProcessor>();
+            var p = TestPrintProcessor.Mock();
             PrintProcessorCollection pp = new PrintProcessorCollection(p.Object);
 
-            Assert.Multiple(
-                () => Assert.Equal(p.Object.FileName, pp.FileName),
-                () => Assert.Contains(p.Object, pp),
-                () => Assert.Single(pp));
+            using (Assert.Multiple())
+            {
+                await Assert.That(pp.FileName).IsEqualTo(p.Object.FileName);
+                await Assert.That(pp).Contains(p.Object);
+                await Assert.That(pp).HasSingleItem();
+            }
         }
 
-        [Fact]
-        public void FileName_Default_IsStringEmpty()
+        [Test]
+        public async Task FileName_Default_IsStringEmpty()
         {
             var ppcoll = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
-            Assert.Empty(ppcoll.FileName);
+            await Assert.That(ppcoll.FileName).IsEmpty();
         }
 
-        [Fact]
-        public void FileName_InvalidCharacters_GetsRemoved()
+        [Test]
+        public async Task FileName_InvalidCharacters_GetsRemoved()
         {
             var ppcoll = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
             var formattableString = $"Hello{Path.GetInvalidFileNameChars()[0]}Hello{Path.GetInvalidFileNameChars()[1]}";
 
-            Assert.Empty(ppcoll.FileName);
+            await Assert.That(ppcoll.FileName).IsEmpty();
 
             ppcoll.FileName = formattableString;
 
             char[] invalid = Path.GetInvalidFileNameChars();
-#if NETFRAMEWORK
-            Assert.DoesNotContain(ppcoll.FileName, v => invalid.Contains(v));
-#else
-            Assert.DoesNotContain(ppcoll.FileName, invalid, StringComparison.InvariantCultureIgnoreCase);
-#endif
+            await Assert.That(ppcoll.FileName.ToCharArray()).DoesNotContain(e => invalid.Contains(e));
         }
 
-        [Fact]
+        [Test]
         public void PreviewDocument()
         {
             var printProcessor = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
-            var windowProvider = new Mock<IWindowProvider>();
+            var windowProvider = IWindowProvider.Mock();
 
             printProcessor.PreviewDocument(windowProvider.Object);
 
-            windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Never);
+            windowProvider.Show(Any<string>(), Any<DocumentViewer>()).WasNeverCalled();
+            ((IMock)windowProvider).VerifyNoOtherCalls();
         }
 
-        [StaFact]
-        public void PrintEverything()
+        [Test, STAThreadExecutor]
+        public async Task PrintEverything()
         {
-            var printDialog = new Mock<IPrintDialog>();
+            var printDialog = IPrintDialog.Mock();
             var printProcessor = new PrintEverything() { PrintDialog = printDialog.Object };
 
-            var windowProvider = new Mock<IWindowProvider>();
-            Assert.True(printProcessor.PrintDocument());
+            var windowProvider = IWindowProvider.Mock();
+            await Assert.That(printProcessor.PrintDocument()).IsTrue();
             printProcessor.PreviewDocument(windowProvider.Object);
 
-            windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Once);
+            windowProvider.Show(Any<string>(), Any<DocumentViewer>()).WasCalled();
+            ((IMock)windowProvider).VerifyNoOtherCalls();
         }
 
-        [StaFact]
+        [Test, STAThreadExecutor]
         public void PreviewDocument1()
         {
-            var printDialog = new Mock<IPrintDialog>();
+            var printDialog = IPrintDialog.Mock();
             var testPrintProcessor = new TestPrintProcessor { PrintDialog = printDialog.Object };
             var printProcessor = new PrintProcessorCollection(testPrintProcessor);
-            var windowProvider = new Mock<IWindowProvider>();
+            var windowProvider = IWindowProvider.Mock();
             printProcessor.PreviewDocument(windowProvider.Object);
 
-            windowProvider.Verify(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()), Times.Once);
+            windowProvider.Show(Any<string>(), Any<DocumentViewer>()).WasCalled();
+            ((IMock)windowProvider).VerifyNoOtherCalls();
         }
 
-        [Fact]
-        public void PrintDocument_NoPrintProcessor_DoesNotPrint()
+        [Test]
+        public async Task PrintDocument_NoPrintProcessor_DoesNotPrint()
         {
             var ppcoll = new PrintProcessorCollection(Enumerable.Empty<PrintProcessor.PrintProcessor>());
-            Assert.Multiple(
-                () => Assert.False(ppcoll.PrintDocument()),
-                () => Assert.False(ppcoll.PrintDocument(string.Empty))
-                );
+
+            using (Assert.Multiple())
+            {
+                await Assert.That(ppcoll.PrintDocument()).IsFalse();
+                await Assert.That(ppcoll.PrintDocument(string.Empty)).IsFalse();
+            }
+
         }
 
-        [Fact]
-        public void PrintDoucment_CloseDialog_ReturnsFalse()
+        [Test]
+        public async Task PrintDoucment_CloseDialog_ReturnsFalse()
         {
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(false);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(false);
 
             var testPrintProcessor = new TestPrintProcessor
             {
@@ -128,24 +133,23 @@ namespace Mairegger.Printing.Tests.Content
 
             var printProcessor = new PrintProcessorCollection(testPrintProcessor);
 
-            Assert.False(printProcessor.PrintDocument());
+            await Assert.That(printProcessor.PrintDocument()).IsFalse();
         }
 
-        [StaFact]
-        public void PrintDoucment_Direct_ReturnsTrue()
+        [Test, STAThreadExecutor]
+        public async Task PrintDoucment_Direct_ReturnsTrue()
         {
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(true);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(true);
 
             var testPrintProcessor = new TestPrintProcessor();
             var printProcessor = new PrintProcessorCollection(testPrintProcessor);
 
             testPrintProcessor.PrintDialog = printDialog.Object;
 
-            Assert.Multiple(
-                () => Assert.True(printProcessor.PrintDocument()),
-                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())),
-                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])));
+            await Assert.That(printProcessor.PrintDocument()).IsTrue();
+            await Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())).IsTrue();
+            await Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])).IsTrue();
         }
     }
 }

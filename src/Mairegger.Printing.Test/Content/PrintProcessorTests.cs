@@ -21,6 +21,7 @@ using Bogus;
 using Mairegger.Printing.Content;
 using Mairegger.Printing.Definition;
 using Mairegger.Printing.PrintProcessor;
+using TUnit.Core.Executors;
 
 namespace Mairegger.Printing.Tests.Content
 {
@@ -28,42 +29,55 @@ namespace Mairegger.Printing.Tests.Content
     {
         private static readonly Faker faker = new Faker();
 
-        [StaFact]
-        public void CheckPrintDimensions_HasPrintDimensionsSet()
+        [Test, STAThreadExecutor]
+        public async Task CheckPrintDimensions_HasPrintDimensionsSet()
         {
             var print = new PrintProcessorWithPrintOnAllPages();
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(true);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(true);
 
             print.PrintDialog = printDialog.Object;
             print.PrintDocument();
 
-            Assert.True(print.PrintDefinition.IsDefined(PrintAppendixes.Footer));
+            await Assert.That(print.PrintDefinition.IsDefined(PrintAppendixes.Footer)).IsTrue();
         }
 
-        [Fact]
-        public void ColorPrintPartsForDebug_IsDefault_False()
+        [Test]
+        public async Task ColorPrintPartsForDebug_IsDefault_False()
         {
             PrintProcessor.PrintProcessor tp = new TestPrintProcessor();
-            Assert.False(tp.ColorPrintPartsForDebug);
+            await Assert.That(tp.ColorPrintPartsForDebug).IsFalse();
             tp.ColorPrintPartsForDebug = true;
-            Assert.True(tp.ColorPrintPartsForDebug);
+            await Assert.That(tp.ColorPrintPartsForDebug).IsTrue();
         }
 
-        [Fact]
-        public void Ctor()
+        [Test]
+        public async Task Ctor()
         {
-            var printProcessor = new Mock<PrintProcessor.PrintProcessor>();
+            var printProcessor = TestPrintProcessor.Mock();
 
-            Assert.Multiple(
-                () => Assert.NotNull(printProcessor.Object.PrintDialog),
-                () => Assert.Equal(PageOrientation.Portrait, printProcessor.Object.PageOrientation));
+            using (Assert.Multiple())
+            {
+                await Assert.That(printProcessor.Object.PrintDialog).IsNotNull();
+                await Assert.That(printProcessor.Object.PageOrientation).IsEqualTo(PageOrientation.Portrait);
+            }
         }
 
-        [StaTheory]
-        [MemberData(nameof(RandomTest.NumberList2), 10, 20, 3, 7, 1, MemberType = typeof(RandomTest))]
-        public void CustomAlternatingRowColors(int itemCount, int differentColors)
+
+        private static readonly Faker s_faker = new();
+        public static IEnumerable<(int, int)> CustomAlternatingRowColorsRandomList()
+        {
+            for (int i = 1; i <= 1; i++)
+            {
+                yield return (s_faker.Random.Int(10,20),s_faker.Random.Int(3,7));
+            }
+        }
+
+
+        [Test, STAThreadExecutor]
+        [MethodDataSource(nameof(CustomAlternatingRowColorsRandomList))]
+        public async Task CustomAlternatingRowColors(int itemCount, int differentColors)
         {
             var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
@@ -79,73 +93,69 @@ namespace Mairegger.Printing.Tests.Content
             }
             pp.AlternatingRowColors = colorList;
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(true);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(true);
 
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
 
             for (int i = 0; i < itemCount; i++)
             {
-                Assert.Equal(colorList[i % differentColors], retrievedContent[i].Content.GetValue(Panel.BackgroundProperty));
+                await Assert.That(retrievedContent[i].Content.GetValue(Panel.BackgroundProperty)).IsEqualTo(colorList[i % differentColors]);
             }
         }
 
-        [Fact]
-        public void FileName_Default_IsStringEmpty()
+        [Test]
+        public async Task FileName_Default_IsStringEmpty()
         {
-            Mock<PrintProcessor.PrintProcessor> mock = new Mock<PrintProcessor.PrintProcessor>();
-            Assert.Empty(mock.Object.FileName);
+            Mock<TestPrintProcessor> mock = TestPrintProcessor.Mock();
+            await Assert.That(mock.Object.FileName).IsEmpty();
         }
 
-        [Fact]
-        public void FileName_InvalidCharacters_GetsRemoved()
+        [Test]
+        public async Task FileName_InvalidCharacters_GetsRemoved()
         {
-            Mock<PrintProcessor.PrintProcessor> mock = new Mock<PrintProcessor.PrintProcessor>();
+            Mock<TestPrintProcessor> mock = TestPrintProcessor.Mock();
             var formattableString = $"Hello{Path.GetInvalidFileNameChars()[0]}Hello{Path.GetInvalidFileNameChars()[1]}";
 
             mock.Object.FileName = formattableString;
 
             char[] invalid = Path.GetInvalidFileNameChars();
-#if NETFRAMEWORK
-            Assert.DoesNotContain(mock.Object.FileName, v => invalid.Contains(v));
-#else
-            Assert.DoesNotContain(mock.Object.FileName, invalid, StringComparison.InvariantCultureIgnoreCase);
-#endif
+            await Assert.That(mock.Object.FileName.ToCharArray()).DoesNotContain(e => invalid.Contains(e));
         }
 
-        [Fact]
+        [Test]
         public void GetBackgound_Throws_IfNotImplemented()
         {
             Assert.Throws<NotImplementedException>(() => new TestPrintProcessor().GetBackground());
         }
 
-        [Fact]
+        [Test]
         public void GetFooter_Throws_IfNotImplemented()
         {
             Assert.Throws<NotImplementedException>(() => new TestPrintProcessor().GetFooter());
         }
 
-        [Fact]
+        [Test]
         public void GetHeader_Throws_IfNotImplemented()
         {
             Assert.Throws<NotImplementedException>(() => new TestPrintProcessor().GetHeader());
         }
 
-        [Fact]
+        [Test]
         public void GetHeaderDescription_Throws_IfNotImplemented()
         {
             Assert.Throws<NotImplementedException>(() => new TestPrintProcessor().GetHeaderDescription());
         }
 
-        [Fact]
+        [Test]
         public void GetSummary_Throws_IfNotImplemented()
         {
             Assert.Throws<NotImplementedException>(() => new TestPrintProcessor().GetSummary());
         }
 
-        [StaFact]
-        public void IsAlternatingRowColor_False_NotColoring()
+        [Test, STAThreadExecutor]
+        public async Task IsAlternatingRowColor_False_NotColoring()
         {
             var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
@@ -154,20 +164,22 @@ namespace Mairegger.Printing.Tests.Content
                 IsAlternatingRowColor = false
             };
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(true);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(true);
 
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
 
-            Assert.Multiple(
-                () => Assert.Null(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty)),
-                () => Assert.Null(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty)),
-                () => Assert.Null(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty)));
+            using (Assert.Multiple())
+            {
+                await Assert.That(retrievedContent[0].Content.GetValue(Panel.BackgroundProperty)).IsNull();
+                await Assert.That(retrievedContent[1].Content.GetValue(Panel.BackgroundProperty)).IsNull();
+                await Assert.That(retrievedContent[2].Content.GetValue(Panel.BackgroundProperty)).IsNull();
+            }
         }
 
-        [StaFact]
-        public void IsAlternatingRowColor_True_Coloring()
+        [Test, STAThreadExecutor]
+        public async Task IsAlternatingRowColor_True_Coloring()
         {
             var retrievedContent = new List<IPrintContent>();
             var pp = new PrintProcessorWithPrintOnAllPages(retrievedContent)
@@ -176,8 +188,8 @@ namespace Mairegger.Printing.Tests.Content
                 IsAlternatingRowColor = true
             };
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(true);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(true);
 
             pp.PrintDialog = printDialog.Object;
             pp.PrintDocument();
@@ -185,107 +197,109 @@ namespace Mairegger.Printing.Tests.Content
 
             for (int j = 0; j < retrievedContent.Count; j++)
             {
-                Assert.Equal(pp.AlternatingRowColors[j % 2], retrievedContent[j].Content.GetValue(Panel.BackgroundProperty));
+                await Assert.That(retrievedContent[j].Content.GetValue(Panel.BackgroundProperty)).IsEqualTo(pp.AlternatingRowColors[j % 2]);
             }
         }
 
-        [StaFact]
-        public void NoItemsOnPrintout()
+        [Test, STAThreadExecutor]
+        public async Task NoItemsOnPrintout()
         {
-            var printDialog = new Mock<IPrintDialog>();
+            var printDialog = IPrintDialog.Mock();
             var printProcessor = new NoLineItemsTestPrintProcessor
             {
                 PrintDialog = printDialog.Object
             };
 
-            Assert.True(printProcessor.PrintDocument());
+            await Assert.That(printProcessor.PrintDocument()).IsTrue();
         }
 
-        [StaTheory]
-        [InlineData(true)]
-        [InlineData(false)]
+        [Test, STAThreadExecutor]
+        [Arguments(true)]
+        [Arguments(false)]
         public void PreviewDocument(bool colorPrintPartsForDebug)
         {
-            var printDialog = new Mock<IPrintDialog>();
+            var printDialog = IPrintDialog.Mock();
             var printProcessor = new TestPrintProcessor
             {
                 PrintDialog = printDialog.Object,
                 ColorPrintPartsForDebug = colorPrintPartsForDebug
             };
 
-            var windowProvider = new Mock<IWindowProvider>();
-            windowProvider.Setup(i => i.Show(It.IsNotNull<string>(), It.IsNotNull<DocumentViewer>()));
+            var windowProvider = IWindowProvider.Mock();
+            windowProvider.Show(Any<string>(), Any<DocumentViewer>());
 
             printProcessor.PreviewDocument(windowProvider.Object);
 
             windowProvider.VerifyAll();
         }
 
-        [Fact]
-        public void PrintDimension()
+        [Test]
+        public async Task PrintDimension()
         {
             var pp = new PrintProcessorWithPrintOnAllPages();
             var pd = new PrintDimension();
             pp.PrintDimension = pd;
-            Assert.Equal(pd, pp.PrintDimension);
+            await Assert.That(pp.PrintDimension).IsEqualTo(pd);
         }
 
-        [Fact]
-        public void PrintDoucment_CloseDialog_ReturnsFalse()
+        [Test]
+        public async Task PrintDoucment_CloseDialog_ReturnsFalse()
         {
             var printProcessor = new TestPrintProcessor();
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(false);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(false);
 
             printProcessor.PrintDialog = printDialog.Object;
 
-            Assert.False(printProcessor.PrintDocument());
+            await Assert.That(printProcessor.PrintDocument()).IsFalse();
         }
 
-        [StaFact]
-        public void PrintDoucment_CloseDialog_ReturnsTrue()
+        [Test, STAThreadExecutor]
+        public async Task PrintDoucment_CloseDialog_ReturnsTrue()
         {
             var printProcessor = new TestPrintProcessor();
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(true);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(true);
 
             printProcessor.PrintDialog = printDialog.Object;
 
-            Assert.True(printProcessor.PrintDocument());
+            await Assert.That(printProcessor.PrintDocument()).IsTrue();
         }
 
-        [StaFact]
-        public void PrintDoucment_Direct_ReturnsTrue()
+        [Test, STAThreadExecutor]
+        public async Task PrintDoucment_Direct_ReturnsTrue()
         {
             var printProcessor = new TestPrintProcessor();
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(false);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(false);
 
             printProcessor.PrintDialog = printDialog.Object;
 
-            Assert.Multiple(
-                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())),
-                () => Assert.True(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])));
+            using (Assert.Multiple())
+            {
+                await Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())).IsTrue();
+                await Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])).IsTrue();
+            }
         }
 
-        [StaFact]
-        public void SaveToXps_FileIsFilled()
+        [Test, STAThreadExecutor]
+        public async Task SaveToXps_FileIsFilled()
         {
             var printProcessor = new TestPrintProcessor();
 
-            var printDialog = new Mock<IPrintDialog>();
-            printDialog.Setup(i => i.ShowDialog()).Returns(false);
+            var printDialog = IPrintDialog.Mock();
+            printDialog.ShowDialog().Returns(false);
 
             printProcessor.PrintDialog = printDialog.Object;
 
             string file = Path.GetTempFileName();
-            Assert.Equal(0, new FileInfo(file).Length);
+            await Assert.That(new FileInfo(file).Length).IsEqualTo(0);
             printProcessor.SaveToXps(file);
 
-            Assert.True(new FileInfo(file).Length > 0);
+            await Assert.That(new FileInfo(file).Length > 0).IsTrue();
 
             File.Delete(file);
         }

@@ -45,8 +45,8 @@ namespace Mairegger.Printing.Tests.Content
         {
             for (int i = 0; i < ItemCount; i++)
             {
-                var itemCollection = new Mock<IPrintContent>();
-                itemCollection.SetupGet(x => x.Content).Returns(new Grid());
+                var itemCollection = IPrintContent.Mock();
+                itemCollection.Content.Returns(new Grid());
 
                 _retrievedContent?.Add(itemCollection.Object);
 

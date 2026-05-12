@@ -12,20 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Bogus;
 using Mairegger.Printing.Definition;
-using Mairegger.Printing.Tests.Content;
 
 namespace Mairegger.Printing.Tests.Definition
 {
     public class PrintOnAllPagesTests
     {
-        [Theory]
-        [MemberData(nameof(RandomTest.NumberList), 1, int.MaxValue, 10, MemberType = typeof(RandomTest))]
-        public void Ctor(int page)
+        private static readonly Faker s_faker = new();
+        public static IEnumerable<int> GetRandomList()
+        {
+            for (int i = 1; i <= 10; i++)
+            {
+                yield return s_faker.Random.Int(1);
+            }
+        }
+
+        [Test]
+        [MethodDataSource(nameof(GetRandomList))]
+        public async Task Ctor(int page)
         {
             var attribute = new PrintOnAllPagesAttribute(PrintAppendixes.All);
 
-            Assert.Equal(PrintPartStatus.Include, attribute.GetPrintDefinition(page));
+            await Assert.That(attribute.GetPrintDefinition(page)).IsEqualTo(PrintPartStatus.Include);
         }
     }
 }
