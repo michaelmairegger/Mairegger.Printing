@@ -36,7 +36,4 @@
     <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)..\</GitVersionBaseDirectory>
   </PropertyGroup>
 
-  <ItemGroup Label="Rider">
-    <None Remove="$(ProjectFileName).DotSettings" />
-  </ItemGroup>
 </Project>

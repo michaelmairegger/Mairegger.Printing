@@ -8,6 +8,7 @@
     <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
     <File Path="Versions.props" />
+    <File Path="Versions.targets" />
   </Folder>
   <Folder Name="/Solution Items/.github/">
     <File Path="../.github/dependabot.yml" />
