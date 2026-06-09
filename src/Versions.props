@@ -12,19 +12,33 @@
     <NetFrameworkMinimum>net462</NetFrameworkMinimum>
   </PropertyGroup>
 
+  <PropertyGroup Label="Minimum versions">
+    <MinWpfAnalyzersVersion>4.1.1</MinWpfAnalyzersVersion>
+
+    <MinBogusVersion>35.6.5</MinBogusVersion>
+    <MinTUnitVersion>1.45.0</MinTUnitVersion>
+    <MinMicrosoftNETTestSdkVersion>18.5.1</MinMicrosoftNETTestSdkVersion>
+    <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.7.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
+    <MinMicrosoftTestingPlatformVersion>2.2.3</MinMicrosoftTestingPlatformVersion>
+  </PropertyGroup>
+
   <PropertyGroup>
     <NerdbankGitVersioningVersion>3.9.50</NerdbankGitVersioningVersion>
-    <WpfAnalyzersVersion>4.1.1</WpfAnalyzersVersion>
+    <WpfAnalyzersVersion>$(MinWpfAnalyzersVersion)</WpfAnalyzersVersion>
+
     <!--Testing -->
-    <BogusVersion>35.6.5</BogusVersion>
-    <TUnitVersion>1.45.0</TUnitVersion>
-    <MicrosoftNETTestSdkVersion>18.5.1</MicrosoftNETTestSdkVersion>
-    <MicrosoftTestingExtensionsCodeCoverageVersion>18.7.0</MicrosoftTestingExtensionsCodeCoverageVersion>
-    <MicrosoftTestingPlatformVersion>2.2.3</MicrosoftTestingPlatformVersion>
+    <BogusVersion>$(MinBogusVersion)</BogusVersion>
+    <TUnitVersion>$(MinTUnitVersion)</TUnitVersion>
+    <MicrosoftNETTestSdkVersion>$(MinMicrosoftNETTestSdkVersion)</MicrosoftNETTestSdkVersion>
+    <MicrosoftTestingExtensionsCodeCoverageVersion>$(MinMicrosoftTestingExtensionsCodeCoverageVersion)</MicrosoftTestingExtensionsCodeCoverageVersion>
+    <MicrosoftTestingPlatformVersion>$(MinMicrosoftTestingPlatformVersion)</MicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Allow to overwrite versions from base Versions.props">
     <ParentDirectoryVersionsPropsPath>$([MSBuild]::GetPathOfFileAbove('Versions.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryVersionsPropsPath>
   </PropertyGroup>
   <Import Project="$(ParentDirectoryVersionsPropsPath)" Condition="'$(ParentDirectoryVersionsPropsPath)' != '' and Exists($(ParentDirectoryVersionsPropsPath))" />
+
+  <Import Project="$(MSBuildThisFileName).targets" />
+
 </Project>
