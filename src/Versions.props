@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.9.50</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.10.85</NerdbankGitVersioningVersion>
     <WpfAnalyzersVersion>$(MinWpfAnalyzersVersion)</WpfAnalyzersVersion>
 
     <!--Testing -->
