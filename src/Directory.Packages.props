@@ -7,9 +7,10 @@
     <NetCoreWpfCurrent Condition="'$(CurrentNetVersion)' != ''">$(NetCoreAppCurrent)-windows$(WindowsSdkVersion)</NetCoreWpfCurrent>
     <NetCoreWpfPrevious Condition="'$(PreviousNetVersion)' != ''">$(NetCoreAppPrevious)-windows$(WindowsSdkVersion)</NetCoreWpfPrevious>
     <NetCoreWpfMinimum Condition="'$(MinimumNetVersion)' != ''">$(NetCoreAppMinimum)-windows$(WindowsSdkVersion)</NetCoreWpfMinimum>
-    <AspNetCoreVersion Condition="'$(CurrentNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</AspNetCoreVersion>
-    <AspNetCoreVersion Condition="'$(PreviousNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</AspNetCoreVersion>
-    <AspNetCoreVersion Condition="'$(MinimumNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
+
+    <TargetNetCoreVersion Condition="'$(CurrentNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</TargetNetCoreVersion>
+    <TargetNetCoreVersion Condition="'$(PreviousNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</TargetNetCoreVersion>
+    <TargetNetCoreVersion Condition="'$(MinimumNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</TargetNetCoreVersion>
   </PropertyGroup>
   <PropertyGroup Label="Set WPF properties">
     <UseWPF>true</UseWPF>
@@ -43,7 +44,6 @@
   <ItemGroup>
     <PackageVersion Include="Bogus" Version="$(BogusVersion)" />
     <PackageVersion Include="Enums.NET" Version="5.0.0" />
-    <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies.net462" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup Label="Testing">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
