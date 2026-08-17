@@ -2,10 +2,10 @@
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
     <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>10.0.10</CurrentNetVersion>
-    <PreviousNetVersion>9.0.18</PreviousNetVersion>
+    <CurrentNetVersion>10.0.11</CurrentNetVersion>
+    <PreviousNetVersion>9.0.19</PreviousNetVersion>
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>8.0.29</MinimumNetVersion>
+    <MinimumNetVersion>8.0.30</MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
 
     <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->
@@ -16,10 +16,10 @@
     <MinWpfAnalyzersVersion>4.1.1</MinWpfAnalyzersVersion>
 
     <MinBogusVersion>35.6.5</MinBogusVersion>
-    <MinTUnitVersion>1.61.38</MinTUnitVersion>
-    <MinMicrosoftNETTestSdkVersion>18.8.1</MinMicrosoftNETTestSdkVersion>
-    <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.9.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
-    <MinMicrosoftTestingPlatformVersion>2.3.2</MinMicrosoftTestingPlatformVersion>
+    <MinTUnitVersion>1.65.0</MinTUnitVersion>
+    <MinMicrosoftNETTestSdkVersion>18.9.0</MinMicrosoftNETTestSdkVersion>
+    <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.10.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
+    <MinMicrosoftTestingPlatformVersion>2.3.3</MinMicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup>
