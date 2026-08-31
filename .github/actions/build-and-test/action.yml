@@ -21,10 +21,14 @@ runs:
       dotnet-version: '10.0.x'
   - name: Build
     shell: pwsh
-    run: dotnet build --configuration ${{ inputs.buildConfiguration }}
+    env:
+      BUILD_CONFIGURATION: ${{ inputs.buildConfiguration }}
+    run: dotnet build --configuration $env:BUILD_CONFIGURATION
     working-directory: ${{ inputs.workingDirectory }}
 
   - name: Test
     shell: pwsh
-    run: dotnet test --configuration ${{ inputs.buildConfiguration }} --no-build --coverage --coverage-output-format cobertura
+    env:
+      BUILD_CONFIGURATION: ${{ inputs.buildConfiguration }}
+    run: dotnet test --configuration $env:BUILD_CONFIGURATION --no-build --coverage --coverage-output-format cobertura
     working-directory: ${{ inputs.workingDirectory }}
