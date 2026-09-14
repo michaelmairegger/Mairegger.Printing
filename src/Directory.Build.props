@@ -15,7 +15,7 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UseArtiTestsOutput>true</UseArtiTestsOutput>
+    <UseArtifactsOutput>true</UseArtifactsOutput>
 
     <AnalysisLevel>latest-recommended</AnalysisLevel>
   </PropertyGroup>
