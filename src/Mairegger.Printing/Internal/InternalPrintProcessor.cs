@@ -96,6 +96,13 @@ namespace Mairegger.Printing.Internal
         {
             if (item is PageBreak)
             {
+                if (isLast)
+                {
+                    // a trailing page break must not open an empty page, the current page is the last one
+                    ConcludeDocument();
+                    return;
+                }
+
                 ConcludeDocumentPage(false);
                 _pageHelper = CreateNewPageHelper();
             }
