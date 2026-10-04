@@ -227,7 +227,7 @@ namespace Mairegger.Printing.Internal
             var lineElement = lineContent;
             var contentControl = new ContentControl { Content = lineElement };
 
-            if (_printProcessor.IsAlternatingRowColor)
+            if (_printProcessor.IsAlternatingRowColor && _printProcessor.AlternatingRowColors.Count > 0)
             {
                 var i = _itemCount++ % _printProcessor.AlternatingRowColors.Count;
                 var alternatingRowBackground = _printProcessor.AlternatingRowColors[i];
@@ -383,8 +383,11 @@ namespace Mairegger.Printing.Internal
 
         private static SolidColorBrush ComputeBackGround(PrintAppendixes printAppendix)
         {
-            var Testor = (byte)(byte.MaxValue - (byte)((byte.MaxValue / (byte)Enums.GetValues<PrintAppendixes>().Count) * (byte)printAppendix));
-            return new SolidColorBrush(Color.FromArgb(128, Testor, Testor, Testor));
+            // use the position within the enum values and not the (flag) value itself, otherwise the computation overflows
+            var printAppendixes = Enums.GetValues<PrintAppendixes>().ToList();
+            var index = Math.Max(0, printAppendixes.IndexOf(printAppendix));
+            var factor = (byte)(byte.MaxValue - byte.MaxValue / printAppendixes.Count * index);
+            return new SolidColorBrush(Color.FromArgb(128, factor, factor, factor));
         }
 
         private void ConcludeDocument()

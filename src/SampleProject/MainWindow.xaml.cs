@@ -72,7 +72,7 @@ namespace Mairegger.Printing.Sample
         {
             var pa = PrintAppendixes();
 
-            new ExludeHeaderOnPageTwo(pa, _mcv.CollectionToPrint).PreviewDocument();
+            new ExcludeHeaderOnPageOne(pa, _mcv.CollectionToPrint).PreviewDocument();
         }
 
         private void MenuItemClick(object sender, RoutedEventArgs e)

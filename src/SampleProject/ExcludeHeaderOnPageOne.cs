@@ -17,9 +17,9 @@ using Mairegger.Printing.Definition;
 namespace Mairegger.Printing.Sample
 {
     [ExcludeFromPage(PrintAppendixes.Header, 1)]
-    public class ExludeHeaderOnPageTwo : Printer
+    public class ExcludeHeaderOnPageOne : Printer
     {
-        public ExludeHeaderOnPageTwo(PrintAppendixes printingAppendix, IEnumerable<MyShownObject> collToPrint)
+        public ExcludeHeaderOnPageOne(PrintAppendixes printingAppendix, IEnumerable<MyShownObject> collToPrint)
             : base(printingAppendix, collToPrint)
         {
         }
