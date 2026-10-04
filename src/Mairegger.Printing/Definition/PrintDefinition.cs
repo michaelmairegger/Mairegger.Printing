@@ -81,11 +81,19 @@ namespace Mairegger.Printing.Definition
 
         private PrintPartStatus IsPrintPartToPrintOnLastPage(PrintAppendixes pa, int page)
         {
+            var printOnPage = GetPrintPrintDefinitionForPage(pa, page);
+
+            // an explicit exclusion of the page is prioritized, even if the page is the last page
+            if (printOnPage == PrintPartStatus.Exclude)
+            {
+                return printOnPage;
+            }
+
             var printOnLastPage = GetPrintPrintDefinitionForPage(pa, PrintPartDefinitionAttribute.LastPage);
 
             if (printOnLastPage == PrintPartStatus.NotDefined)
             {
-                return GetPrintPrintDefinitionForPage(pa, page);
+                return printOnPage;
             }
 
             return printOnLastPage;
