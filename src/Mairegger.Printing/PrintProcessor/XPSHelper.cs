@@ -69,10 +69,15 @@ namespace Mairegger.Printing.PrintProcessor
         /// <param name="windowProvider">An implementation for creating a customized window. If null, default implementation is used.</param>
         public static void ShowFixedDocument(FixedDocument fixedDocument, string title, IWindowProvider? windowProvider = null)
         {
+            ShowFixedDocument(fixedDocument, title, windowProvider, null);
+        }
+
+        internal static void ShowFixedDocument(FixedDocument fixedDocument, string title, IWindowProvider? windowProvider, IPrintDialog? printDialog)
+        {
             var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
             WriteXps(fixedDocument, tempFileName);
-            InternalShowXps(tempFileName, title, true, windowProvider);
+            InternalShowXps(tempFileName, title, true, windowProvider, printDialog);
         }
 
         /// <summary>
@@ -86,13 +91,14 @@ namespace Mairegger.Printing.PrintProcessor
             InternalShowXps(fileName, title, false, windowProvider);
         }
 
-        private static void InternalShowXps(string fileName, string title, bool deleteFileOnClose, IWindowProvider? windowProvider = null)
+        private static void InternalShowXps(string fileName, string title, bool deleteFileOnClose, IWindowProvider? windowProvider = null, IPrintDialog? printDialog = null)
         {
             var xpsDocument = new XpsDocument(fileName, FileAccess.Read);
 
             var documentViewer = new CustomDocumentViewer
             {
                 JobTitle = title,
+                PrintDialog = printDialog,
                 Document = xpsDocument.GetFixedDocumentSequence()
             };
 

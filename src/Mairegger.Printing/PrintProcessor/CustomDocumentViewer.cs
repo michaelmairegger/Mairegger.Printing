@@ -26,8 +26,22 @@ public class CustomDocumentViewer : DocumentViewer
 
     public string? JobTitle { get; set; }
 
+    /// <summary>
+    ///     Gets or sets the <see cref="IPrintDialog" /> that is used for printing. If null, a new <see cref="System.Windows.Controls.PrintDialog" /> is used.
+    /// </summary>
+    public IPrintDialog? PrintDialog { get; set; }
+
     protected override void OnPrintCommand()
     {
+        if (PrintDialog != null)
+        {
+            if (PrintDialog.ShowDialog() == true)
+            {
+                PrintDialog.PrintDocument(Document.DocumentPaginator, JobTitle ?? string.Empty);
+            }
+            return;
+        }
+
         var dialog = new PrintDialog();
         if (dialog.ShowDialog() == true)
         {
