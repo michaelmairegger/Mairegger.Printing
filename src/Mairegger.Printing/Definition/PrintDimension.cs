@@ -274,15 +274,20 @@ namespace Mairegger.Printing.Definition
                     effectiveWidth *= widthPerPiece;
                 }
 
-                if (!property.CanWrite)
-                {
-                    var field = GetType().GetField($"<{property.Name}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance);
+                // private setters and backing fields of a property declared in a base class are only accessible via the declaring type
+                var declaringType = property.DeclaringType ?? GetType();
+                var declaredProperty = declaringType.GetProperty(property.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly) ?? property;
 
-                    field?.SetValue(this, effectiveWidth);
+                if (!declaredProperty.CanWrite)
+                {
+                    var field = declaringType.GetField($"<{property.Name}>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance)
+                                ?? throw new InvalidOperationException($"The property {declaringType.Name}.{property.Name} must either have a setter or be an auto-implemented property.");
+
+                    field.SetValue(this, effectiveWidth);
                 }
                 else
                 {
-                    property.SetValue(this, effectiveWidth, null);
+                    declaredProperty.SetValue(this, effectiveWidth, null);
                 }
             }
 

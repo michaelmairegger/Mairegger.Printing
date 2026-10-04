@@ -204,6 +204,28 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Test]
+        public async Task SetColumnDimensionToPropertiesOfBaseClass()
+        {
+            var printDimension = new DerivedFromBasePrintDimension();
+
+            SetPageSizeToPrintDimension(printDimension, new Size(500, 1000));
+
+            using (Assert.Multiple())
+            {
+                await Assert.That(printDimension.ReadOnlyColumn).IsEqualTo(100);
+                await Assert.That(printDimension.PrivateSetColumn).IsEqualTo(400);
+            }
+        }
+
+        [Test]
+        public void SetColumnDimensionToPropertyWithoutBackingField_ThrowsException()
+        {
+            var printDimension = new ComputedColumnPrintDimension();
+
+            Assert.Throws<InvalidOperationException>(() => SetPageSizeToPrintDimension(printDimension, new Size(500, 1000)));
+        }
+
+        [Test]
         public async Task SetHeightValue()
         {
             PrintDimension pd = new PrintDimension
@@ -278,6 +300,33 @@ namespace Mairegger.Printing.Tests.Definition
 
             [ColumnDimension("1*")]
             public int Column1 { get; set; }
+        }
+
+        private class BasePrintDimension : PrintDimension
+        {
+            protected BasePrintDimension()
+            {
+                UseRelativeColumnPosition = true;
+            }
+
+            [ColumnDimension("1*")]
+            public double ReadOnlyColumn { get; }
+
+            [ColumnDimension("4*")]
+            public double PrivateSetColumn { get; private set; }
+        }
+
+        private sealed class DerivedFromBasePrintDimension : BasePrintDimension;
+
+        private sealed class ComputedColumnPrintDimension : PrintDimension
+        {
+            public ComputedColumnPrintDimension()
+            {
+                UseRelativeColumnPosition = true;
+            }
+
+            [ColumnDimension("1*")]
+            public double Column1 => UseRelativeColumnPosition ? 1 : 0;
         }
 
         private class CannotWritePrintDimension : PrintDimension
