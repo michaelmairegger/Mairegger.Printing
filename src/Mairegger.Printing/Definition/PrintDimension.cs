@@ -152,7 +152,8 @@ namespace Mairegger.Printing.Definition
                         throw new ArgumentNullException($"{nameof(PrintProcessor)}.Get{printAppendix}()", string.Format(CultureInfo.CurrentCulture, l10nComposite.PrintDimension_GetHeightFor__0__must_return_a_value_for__Get_1_____if___2___is_set_, typeof(PrintProcessor.PrintProcessor), printAppendix, printAppendix));
 #endif
                     }
-                    uiElement.Measure(new Size(double.MaxValue, double.MaxValue));
+                    // measure with the width that is available on the page so that wrapping content gets its real height
+                    uiElement.Measure(new Size(Math.Max(0, PrintablePageSize.Width), double.PositiveInfinity));
                     value = uiElement.DesiredSize.Height;
                     _printPartDimensions[printAppendix] = value;
                 }

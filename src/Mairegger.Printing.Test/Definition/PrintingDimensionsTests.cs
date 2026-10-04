@@ -54,6 +54,28 @@ namespace Mairegger.Printing.Tests.Definition
             await Assert.That(pd.GetHeightFor(PrintAppendixes.HeaderDescription, 1, false)).IsEqualTo(3);
         }
 
+        [Test, STAThreadExecutor]
+        public async Task GetHeightFor_WrappingContent_IsMeasuredWithPrintablePageWidth()
+        {
+            var text = string.Join(" ", Enumerable.Repeat("Header", 100));
+
+            var singleLine = new TextBlock { Text = "Header" };
+            singleLine.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+
+            Mock<IPrintProcessor> mock = IPrintProcessor.Mock();
+            mock.GetHeader().Returns(new TextBlock { Text = text, TextWrapping = TextWrapping.Wrap });
+
+            PrintDimension pd = new PrintDimension
+            {
+                PrintProcessor = mock.Object,
+                PageSize = new Size(200, 1000),
+                InternalPrintDefinition = new PrintDefinition()
+            };
+            pd.InternalPrintDefinition.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header));
+
+            await Assert.That(pd.GetHeightFor(PrintAppendixes.Header, 1, false)).IsGreaterThan(singleLine.DesiredSize.Height * 2);
+        }
+
         [Test]
         public async Task GetHeightForBody_IsTotalPageHeight_IfNoAdditionalPrintParts()
         {
