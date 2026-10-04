@@ -160,18 +160,11 @@ namespace Mairegger.Printing.PrintProcessor
 
         public bool PrintDocument(string printQueueName)
         {
-            if (printQueueName.StartsWith(@"\\", StringComparison.Ordinal))
-            {
-                var printServerName = new string(printQueueName.Substring(2).TakeWhile(c => c != '\\').ToArray());
+            var queueName = SplitPrintQueueName(printQueueName, out var printServerName);
 
-                using (var printServer = new PrintServer($@"\\{printServerName}"))
-                {
-                    return PrintDocument(printQueueName, printServer);
-                }
-            }
-            using (var printServer = new LocalPrintServer())
+            using (var printServer = printServerName == null ? new LocalPrintServer() : new PrintServer(printServerName))
             {
-                return PrintDocument(printQueueName, printServer);
+                return PrintDocument(queueName, printServer);
             }
         }
 
@@ -205,6 +198,30 @@ namespace Mairegger.Printing.PrintProcessor
             var fixedDocument = CreateDocument(new Size(pd.PrintableAreaWidth, pd.PrintableAreaHeight), ppc);
 
             XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName, windowsProvider);
+        }
+
+        /// <summary>
+        ///     Splits a full print queue name like <c>\\server\queue</c> into the name of the print server (<c>\\server</c>) and
+        ///     the name of the print queue (<c>queue</c>).
+        /// </summary>
+        /// <param name="printQueueName">The name of the print queue, optionally prefixed by the print server.</param>
+        /// <param name="printServerName">The name of the print server, or null if the print queue is a local print queue.</param>
+        /// <returns>The name of the print queue without the print server.</returns>
+        internal static string SplitPrintQueueName(string printQueueName, out string? printServerName)
+        {
+            printServerName = null;
+
+            if (printQueueName.StartsWith(@"\\", StringComparison.Ordinal))
+            {
+                var separatorIndex = printQueueName.IndexOf('\\', 2);
+                if (separatorIndex > 2)
+                {
+                    printServerName = printQueueName.Substring(0, separatorIndex);
+                    return printQueueName.Substring(separatorIndex + 1);
+                }
+            }
+
+            return printQueueName;
         }
 
         internal static string ReplaceInvalidCharsFromFilename(string path)
