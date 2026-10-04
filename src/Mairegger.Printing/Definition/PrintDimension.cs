@@ -27,6 +27,8 @@ namespace Mairegger.Printing.Definition
     /// </summary>
     public class PrintDimension
     {
+        private readonly Dictionary<PrintAppendixes, double> _measuredPrintPartDimensions = new Dictionary<PrintAppendixes, double>();
+
         private readonly Dictionary<PrintAppendixes, double?> _printPartDimensions = new Dictionary<PrintAppendixes, double?>();
 
         private readonly Dictionary<PrintAppendixes, Func<IPrintProcessor, UIElement>> _printPartDimensionsRetrievalDictionary = new Dictionary<PrintAppendixes, Func<IPrintProcessor, UIElement>>
@@ -111,6 +113,7 @@ namespace Mairegger.Printing.Definition
             if (_printPartDimensions.ContainsKey(printAppendix))
             {
                 _printPartDimensions[printAppendix] = value;
+                _measuredPrintPartDimensions.Remove(printAppendix);
             }
         }
 
@@ -141,6 +144,10 @@ namespace Mairegger.Printing.Definition
             if (InternalPrintDefinition?.IsToPrint(printAppendix, pageNumber, isLastPage) == true)
             {
                 double? value = _printPartDimensions[printAppendix];
+                if (!value.HasValue && _measuredPrintPartDimensions.TryGetValue(printAppendix, out var measuredValue))
+                {
+                    value = measuredValue;
+                }
                 if (!value.HasValue && PrintProcessor != null)
                 {
                     var uiElement = _printPartDimensionsRetrievalDictionary[printAppendix](PrintProcessor);
@@ -155,11 +162,20 @@ namespace Mairegger.Printing.Definition
                     // measure with the width that is available on the page so that wrapping content gets its real height
                     uiElement.Measure(new Size(Math.Max(0, PrintablePageSize.Width), double.PositiveInfinity));
                     value = uiElement.DesiredSize.Height;
-                    _printPartDimensions[printAppendix] = value;
+                    _measuredPrintPartDimensions[printAppendix] = value.Value;
                 }
                 return value ?? 0;
             }
             return 0;
+        }
+
+        /// <summary>
+        ///     Removes the measured heights of the print parts so that they are measured again for the next print.
+        ///     Heights that are set by <see cref="SetHeightValue" /> are kept.
+        /// </summary>
+        internal void ResetMeasuredHeights()
+        {
+            _measuredPrintPartDimensions.Clear();
         }
 
         internal double GetHeightForBodyGrid(int pageNumber, bool isLastPage)

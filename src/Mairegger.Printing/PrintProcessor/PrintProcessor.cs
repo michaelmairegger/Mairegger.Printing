@@ -34,6 +34,7 @@ namespace Mairegger.Printing.PrintProcessor
         private string _fileName = string.Empty;
         private IPrintDialog _printDialog;
         private PrintDimension _printDimension = new PrintDimension();
+        private bool _printOnAttributesSet;
 
         protected PrintProcessor()
         {
@@ -262,6 +263,10 @@ namespace Mairegger.Printing.PrintProcessor
 
         private void Prepare(Size pageSize)
         {
+            // each print starts from scratch, also if the same instance is printed multiple times (e.g. preview and print)
+            CurrentPage = 0;
+            PrintDimension.ResetMeasuredHeights();
+
             PrintDimension.PrintProcessor = this;
             PrintDimension.PageSize = pageSize;
             PreparePrint();
@@ -270,11 +275,16 @@ namespace Mairegger.Printing.PrintProcessor
 
         private void SetPrintOnAttributes()
         {
-            var customPageAttributes = (IPrintPartDefinition[])GetType().GetCustomAttributes(typeof(IPrintPartDefinition), true);
-
-            foreach (var printOnAttribute in customPageAttributes)
+            if (!_printOnAttributesSet)
             {
-                PrintDefinition.SetPrintAttribute(printOnAttribute);
+                var customPageAttributes = (IPrintPartDefinition[])GetType().GetCustomAttributes(typeof(IPrintPartDefinition), true);
+
+                foreach (var printOnAttribute in customPageAttributes)
+                {
+                    PrintDefinition.SetPrintAttribute(printOnAttribute);
+                }
+
+                _printOnAttributesSet = true;
             }
             PrintDimension.InternalPrintDefinition = PrintDefinition;
         }
