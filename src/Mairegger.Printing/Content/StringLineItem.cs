@@ -96,7 +96,6 @@ namespace Mairegger.Printing.Content
         public IEnumerable<UIElement> PageContents(double currentPageHeight, Size printablePageSize)
         {
             var lineHeight = GetLineHeight();
-            var printablePageHeight = currentPageHeight;
 
             var textBlock = ConstructTextBlock(Text);
             textBlock.Measure(new Size(printablePageSize.Width - Margin.Left - Margin.Right - Padding.Left - Padding.Right, printablePageSize.Height));
@@ -109,9 +108,15 @@ namespace Mairegger.Printing.Content
 
             var stringBuilder = new StringBuilder();
 
+            var linesThatHaveSpace = LinesThatHaveSpace(currentPageHeight);
+            if (linesThatHaveSpace < 1)
+            {
+                // not a single line fits on the current page, therefore the first part is sized for a whole page
+                linesThatHaveSpace = LinesThatHaveSpaceOnPage();
+            }
+
             while (currentLine < totalLines)
             {
-                var linesThatHaveSpace = (int)(printablePageHeight / lineHeight * .95); // remove 5% of the page height
                 var currentLineLength = TextBlockAccessors.GetCurrentLineLength(textBlock, currentLine);
 
                 var substring = Text.Substring(currentPosition, currentLineLength);
@@ -121,16 +126,21 @@ namespace Mairegger.Printing.Content
                 currentLineOnPage++;
                 currentLine++;
 
-                if (currentLineOnPage == linesThatHaveSpace || currentLine == totalLines)
+                if (currentLineOnPage >= linesThatHaveSpace || currentLine == totalLines)
                 {
                     yield return ConstructContent(stringBuilder.ToString());
                     stringBuilder.Clear();
 
                     currentLineOnPage = 0;
 
-                    printablePageHeight = printablePageSize.Height;
+                    linesThatHaveSpace = LinesThatHaveSpaceOnPage();
                 }
             }
+
+            int LinesThatHaveSpace(double height) => (int)(height / lineHeight * .95); // remove 5% of the page height
+
+            // at least one line per page, otherwise the text would not be split at all
+            int LinesThatHaveSpaceOnPage() => Math.Max(1, LinesThatHaveSpace(printablePageSize.Height));
         }
 
         private Grid ConstructContent(string text)
