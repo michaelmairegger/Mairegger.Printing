@@ -34,7 +34,9 @@ namespace Mairegger.Printing.Internal
         private readonly Thickness _pageMargin = new Thickness(0);
         private readonly IPrintProcessor _printProcessor;
         private bool _alternatingWarningShown;
+        private int _firstDocumentPage;
         private int _itemCount;
+        private int _pageCount;
         private PageHelper _pageHelper;
 
         private InternalPrintProcessor(IPrintProcessor printProcessor, FixedDocument fixedDocument)
@@ -53,9 +55,13 @@ namespace Mairegger.Printing.Internal
             IList<IPrintContent> itemCollection = _printProcessor.ItemCollection().ToList();
 
             AddItems(itemCollection);
+
+            _firstDocumentPage = documentPages;
+            _pageCount = _fixedDocument.Pages.Count - documentPages;
+
             if (individualPageNumbering)
             {
-                AddPageNumbers(documentPages);
+                AddPageNumbers(0, _pageCount);
             }
 
             for (int i = documentPages,
@@ -290,23 +296,23 @@ namespace Mairegger.Printing.Internal
             return pageContent;
         }
 
-        private void AddPageNumbers(int from)
+        /// <summary>
+        ///     Adds the page numbers to the pages of this print processor.
+        /// </summary>
+        /// <param name="pageNumberOffset">The number of pages that are printed before the first page of this print processor.</param>
+        /// <param name="totalPages">The total number of pages that is printed.</param>
+        private void AddPageNumbers(int pageNumberOffset, int totalPages)
         {
-            var currentPageCount = 1;
-            var maxPages = _fixedDocument.Pages.Count - from;
-
-            foreach (var pageContent in _fixedDocument.Pages.Skip(from))
+            for (var currentPageCount = 1; currentPageCount <= _pageCount; currentPageCount++)
             {
                 var count = currentPageCount;
                 AddSpecialElement(
-                    count == maxPages,
+                    count == _pageCount,
                     count,
-                    pageContent,
+                    _fixedDocument.Pages[_firstDocumentPage + count - 1],
                     PrintAppendixes.PageNumbers,
-                    () => _printProcessor.GetPageNumbers(count, maxPages)
+                    () => _printProcessor.GetPageNumbers(pageNumberOffset + count, totalPages)
                 );
-
-                currentPageCount++;
             }
         }
 
@@ -457,14 +463,24 @@ namespace Mairegger.Printing.Internal
         {
             var fixedDocument = new FixedDocument();
 
+            var processors = new List<InternalPrintProcessor>();
+
             foreach (var pp in collection)
             {
-                new InternalPrintProcessor(pp, fixedDocument).Process(collection.IndividualPageNumbers);
+                var internalPrintProcessor = new InternalPrintProcessor(pp, fixedDocument);
+                internalPrintProcessor.Process(collection.IndividualPageNumbers);
+                processors.Add(internalPrintProcessor);
             }
 
             if (!collection.IndividualPageNumbers)
             {
-                // AddPageNumbers(FixedDocument);
+                // the page numbers are continued over all print processors
+                var pageNumberOffset = 0;
+                foreach (var internalPrintProcessor in processors)
+                {
+                    internalPrintProcessor.AddPageNumbers(pageNumberOffset, fixedDocument.Pages.Count);
+                    pageNumberOffset += internalPrintProcessor._pageCount;
+                }
             }
 
             return fixedDocument;
