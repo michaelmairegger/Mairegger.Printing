@@ -120,10 +120,23 @@ namespace Mairegger.Printing.Internal
         private void AddLineItem(IPageBreakAware aware, bool isLast)
         {
             var currentPageHeight = _pageHelper.GetRemainingSpace(CurrentPageNumber, isLast);
-            var rangeForBodyGrid = _printProcessor.PrintDimension.GetRangeForBodyGrid(CurrentPageNumber, isLast);
-            var printablePageSize = new Size(_printProcessor.PrintDimension.PrintablePageSize.Width, rangeForBodyGrid.Length);
+
+            // the following parts are placed on new pages, which may have a different layout than the current page
+            // and start with the reserved space (e.g. the table header)
+            var followingPageHeight = _printProcessor.PrintDimension.GetHeightForBodyGrid(CurrentPageNumber + 1, isLast) - _pageHelper.ReservedSpace;
+            var printablePageSize = new Size(_printProcessor.PrintDimension.PrintablePageSize.Width, Math.Max(0, followingPageHeight));
 
             var pageContents = aware.PageContents(currentPageHeight, printablePageSize).ToList();
+            if (pageContents.Count == 0)
+            {
+                if (isLast)
+                {
+                    ConcludeDocument();
+                }
+
+                return;
+            }
+
             var last = pageContents.Last();
 
             foreach (var item in pageContents)
