@@ -18,18 +18,17 @@
   <PropertyGroup Label="NuGet settings">
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
-    <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors>
-    <!-- Duplicate 'PackageReference' items found -->
-    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
-    <!-- Duplicate 'PackageVersion' items found -->
-    <!--<WarningsAsErrors>$(WarningsAsErrors);NU1507</WarningsAsErrors> -->
-    <!-- Multiple package source defined in config file -->
-    <!-- A package restored for your project has a known vulnerability. -->
+
+    <WarningsAsErrors Label="Duplicate 'PackageReference' items found">$(WarningsAsErrors);NU1504</WarningsAsErrors>
+    <WarningsAsErrors Label="Duplicate 'PackageDownload' items found">$(WarningsAsErrors);NU1505</WarningsAsErrors>
+    <WarningsAsErrors Label="Duplicate 'PackageVersion' items found">$(WarningsAsErrors);NU1506</WarningsAsErrors>
+    <WarningsAsErrors Label="There are 2 package sources defined in your configuration">$(WarningsAsErrors);NU1507</WarningsAsErrors>
+
     <WarningsAsErrors Label="Package X has a known low severity vulnerability">$(WarningsAsErrors);NU1901</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known moderate severity vulnerability">$(WarningsAsErrors);NU1902</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known high severity vulnerability">$(WarningsAsErrors);NU1903</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known critical severity vulnerability">$(WarningsAsErrors);NU1904</WarningsAsErrors>
-    <WarningsAsErrors Label="'PackageA' 4.0.0 depends on 'PackageB' (&gt;= 4.0.0) but 4.0.0 was not found. An approximate best match of 5.0.0 was resolved.">$(WarningsAsErrors);NU1603</WarningsAsErrors>
+    <WarningsAsErrors Label="'PackageA' 4.0.0 depends on 'PackageB' (>= 4.0.0) but 4.0.0 was not found. An approximate best match of 5.0.0 was resolved.">$(WarningsAsErrors);NU1603</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Label="Source commit tagging" Condition="'$(Configuration)' != 'Release'">
     <!-- Note: This prevents rebuilding all projects because of a commit, since build steps injects version information into projects. -->
