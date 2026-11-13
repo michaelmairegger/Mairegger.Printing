@@ -32,16 +32,33 @@ namespace Mairegger.Printing.PrintProcessor
             var fixedDocumentSequence = new FixedDocumentSequence();
 
             var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            using (var target = new XpsDocument(tempFileName, FileAccess.Write))
-            {
-                var xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(target);
 
+            // the source documents must stay open until the pages are written, because the pages are loaded on demand
+            var sourceDocuments = new List<XpsDocument>();
+            try
+            {
                 foreach (var doc in filesToConcat)
                 {
-                    Add(doc, fixedDocumentSequence);
+                    sourceDocuments.Add(Add(doc, fixedDocumentSequence));
                 }
 
-                xpsDocumentWriter.Write(fixedDocumentSequence);
+                using (var target = new XpsDocument(tempFileName, FileAccess.Write))
+                {
+                    var xpsDocumentWriter = XpsDocument.CreateXpsDocumentWriter(target);
+                    xpsDocumentWriter.Write(fixedDocumentSequence);
+                }
+            }
+            catch
+            {
+                File.Delete(tempFileName);
+                throw;
+            }
+            finally
+            {
+                foreach (var sourceDocument in sourceDocuments)
+                {
+                    sourceDocument.Close();
+                }
             }
 
             if (File.Exists(targetFileName))
@@ -101,9 +118,10 @@ namespace Mairegger.Printing.PrintProcessor
             windowProvider.Show(title, documentViewer);
         }
 
-        private static void Add(string path, FixedDocumentSequence fixedDocumentSequence)
+        private static XpsDocument Add(string path, FixedDocumentSequence fixedDocumentSequence)
         {
-            using (var doc = new XpsDocument(path, FileAccess.Read))
+            var doc = new XpsDocument(path, FileAccess.Read);
+            try
             {
                 var sourceSequence = doc.GetFixedDocumentSequence();
                 if (sourceSequence != null)
@@ -121,6 +139,13 @@ namespace Mairegger.Printing.PrintProcessor
                         fixedDocumentSequence.References.Add(newDocumentReference);
                     }
                 }
+
+                return doc;
+            }
+            catch
+            {
+                doc.Close();
+                throw;
             }
         }
 
