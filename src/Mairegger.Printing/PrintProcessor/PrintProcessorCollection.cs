@@ -134,16 +134,18 @@ namespace Mairegger.Printing.PrintProcessor
         }
 
         /// <summary>
-        ///     Prints the document to a <see cref="LocalPrintServer" /> and the given <see cref="PrintQueue.Name" /> of the print
-        ///     queue.
+        ///     Prints the document to the given print queue. If the name is in the form <c>\\server\queue</c> the print queue of
+        ///     the given print server is used, otherwise the print queue of the <see cref="LocalPrintServer" />.
         /// </summary>
-        /// <param name="printQueueName"> The Print-server to print on. </param>
+        /// <param name="printQueueName"> The name of the print queue. </param>
         /// <returns> True if succeeds, false otherwise, or if the use cancels the print process. </returns>
         public bool PrintDocument(string printQueueName)
         {
-            using (var printServer = new LocalPrintServer())
+            var queueName = PrintProcessor.SplitPrintQueueName(printQueueName, out var printServerName);
+
+            using (var printServer = printServerName == null ? new LocalPrintServer() : new PrintServer(printServerName))
             {
-                return PrintDocument(printQueueName, printServer);
+                return PrintDocument(queueName, printServer);
             }
         }
     }
