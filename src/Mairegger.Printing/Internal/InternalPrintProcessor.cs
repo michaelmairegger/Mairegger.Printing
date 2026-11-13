@@ -110,6 +110,11 @@ namespace Mairegger.Printing.Internal
                     directPrintContent.Position.Y + _pageHelper.PrintingDimension.Margin.Top
                 );
                 PositionUiElement(_pageHelper.PageContent, item.Content, position);
+
+                if (isLast)
+                {
+                    ConcludeDocument();
+                }
             }
             else
             {
