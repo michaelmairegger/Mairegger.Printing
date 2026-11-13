@@ -82,6 +82,37 @@ namespace Mairegger.Printing.Tests.Definition
         }
 
         [Test]
+        public async Task IsToPrint_ExcludedPageIsLastPage_IsNotPrinted()
+        {
+            var pd = new PrintDefinition();
+
+            pd.SetPrintAttribute(new PrintOnAllPagesAttribute(PrintAppendixes.Header));
+            pd.SetPrintAttribute(new ExcludeFromPageAttribute(PrintAppendixes.Header, 2));
+
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Header, 2, false)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Header, 2, true)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Header, 3, true)).IsTrue();
+            }
+        }
+
+        [Test]
+        public async Task IsToPrint_ExcludedPageIsLastPage_ExcludeIsStrongerThanPrintOnLastPage()
+        {
+            var pd = new PrintDefinition();
+
+            pd.SetPrintAttribute(new PrintOnPageAttribute(PrintAppendixes.Footer, PrintPartDefinitionAttribute.LastPage));
+            pd.SetPrintAttribute(new ExcludeFromPageAttribute(PrintAppendixes.Footer, 2));
+
+            using (Assert.Multiple())
+            {
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 2, true)).IsFalse();
+                await Assert.That(pd.IsToPrint(PrintAppendixes.Footer, 3, true)).IsTrue();
+            }
+        }
+
+        [Test]
         public async Task IsToPrint_ExcludePage()
         {
             var pd = new PrintDefinition();
