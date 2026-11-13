@@ -204,7 +204,8 @@ namespace Mairegger.Printing.PrintProcessor
 
             var fixedDocument = CreateDocument(new Size(pd.PrintableAreaWidth, pd.PrintableAreaHeight), ppc);
 
-            XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName, windowsProvider);
+            // printing from the preview uses the same print dialog (printer, orientation, ...) as the print processor
+            XpsHelper.ShowFixedDocument(fixedDocument, ppc.FileName, windowsProvider, pd);
         }
 
         internal static string ReplaceInvalidCharsFromFilename(string path)
