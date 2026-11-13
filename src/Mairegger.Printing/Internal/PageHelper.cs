@@ -32,6 +32,7 @@ namespace Mairegger.Printing.Internal
             PrintingDimension = printingDimension;
 
             BodyGrid.Measure(new Size(double.MaxValue, double.MaxValue));
+            ReservedSpace = usedSpace;
             RemoveRemainingSpace(usedSpace);
         }
 
@@ -42,6 +43,11 @@ namespace Mairegger.Printing.Internal
         public PageContent PageContent { get; }
 
         public PrintDimension PrintingDimension { get; }
+
+        /// <summary>
+        ///     Gets the space that is reserved on each page before the first line, e.g. for the table header.
+        /// </summary>
+        public double ReservedSpace { get; }
 
         private double UsedSpace { get; set; }
 
