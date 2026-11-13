@@ -7,6 +7,16 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Label="Workaround for parallel WPF markup compilation with UseArtifactsOutput">
+    <!--
+      For XAML that references local types WPF builds a temporary *_wpftmp project and strips the TargetFramework from the end of
+      the IntermediateOutputPath (Microsoft.WinFX.targets). With the default artifacts pivot "<configuration>_<targetframework>"
+      this results in ".../obj/SampleProject/release_/" for all target frameworks, which breaks parallel builds (MC2000, CS2012).
+      Putting the target framework first keeps a separate intermediate output path per target framework.
+    -->
+    <ArtifactsPivots Condition="'$(TargetFramework)' != ''">$(TargetFramework.ToLowerInvariant())_$(Configuration.ToLowerInvariant())</ArtifactsPivots>
+  </PropertyGroup>
+
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <Reference Include="ReachFramework" />
   </ItemGroup>
