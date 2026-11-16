@@ -19,7 +19,7 @@
     <MinTUnitVersion>1.76.28</MinTUnitVersion>
     <MinMicrosoftNETTestSdkVersion>18.11.0</MinMicrosoftNETTestSdkVersion>
     <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.12.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
-    <MinMicrosoftTestingPlatformVersion>2.5.1</MinMicrosoftTestingPlatformVersion>
+    <MinMicrosoftTestingPlatformVersion>2.5.3</MinMicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup>
