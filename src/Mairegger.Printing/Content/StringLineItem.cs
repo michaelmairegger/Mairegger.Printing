@@ -32,8 +32,8 @@ namespace Mairegger.Printing.Content
         private static readonly MethodInfo _reflectionGetLine = TextBlockType.GetMethod(TextBlock_GetLine, BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"BLABLA {TextBlock_GetLine}\" on type {TextBlockType}");
         private static readonly PropertyInfo _reflectionLineLength = Type.GetType(LineMetrics, true)!.GetProperty(LineMetrics_Lenght, BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new InvalidOperationException($"Exception in reflecting property \"{LineMetrics_Lenght}\" on type \"{LineMetrics}\"");
 
-        #if NET11_0_OR_GREATER
-        #error Check if GetCurrentLineLength can be used with UnsafeAccessor. Up to now this is not possible since LineMetrics is a struct and UnsafeAccessor does not support structs.
+        #if NET12_0_OR_GREATER
+        #error Check if GetCurrentLineLength can be used with UnsafeAccessor. Up to .NET 11 this is not possible since LineMetrics is a struct and UnsafeAccessorTypeAttribute throws "NotSupportedException: ValueTypes are not supported with UnsafeAccessorTypeAttribute".
         #endif
         public static int GetCurrentLineLength(TextBlock textBlock, int currentLine)
         {

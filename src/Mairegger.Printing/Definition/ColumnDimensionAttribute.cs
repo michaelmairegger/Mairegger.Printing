@@ -49,6 +49,8 @@ namespace Mairegger.Printing.Definition
         {
 #if NETFRAMEWORK
             if (value.EndsWith("*", StringComparison.Ordinal))
+#elif NET11_0_OR_GREATER
+            if (value.EndsWith('*', StringComparison.Ordinal))
 #else
             if (value.EndsWith('*'))
 #endif
