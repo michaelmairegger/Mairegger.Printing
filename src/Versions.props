@@ -18,9 +18,6 @@
 
     <MinBogusVersion>35.6.5</MinBogusVersion>
     <MinTUnitVersion>1.85.0</MinTUnitVersion>
-    <MinMicrosoftNETTestSdkVersion>18.12.0</MinMicrosoftNETTestSdkVersion>
-    <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.12.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
-    <MinMicrosoftTestingPlatformVersion>2.5.3</MinMicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,9 +27,6 @@
     <!--Testing -->
     <BogusVersion>$(MinBogusVersion)</BogusVersion>
     <TUnitVersion>$(MinTUnitVersion)</TUnitVersion>
-    <MicrosoftNETTestSdkVersion>$(MinMicrosoftNETTestSdkVersion)</MicrosoftNETTestSdkVersion>
-    <MicrosoftTestingExtensionsCodeCoverageVersion>$(MinMicrosoftTestingExtensionsCodeCoverageVersion)</MicrosoftTestingExtensionsCodeCoverageVersion>
-    <MicrosoftTestingPlatformVersion>$(MinMicrosoftTestingPlatformVersion)</MicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Allow to overwrite versions from base Versions.props">
