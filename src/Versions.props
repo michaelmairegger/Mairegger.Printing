@@ -16,7 +16,7 @@
     <MinWpfAnalyzersVersion>4.1.1</MinWpfAnalyzersVersion>
 
     <MinBogusVersion>35.6.5</MinBogusVersion>
-    <MinTUnitVersion>1.76.28</MinTUnitVersion>
+    <MinTUnitVersion>1.85.0</MinTUnitVersion>
     <MinMicrosoftNETTestSdkVersion>18.11.0</MinMicrosoftNETTestSdkVersion>
     <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.12.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
     <MinMicrosoftTestingPlatformVersion>2.5.1</MinMicrosoftTestingPlatformVersion>
