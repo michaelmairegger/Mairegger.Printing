@@ -67,11 +67,6 @@ namespace Mairegger.Printing.Content
             return new BlankLine(height);
         }
 
-        public static IPrintContent ToPrintContent(this UIElement content)
-        {
-            return new DirectContentLineItem(content);
-        }
-
         /// <summary>
         ///     Returns a <see cref="IPrintContent" /> that merges multiple <see cref="IPrintContent" />s into one
         ///     in order to ensure that each item of the collection gets printed preventing a page break.

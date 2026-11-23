@@ -25,13 +25,6 @@
     <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <None Include="$(MSBuildThisFileDirectory)xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-
-    <Using Include="Moq" />
-    <Using Include="Xunit" />
-  </ItemGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Mairegger.Printing.Tests</_Parameter1>
@@ -43,7 +36,4 @@
     <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)..\</GitVersionBaseDirectory>
   </PropertyGroup>
 
-  <ItemGroup Label="Rider">
-    <None Remove="$(ProjectFileName).DotSettings" />
-  </ItemGroup>
 </Project>

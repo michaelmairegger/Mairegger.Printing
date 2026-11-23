@@ -1,15 +1,16 @@
 <Project>
   <Import Project="Versions.props" />
   <PropertyGroup Label="Target Frameworks">
-    <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,4))</NetCoreAppCurrent>
-    <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,3))</NetCoreAppPrevious>
-    <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,3))</NetCoreAppMinimum>
+    <NetCoreAppCurrent Condition="'$(CurrentNetVersion)' != ''">net$(CurrentNetVersion.Substring(0,$(CurrentNetVersion.LastIndexOf('.'))))</NetCoreAppCurrent>
+    <NetCoreAppPrevious Condition="'$(PreviousNetVersion)' != ''">net$(PreviousNetVersion.Substring(0,$(PreviousNetVersion.LastIndexOf('.'))))</NetCoreAppPrevious>
+    <NetCoreAppMinimum Condition="'$(MinimumNetVersion)' != ''">net$(MinimumNetVersion.Substring(0,$(MinimumNetVersion.LastIndexOf('.'))))</NetCoreAppMinimum>
     <NetCoreWpfCurrent Condition="'$(CurrentNetVersion)' != ''">$(NetCoreAppCurrent)-windows$(WindowsSdkVersion)</NetCoreWpfCurrent>
     <NetCoreWpfPrevious Condition="'$(PreviousNetVersion)' != ''">$(NetCoreAppPrevious)-windows$(WindowsSdkVersion)</NetCoreWpfPrevious>
     <NetCoreWpfMinimum Condition="'$(MinimumNetVersion)' != ''">$(NetCoreAppMinimum)-windows$(WindowsSdkVersion)</NetCoreWpfMinimum>
-    <AspNetCoreVersion Condition="'$(CurrentNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</AspNetCoreVersion>
-    <AspNetCoreVersion Condition="'$(PreviousNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</AspNetCoreVersion>
-    <AspNetCoreVersion Condition="'$(MinimumNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</AspNetCoreVersion>
+
+    <TargetNetCoreVersion Condition="'$(CurrentNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppCurrent)))">$(CurrentNetVersion)</TargetNetCoreVersion>
+    <TargetNetCoreVersion Condition="'$(PreviousNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppPrevious)))">$(PreviousNetVersion)</TargetNetCoreVersion>
+    <TargetNetCoreVersion Condition="'$(MinimumNetVersion)' != '' and $(TargetFramework.StartsWith($(NetCoreAppMinimum)))">$(MinimumNetVersion)</TargetNetCoreVersion>
   </PropertyGroup>
   <PropertyGroup Label="Set WPF properties">
     <UseWPF>true</UseWPF>
@@ -17,17 +18,17 @@
   <PropertyGroup Label="NuGet settings">
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <EnablePackageVersionOverride>false</EnablePackageVersionOverride>
-    <WarningsAsErrors>$(WarningsAsErrors);NU1504</WarningsAsErrors>
-    <!-- Duplicate 'PackageReference' items found -->
-    <WarningsAsErrors>$(WarningsAsErrors);NU1506</WarningsAsErrors>
-    <!-- Duplicate 'PackageVersion' items found -->
-    <!--<WarningsAsErrors>$(WarningsAsErrors);NU1507</WarningsAsErrors> -->
-    <!-- Multiple package source defined in config file -->
-    <!-- A package restored for your project has a known vulnerability. -->
+
+    <WarningsAsErrors Label="Duplicate 'PackageReference' items found">$(WarningsAsErrors);NU1504</WarningsAsErrors>
+    <WarningsAsErrors Label="Duplicate 'PackageDownload' items found">$(WarningsAsErrors);NU1505</WarningsAsErrors>
+    <WarningsAsErrors Label="Duplicate 'PackageVersion' items found">$(WarningsAsErrors);NU1506</WarningsAsErrors>
+    <WarningsAsErrors Label="There are 2 package sources defined in your configuration">$(WarningsAsErrors);NU1507</WarningsAsErrors>
+
     <WarningsAsErrors Label="Package X has a known low severity vulnerability">$(WarningsAsErrors);NU1901</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known moderate severity vulnerability">$(WarningsAsErrors);NU1902</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known high severity vulnerability">$(WarningsAsErrors);NU1903</WarningsAsErrors>
     <WarningsAsErrors Label="Package X has a known critical severity vulnerability">$(WarningsAsErrors);NU1904</WarningsAsErrors>
+    <WarningsAsErrors Label="'PackageA' 4.0.0 depends on 'PackageB' (>= 4.0.0) but 4.0.0 was not found. An approximate best match of 5.0.0 was resolved.">$(WarningsAsErrors);NU1603</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Label="Source commit tagging" Condition="'$(Configuration)' != 'Release'">
     <!-- Note: This prevents rebuilding all projects because of a commit, since build steps injects version information into projects. -->
@@ -44,14 +45,10 @@
     <PackageVersion Include="Enums.NET" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup Label="Testing">
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" Version="1.1.2" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" Version="1.1.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="$(MicrosoftTestingExtensionsCodeCoverageVersion)" />
     <PackageVersion Include="Microsoft.Testing.Platform" Version="$(MicrosoftTestingPlatformVersion)" />
-    <PackageVersion Include="Moq" Version="$(MoqVersion)" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="$(XUnitV3Version)" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualStudioVersion)" />
-    <PackageVersion Include="Xunit.StaFact" Version="3.0.13" />
+    <PackageVersion Include="TUnit" Version="$(TUnitVersion)" />
+    <PackageVersion Include="TUnit.Mocks" Version="$(TUnitVersion)" />
   </ItemGroup>
 </Project>

@@ -1,31 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum)</TargetFrameworks>
+    <TargetFrameworks>$(NetCoreWpfCurrent)</TargetFrameworks>
+    <!--    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum)</TargetFrameworks>-->
 
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-
-    <!-- this is only because of NetCoreAppMinimum is needed below in references -->
-    <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppPrevious)</NetCoreAppMinimum>
-    <NetCoreAppMinimum Condition="'$(NetCoreAppMinimum)' == ''">$(NetCoreAppCurrent)</NetCoreAppMinimum>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="Microsoft.Testing.Platform" />
-    <PackageReference Include="Moq" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
-    <PackageReference Include="xunit.runner.visualstudio">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Xunit.StaFact" />
-    <PackageReference Include="xunit.v3.mtp-v2" />
+    <PackageReference Include="Microsoft.Testing.Platform" />
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="TUnit.Mocks" />
 
-    <Reference Include="System.Printing" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
-    <Reference Include="ReachFramework" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />
+<!--    <Reference Include="System.Printing" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />-->
+<!--    <Reference Include="ReachFramework" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(NetCoreAppMinimum)'))"  />-->
   </ItemGroup>
 
   <PropertyGroup>

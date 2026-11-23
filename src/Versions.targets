@@ -1,0 +1,25 @@
+<Project>
+  <!-- Mininum supported version check, for override when used as submodule -->
+
+  <Target Name="VersionErrorCheck" BeforeTargets="Compile">
+
+    <ItemGroup>
+      <MinVersionCheck Include="WpfAnalyzers" MinVersion="$(MinWpfAnalyzersVersion)" Version="$(WpfAnalyzersVersion)"/>
+
+      <MinVersionCheck Include="Bogus" MinVersion="$(MinBogusVersion)" Version="$(BogusVersion)"/>
+      <MinVersionCheck Include="TUnit" MinVersion="$(MinTUnitVersion)" Version="$(TUnitVersion)"/>
+      <MinVersionCheck Include="Microsoft.NET.Test.Sdk" MinVersion="$(MinMicrosoftNETTestSdkVersion)" Version="$(MicrosoftNETTestSdkVersion)"/>
+      <MinVersionCheck Include="Microsoft.Testing.Extensions.CodeCoverage" MinVersion="$(MinMicrosoftTestingExtensionsCodeCoverageVersion)" Version="$(MicrosoftTestingExtensionsCodeCoverageVersion)"/>
+      <MinVersionCheck Include="Microsoft.Testing.Platform" MinVersion="$(MinMicrosoftTestingPlatformVersion)" Version="$(MicrosoftTestingPlatformVersion)"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <!-- Include both PackageReference and GlobalPackageReference -->
+      <_Refs>;@(PackageReference);@(GlobalPackageReference);</_Refs>
+    </PropertyGroup>
+
+    <!-- Identity = NuGet package name prefix; matches the package itself and any sub-packages (e.g. "Sentry" matches Sentry, Sentry.AspNetCore, Sentry.Serilog) -->
+    <Error Text="Project '$(ProjectName)' requires %(MinVersionCheck.Identity) version to be at least %(MinVersionCheck.MinVersion) but it is %(MinVersionCheck.Version)"
+           Condition="$(_Refs.Contains(';%(MinVersionCheck.Identity)')) AND $([MSBuild]::VersionLessThan('%(MinVersionCheck.Version)', '%(MinVersionCheck.MinVersion)'))" />
+  </Target>
+</Project>
