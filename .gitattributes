@@ -1,0 +1,3 @@
+# release/vX.Y branches keep their own version.json (major = .NET version) when main is merged into them.
+# Requires once per clone: git config merge.ours.driver true
+version.json merge=ours

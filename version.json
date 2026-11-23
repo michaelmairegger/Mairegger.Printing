@@ -1,11 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/AArnott/Nerdbank.GitVersioning/main/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "10.0.0",
+  "version": "10.0.0.0-alpha",
+  "versionHeightOffset": -1,
   "nuGetPackageVersion": {
-    "semVer": 2.0
+    "semVer": 2.0,
+    "precision": "revision"
   },
   "publicReleaseRefSpec": [
-    "^refs/heads/main",
-    "^refs/tags/v\\d+\\.\\d+\\.\\d+"
+    "^refs/heads/release/v\\d+(?:\\.\\d+)?$"
   ]
 }

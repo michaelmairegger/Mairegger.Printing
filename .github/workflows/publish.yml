@@ -1,32 +1,42 @@
 name: Publish
+# Every push to a release line (release/vX.0, version.json = .NET version) publishes to nuget.org and tags the commit.
+# Publishing uses nuget.org trusted publishing (no API key secret): the policy on nuget.org is bound to this workflow
+# file (publish.yml) and the environment 'production', see https://learn.microsoft.com/nuget/nuget-org/trusted-publishing
 on:
   push:
-    tags:
-      - 'v*.*.*'
-
-env:
-  buildConfiguration: 'Release'
-  workingDirectory: 'src'
+    branches:
+    - 'release/v*'
 
 jobs:
-  deploy:
+  publish:
     runs-on: windows-latest
     environment: production
+    permissions:
+      contents: write   # push the release tag
+      id-token: write   # OIDC token exchanged for a temporary nuget.org API key
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-      - uses: ./.github/actions/build-and-test
-        id: build-and-test
-        with:
-          buildConfiguration: ${{ env.buildConfiguration }}
-          workingDirectory: ${{ env.workingDirectory }}
+    - uses: ./.github/actions/build-and-test
+      id: build
+      with:
+        pack: 'true'
 
-      - name: Pack
-        run: dotnet pack --configuration Release --no-build --output artiTests
-        working-directory: src
+    - name: NuGet login (OIDC -> temporary API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: michael.mairegger
 
-      - name: Push with dotnet
-        run: dotnet nuget push artiTests\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-        working-directory: src
+    - name: Push to nuget.org
+      shell: pwsh
+      run: dotnet nuget push (Join-Path '${{ steps.build.outputs.package-directory }}' '*.nupkg') --api-key '${{ steps.login.outputs.NUGET_API_KEY }}' --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+    - name: Tag release
+      shell: pwsh
+      run: |
+        $tag = 'v${{ steps.build.outputs.package-version }}'
+        git tag $tag
+        git push origin $tag

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Drawing.Printing;
 using System.IO;
 using System.Printing;
 using System.Windows.Controls;
@@ -230,7 +229,7 @@ namespace Mairegger.Printing.Tests.Content
 
             printProcessor.PreviewDocument(windowProvider.Object);
 
-            windowProvider.VerifyAll();
+            ((IMock)windowProvider).VerifyAll();
         }
 
         [Test]
@@ -280,8 +279,8 @@ namespace Mairegger.Printing.Tests.Content
 
             using (Assert.Multiple())
             {
-                await Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0], new LocalPrintServer())).IsTrue();
-                await Assert.That(printProcessor.PrintDocument(PrinterSettings.InstalledPrinters[0])).IsTrue();
+                await Assert.That(printProcessor.PrintDocument(new LocalPrintServer().GetPrintQueues().First().Name, new LocalPrintServer())).IsTrue();
+                await Assert.That(printProcessor.PrintDocument(new LocalPrintServer().GetPrintQueues().First().Name)).IsTrue();
             }
         }
 

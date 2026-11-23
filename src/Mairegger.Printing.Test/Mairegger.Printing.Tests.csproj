@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>$(NetCoreWpfCurrent)</TargetFrameworks>
+    <!-- release line: only one of these is set (see Directory.Packages.props) -->
+    <TargetFrameworks Condition="'$(ReleaseNetMajor)' != ''">$(NetCoreWpfCurrent)$(NetCoreWpfPrevious)$(NetCoreWpfMinimum)</TargetFrameworks>
     <!--    <TargetFrameworks>$(NetCoreWpfCurrent);$(NetCoreWpfPrevious);$(NetCoreWpfMinimum)</TargetFrameworks>-->
 
     <OutputType>Exe</OutputType>

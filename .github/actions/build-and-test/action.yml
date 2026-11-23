@@ -1,24 +1,54 @@
-name: 'Compile, test'
-description: 'Compiles and tests the project'
+name: 'Build, test and pack'
+description: 'Verifies version.json, builds and tests the solution and optionally packs the NuGet packages'
 inputs:
   buildConfiguration:
-    description: Defines the build configuration like Debug or Release
-    required: true
+    description: Build configuration
+    default: Release
   workingDirectory:
-    description: Defines the base working directory containing the solution file
-    required: true
+    description: Directory containing the solution file
+    default: src
+  pack:
+    description: "'true' to pack the NuGet packages (see the package-directory and package-version outputs)"
+    default: 'false'
 
 outputs:
-  nuget-package-version:
-    description: Returns the nuget package version
-    value: ${{ steps.nbgv.outputs.NuGetPackageVersion }}
+  package-directory:
+    description: Directory containing the packed .nupkg files (only when pack is 'true')
+    value: ${{ steps.pack.outputs.directory }}
+  package-version:
+    description: NuGet package version of Mairegger.Printing (only when pack is 'true')
+    value: ${{ steps.pack.outputs.version }}
 
 runs:
   using: "composite"
   steps:
-  - uses: actions/setup-dotnet@v5
-    with:
-      dotnet-version: '10.0.x'
+  # The GitHub-hosted Windows image already contains the .NET 8, 9, 10 and 11 SDKs and runtimes
+  # (incl. Microsoft.WindowsDesktop.App), see https://github.com/actions/runner-images/tree/main/images/windows.
+  # version.json must match src/Versions.props: release/vX.0 -> the netX version (CurrentNetVersion,
+  # PreviousNetVersion or MinimumNetVersion), other branches -> '<CurrentNetVersion>.0-alpha' (NuGet shows it as <CurrentNetVersion>-alpha;
+  # the explicit 4th component makes the number differ from the release version, so NBGV height restarts at 0 there)
+  - name: Verify version.json matches .NET version
+    shell: pwsh
+    run: |
+      $branch = $env:GITHUB_REF
+      $version = (Get-Content version.json -Raw | ConvertFrom-Json).version
+      [xml]$props = Get-Content src/Versions.props -Raw
+      $netVersions = @(
+        $props.Project.PropertyGroup.CurrentNetVersion | Select-Object -First 1
+        $props.Project.PropertyGroup.PreviousNetVersion | Select-Object -First 1
+        $props.Project.PropertyGroup.MinimumNetVersion | Select-Object -First 1
+      ) | Where-Object { $_ }
+      if ($branch -match '^refs/heads/release/v(\d+)') {
+        $expected = $netVersions | Where-Object { $_.Split('.')[0] -eq $Matches[1] } | Select-Object -First 1
+      } else {
+        $expected = "$($netVersions[0]).0-alpha"
+      }
+      Write-Host "branch: $branch, version.json: $version, expected .NET version: $expected"
+      if (-not $expected -or $version -ne $expected) {
+        Write-Error "version.json must be '$expected' (.NET version from src/Versions.props for this branch), but is '$version'"
+        exit 1
+      }
+
   - name: Build
     shell: pwsh
     env:
@@ -32,3 +62,20 @@ runs:
       BUILD_CONFIGURATION: ${{ inputs.buildConfiguration }}
     run: dotnet test --configuration $env:BUILD_CONFIGURATION --no-build --coverage --coverage-output-format cobertura
     working-directory: ${{ inputs.workingDirectory }}
+
+  - name: Pack
+    id: pack
+    if: inputs.pack == 'true'
+    shell: pwsh
+    env:
+      BUILD_CONFIGURATION: ${{ inputs.buildConfiguration }}
+    working-directory: ${{ inputs.workingDirectory }}
+    run: |
+      $directory = Join-Path $PWD 'nupkgs'
+      dotnet pack --configuration $env:BUILD_CONFIGURATION --no-build --output $directory
+      if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      $package = Get-ChildItem $directory -Filter 'Mairegger.Printing.*.nupkg' | Where-Object { $_.Name -match '^Mairegger\.Printing\.\d+(\.\d+){2,3}\.nupkg$' } | Select-Object -First 1
+      if (-not $package) { Write-Error 'Mairegger.Printing package not found'; exit 1 }
+      $version = $package.BaseName.Substring('Mairegger.Printing.'.Length)
+      "directory=$directory" >> $env:GITHUB_OUTPUT
+      "version=$version" >> $env:GITHUB_OUTPUT

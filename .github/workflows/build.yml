@@ -3,13 +3,11 @@ on:
   push:
     branches:
     - '**'
-
-env:
-  buildConfiguration: 'Release'
-  workingDirectory: 'src'
+    # release lines are built, tested and published by publish.yml
+    - '!release/v*'
 
 jobs:
-  build-ci:
+  build:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
@@ -17,6 +15,3 @@ jobs:
         fetch-depth: 0
 
     - uses: ./.github/actions/build-and-test
-      with:
-        buildConfiguration: ${{ env.buildConfiguration }}
-        workingDirectory: ${{ env.workingDirectory }}
