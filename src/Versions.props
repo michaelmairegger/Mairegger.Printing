@@ -2,10 +2,11 @@
   <PropertyGroup>
     <!-- .NET Framework Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-framework -->
     <!-- .NET Support Dates https://docs.microsoft.com/en-us/lifecycle/products/microsoft-net-and-net-core -->
-    <CurrentNetVersion>10.0.0</CurrentNetVersion>
-    <PreviousNetVersion>9.0.11</PreviousNetVersion>
+    <CurrentNetVersion>11.0.0</CurrentNetVersion>
+    <PreviousNetVersion>10.0.15</PreviousNetVersion>
     <!-- note: when upgrading MinimumNetVersion ensure there is no NET(__version__)_0_OR_GREATER where __version__ is lower than the new MinimumNetVersion -->
-    <MinimumNetVersion>8.0.22</MinimumNetVersion>
+    <!-- note: empty since .NET 8 and .NET 9 reached end of support on 2026-11-10 (see branches support/net8 and support/net9) -->
+    <MinimumNetVersion></MinimumNetVersion>
     <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
 
     <!-- note: when removing NETFRAMEWORK ensure there is no NETFRAMEWORK prepocessor symbol in code  -->
@@ -16,10 +17,7 @@
     <MinWpfAnalyzersVersion>4.1.1</MinWpfAnalyzersVersion>
 
     <MinBogusVersion>35.6.5</MinBogusVersion>
-    <MinTUnitVersion>1.45.0</MinTUnitVersion>
-    <MinMicrosoftNETTestSdkVersion>18.5.1</MinMicrosoftNETTestSdkVersion>
-    <MinMicrosoftTestingExtensionsCodeCoverageVersion>18.7.0</MinMicrosoftTestingExtensionsCodeCoverageVersion>
-    <MinMicrosoftTestingPlatformVersion>2.2.3</MinMicrosoftTestingPlatformVersion>
+    <MinTUnitVersion>1.85.0</MinTUnitVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -29,9 +27,6 @@
     <!--Testing -->
     <BogusVersion>$(MinBogusVersion)</BogusVersion>
     <TUnitVersion>$(MinTUnitVersion)</TUnitVersion>
-    <MicrosoftNETTestSdkVersion>$(MinMicrosoftNETTestSdkVersion)</MicrosoftNETTestSdkVersion>
-    <MicrosoftTestingExtensionsCodeCoverageVersion>$(MinMicrosoftTestingExtensionsCodeCoverageVersion)</MicrosoftTestingExtensionsCodeCoverageVersion>
-    <MicrosoftTestingPlatformVersion>$(MinMicrosoftTestingPlatformVersion)</MicrosoftTestingPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Allow to overwrite versions from base Versions.props">

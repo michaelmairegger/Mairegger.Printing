@@ -8,9 +8,6 @@
 
       <MinVersionCheck Include="Bogus" MinVersion="$(MinBogusVersion)" Version="$(BogusVersion)"/>
       <MinVersionCheck Include="TUnit" MinVersion="$(MinTUnitVersion)" Version="$(TUnitVersion)"/>
-      <MinVersionCheck Include="Microsoft.NET.Test.Sdk" MinVersion="$(MinMicrosoftNETTestSdkVersion)" Version="$(MicrosoftNETTestSdkVersion)"/>
-      <MinVersionCheck Include="Microsoft.Testing.Extensions.CodeCoverage" MinVersion="$(MinMicrosoftTestingExtensionsCodeCoverageVersion)" Version="$(MicrosoftTestingExtensionsCodeCoverageVersion)"/>
-      <MinVersionCheck Include="Microsoft.Testing.Platform" MinVersion="$(MinMicrosoftTestingPlatformVersion)" Version="$(MicrosoftTestingPlatformVersion)"/>
     </ItemGroup>
 
     <PropertyGroup>
